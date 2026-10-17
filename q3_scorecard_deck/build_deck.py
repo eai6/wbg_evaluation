@@ -1,13 +1,15 @@
-"""Build the Q3 executive deck (3 slides) + reproducible notebook + data extract for one thematic area.
+"""Build the Q3 executive deck (3 slides) + its reproducible notebook + data extract for one outcome area.
 
-    python q3_scorecard_deck/build_deck.py                 # Energy for All (outcome 9)
-    python q3_scorecard_deck/build_deck.py --outcome 2     # another outcome area
-    python q3_scorecard_deck/build_deck.py --no-llm        # deterministic slide text (no API key needed)
+    python q3_scorecard_deck/build_deck.py                 # No Learning Poverty (outcome 2), the submitted deck
+    python q3_scorecard_deck/build_deck.py --execute       # also run the notebook live and save it with outputs
+    python q3_scorecard_deck/build_deck.py --outcome 9     # any other outcome area
 
-Uses the same verified analysis as the web app (assistant.analysis.research): Scorecard results by country, client-context
-need, Data360 population and the operational footprint (Scorecard project-level + Projects API). Slide titles can be
-drafted by the LLM, but every number in them must pass Proof-Carrying-Numbers verification or it is flagged.
-Outputs go to q3_scorecard_deck/output/: deck .html, deck .pdf (headless Chrome), notebook .ipynb, priorities .csv.
+This is the web app's "3-slide briefing" export, run from the command line: the same analysis
+(assistant.analysis.research), the same deck builder (assistant.artifacts.deck) and the same notebook
+(assistant.artifacts.notebook). Fully deterministic: no LLM call, every number on the slides carries a
+Proof-Carrying-Numbers claim, and countries are selected by one rule (most results still to deliver).
+Outputs go to q3_scorecard_deck/output/: deck .html and .pdf (headless Chrome), notebook .ipynb (and an executed copy
+with --execute), country extract .csv.
 """
 import argparse
 import csv
@@ -28,9 +30,7 @@ import django  # noqa: E402
 
 django.setup()
 
-from django.conf import settings  # noqa: E402
-
-from assistant import analysis, artifacts, llm, pcn, pipelines  # noqa: E402
+from assistant import analysis, artifacts, pcn  # noqa: E402
 
 CHROME = ["/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", "google-chrome", "chromium", "chromium-browser"]
 
@@ -55,11 +55,9 @@ renderDeck(document.getElementById('deck'), JSON.parse(document.getElementById('
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--outcome", type=int, default=9, help="Scorecard outcome area id (9 = Energy for All)")
-    ap.add_argument("--no-llm", action="store_true")
+    ap.add_argument("--outcome", type=int, default=2, help="Scorecard outcome area id (2 = No Learning Poverty)")
+    ap.add_argument("--execute", action="store_true", help="run the notebook against the live APIs and save it with outputs")
     a = ap.parse_args()
-    if a.no_llm:
-        settings.LLM.update(api_key="", api_base=None)
     claims = pcn.Claims()
     R = analysis.research(a.outcome, claims)
     usage = []  # the deck is fully deterministic: titles and selection are computed from the data
@@ -86,10 +84,20 @@ def main():
     if chrome:
         subprocess.run([chrome, "--headless=new", "--disable-gpu", "--no-pdf-header-footer", "--virtual-time-budget=15000",
                         f"--print-to-pdf={pdf_path}", html_path.as_uri()], check=False, capture_output=True)
+    executed = None
+    if a.execute:  # run every cell against the public APIs; the ✓/⚠ checks in the outputs compare with this deck
+        import nbformat
+        from nbclient import NotebookClient
+        nb = nbformat.read(nb_path, as_version=4)
+        NotebookClient(nb, timeout=900, kernel_name="python3", resources={"metadata": {"path": str(OUT)}}).execute()
+        executed = OUT / f"notebook_{slug}.executed.ipynb"
+        nbformat.write(nb, executed)
+        outs = "".join(o.get("text", "") for c in nb.cells if c.cell_type == "code" for o in c.get("outputs", []))
+        stats["notebook_checks"] = {"passed": outs.count("✓"), "warnings": outs.count("⚠")}
     print(json.dumps({"outcome": R["outcome"]["name"], "checks": stats,
                       "most_to_deliver": [x["name"] for x in R["most_to_deliver"]], "most_people": [x["name"] for x in R["most_people"]],
                       "data_checks": [x["name"] for x in R["data_checks"]], "usage": usage,
-                      "files": [str(p.relative_to(ROOT)) for p in (html_path, pdf_path, nb_path, csv_path) if p.exists()]}, indent=1, default=str))
+                      "files": [str(p.relative_to(ROOT)) for p in (html_path, pdf_path, nb_path, executed, csv_path) if p and p.exists()]}, indent=1, default=str))
 
 
 if __name__ == "__main__":

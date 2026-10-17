@@ -11,3 +11,8 @@ litellm>=1.50
 pydantic>=2.7
 sqlglot>=25.0
 plotly  # notebook exports (figures)
+
+# Q3 notebook execution (build_deck.py --execute) and running the exported notebooks
+nbclient
+nbformat
+ipykernel

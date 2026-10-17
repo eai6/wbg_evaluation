@@ -1,263 +1,224 @@
-# Technical Assessment — Extended Term Consultant (ETC) Data Scientist, Department for Outcomes (WKCOD)
+# WBG Scorecard: LLM-powered explorer (Q1) and executive stocktake (Q3)
 
-## Overview
+**Candidate:** Edward Amoah · ETC Data Scientist technical assessment
+**Questions completed:** **Question 1** (interactive, LLM-powered Scorecard prototype) and **Question 3** (Scorecard data pipeline
+and executive 3-slide deck). Question 2 was not attempted.
 
-This assessment evaluates your ability to work with large language models, design modern analytical web applications, reason about measurement and bias challenges, build robust data pipelines, and communicate strategic insights to senior leadership. It is designed to reflect the actual work you would do in this role as an Extended Term Consultant (ETC) Data Scientist.
+The original assessment brief is archived in [`docs/assessment_instructions.md`](docs/assessment_instructions.md).
 
-The assessment consists of three distinct questions:
+| | Where |
+|---|---|
+| Q1 web app (Django) | [`q1_prototype/`](q1_prototype/) |
+| Q3A data pipeline, shared with Q1 | [`pipeline/`](pipeline/), documented in [`pipeline/README.md`](pipeline/README.md) |
+| Q3B 3-slide deck (No Learning Poverty) | [`q3_scorecard_deck/output/deck_no-learning-poverty.pdf`](q3_scorecard_deck/output/deck_no-learning-poverty.pdf) · [HTML](q3_scorecard_deck/output/deck_no-learning-poverty.html) · [Q3 README](q3_scorecard_deck/README.md) |
+| Q3 reproducible notebook | [`notebook_no-learning-poverty.ipynb`](q3_scorecard_deck/output/notebook_no-learning-poverty.ipynb) · [executed](q3_scorecard_deck/output/notebook_no-learning-poverty.executed.ipynb) |
+| Data (raw extracts, clean tables, database) | [`data/`](data/) |
+| Model evaluation (30 golden questions) | [`q1_prototype/assistant/evals/`](q1_prototype/assistant/evals/) |
+| Design notes, reviews, screenshots | [`docs/`](docs/) |
+| AI coding assistant logs (complete, unedited) | [`chat_logs/`](chat_logs/) |
 
-- **Question 1**: Next-Generation Interactive & LLM-Powered WBG Scorecard Web Prototype
-- **Question 2**: CPF-PAD Alignment Case Study: Uncertainty & Bias Analysis
-- **Question 3**: Scorecard Analytics & Executive Slide Deck
+## Run it (3 commands)
 
----
+```bash
+python3 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt
+cp .env.example .env      # then set LLM_API_KEY (and LLM_MODEL / LLM_FAST_MODEL to use another provider)
+cd q1_prototype && python manage.py migrate && python manage.py runserver 8765   # open http://127.0.0.1:8765
+```
 
-### Time Limit & Candidate Strategy
+The repository includes the processed Scorecard database (`data/scorecard.duckdb`), so the app runs immediately. To
+re-pull everything from the live APIs, run `python -m pipeline` (about 4 minutes; see [`pipeline/README.md`](pipeline/README.md)).
+Without an API key the Overview pages, filters and charts still work; the assistant explains that it needs a model.
 
-**Time limit**: **8 hours**
+**Plugging in your own model.** All calls go through [LiteLLM](https://docs.litellm.ai), so any provider works by setting
+three variables in `.env`:
 
-> **Pacing & Calibration Note**: The assessment is calibrated to take approximately **5 to 6 hours of focused work** to complete two questions. The full 8-hour window is provided to give you sufficient time for environment setup, data ingestion testing, visual and editorial polish, replication packaging, and demo recording without unnecessary time pressure. You may use the full window to attempt all three questions, if you wish.
+| Variable | Default | Examples |
+|---|---|---|
+| `LLM_MODEL` | `anthropic/claude-sonnet-5-5` | `openai/gpt-4o`, `gemini/gemini-2.0-flash` |
+| `LLM_FAST_MODEL` | `anthropic/claude-haiku-5-5` | the router; defaults to `LLM_MODEL` |
+| `LLM_API_KEY` | | your key |
+| `LLM_API_BASE` | | an OpenAI-compatible endpoint, e.g. `http://localhost:11434` for Ollama |
 
-#### Self-Selection & Prioritization:
+## Screenshots
 
-- **Mandatory Minimum**: Candidates are required to complete **at least two (2) questions** of their choice.
-- **Self-Selection as a Self-Declaration**: Deciding which questions to prioritize is an intentional part of the assessment. It serves as a self-declaration of where you see your core strengths and abilities:
-  - If your passion lies in rapid engineering, LLM integration, and interactive user experiences, prioritize **Question 1**.
-  - If your strength lies in methodological depth, econometrics, measurement error, and analytical experimentation, prioritize **Question 2**.
-  - If your expertise is in data pipelines, scorecard analytics, and executive-level visualization/communication for leadership, prioritize **Question 3**.
-- **Grading Parity (Quality over Quantity)**:
-  - Each completed question is evaluated out of **50 points**, for a total maximum score of **100 points**.
-  - Completing 2 questions versus completing all 3 **does not impact or penalize your overall grade**.
-  - If you submit 2 questions, your score is the sum of those two questions (100% max).
-  - If you choose to attempt all 3 questions, your overall grade will be determined by your **top two scoring questions**, ensuring that candidates who invest their 8 hours deepening two solutions are judged on completely equal footing with those who distribute their time across all three.
-- In your top-level `README.md`, simply specify which questions you have chosen to prioritize.
+**Outcome page.** The assistant sits in a resizable left sidebar. The Overview rebuilds the Scorecard data page for the
+selected indicator, with filters for fiscal year, institution, area and female/youth/disability. It shows the header with project
+count, a map/table, institution/region/income tabs, shares, country groups, and the World Bank Operations project table
+with a check that projects add up to the published total.
+![Overview data page](docs/screenshots/2_overview_data_page.png)
 
-**Submission**: A single `.zip` file containing your full replication package. See [Submission Requirements](#submission-requirements) below.
-Email it to Juan Francisco Margitic (jmargitic@worldbank.org), responding to the initial email containing the instructions.
+**A natural-language question with verified numbers.** Every number carries a ✓ that, on hover, shows the area, measure,
+snapshot and source row. The answer also produced a ranked figure and listed the World Bank projects behind Nigeria's
+numbers, with the sum check.
+![Chat answer with verified numbers](docs/screenshots/3_chat_verified_answer.png)
 
----
+**The 3-slide briefing.** One click builds the leadership deck (Q3B) with a Slides | Notebook switch. The notebook rebuilds
+each slide from the public APIs; it can be copied cell by cell or downloaded.
+![Briefing](docs/screenshots/4_briefing_slides.png)
 
-## Question 1 — Next-Generation Interactive & LLM-Powered WBG Scorecard Prototype (50 Points)
-
-### Context & Management Mandate
-
-The **WBG Corporate Scorecard** (available at [scorecard.worldbank.org](https://scorecard.worldbank.org)) is the apex results-reporting platform for the World Bank Group. It tracks institutional progress across development outcomes, operational effectiveness, and organizational performance.
-
-Your manager approaches you with a mandate:
-
-> *"We want to take accessibility and analytics for global citizens to the next level. Rather than presenting static dashboards or raw data tables, we want to re-imagine the Scorecard as an immersive, highly interactive web application. Global users—from policymakers and researchers to journalists and ordinary citizens—should be able to explore the data dynamically and ask complex analytical questions in natural language. We want an LLM integrated directly into the app that can intelligently query our indicators database, synthesize findings, and generate accurate insights on demand. Innovation and visual polish are paramount."*
-
-You are asked to build a **working prototype / artifact** of this web application in a few hours.
-
----
-
-### Step 1 — Review & Familiarization with the WBG Scorecard
-
-Before designing your application, review the live platform at **[https://scorecard.worldbank.org](https://scorecard.worldbank.org)** to understand its structure and narrative:
-
-1. **Outcomes Tab**: Familiarize yourself with the **"Outcome Areas"** (how development goals and thematic priority areas are organized).
-2. **Data Tab**: Explore the three primary data sections:
-   - **"Vision"**
-   - **"Client Context"**
-   - **"WBG Results"**
-
-**Note**: You may also draw on other publicly available World Bank data sources for individual projects (such as the [Documents & Reports API](https://documents.worldbank.org)).
+More: [landing page](docs/screenshots/1_landing.png) · [briefing notebook view](docs/screenshots/5_briefing_notebook.png).
 
 ---
 
-### Step 2 — Focus Area: WBG Results Data & API Ingestion
+## Q1 · Architecture and LLM strategy
 
-For your prototype, your analytical engine should focus specifically on the **WBG Results** indicator database. You may use **Vision** and **Client Context** data to contextualize and compare progress achieved or expected by WBG-financed operations, as reflected in the **WBG Results** indicators.
+### Data flow
 
-- **Data Ingestion via API**: Inspect and utilize the API endpoints or network data calls powering the WBG Scorecard website (or its public data download endpoints) to pull and ingest the WBG Results data directly into your application.
-- Ensure your ingestion logic cleans, structures, and caches or stores the data efficiently so your application is responsive.
+```
+ Scorecard data API ─┐   (getSCSUMMARYDATA by region/FCS/country/institution, getSCResultIndicatorSummary = projects,
+ Scorecard CMS API  ─┤    getSCMETADATA, CMS outcome areas and descriptions)
+ Data360 (WDI)      ─┤
+                     ▼
+   pipeline/  extract → transform → load → validate  ──►  data/raw (unmodified) · data/processed (typed) · data/scorecard.duckdb
+                                                                                                  │ (read-only, no external access)
+                                                                                                  ▼
+   Django app  ── explorer/  Overview data page (queries.py → JSON → Plotly), landing tiles
+               └─ assistant/ router → pipelines → typed tools (DuckDB) → claims → server-rendered answer / figure / deck + notebook
+```
 
----
+### How the LLM interacts with the data
 
-### Step 3 — Prototype Development: Core Requirements
+The design rule is that **the model never writes a number.** Numbers come only from typed database queries, and the server
+renders them.
 
-Build a rapid, functional web application prototype (using your framework of choice, such as Streamlit, Dash, Shiny, Gradio, React/Next.js, FastAPI + modern frontend, etc.).
+1. **Router (fast model, Haiku).** It classifies each message into one intent and extracts entities as JSON. The intents are filter, analyze, explain, summary, research, deck,
+   notebook, navigate, clarify and out_of_scope. Every code it returns is validated: outcome ids against the outcome table, and
+   places by exact lookup in a name/alias table (no fuzzy or keyword matching). The router sees the last three exchanges, stored
+   as the text the user actually saw, so follow-ups such as "how does this compare?" resolve.
+2. **Pipelines (deterministic code).** These do most of the work without free generation:
+   - **filter** changes the Overview;
+   - **explain** quotes the Scorecard definition verbatim;
+   - **research** and **deck** compute ranked lists and build the 3-slide briefing and its notebook with no model-written text.
+3. **Analysis tool loop (main model, Sonnet).** For open questions the model calls **typed, read-only tools**, at most 6 calls
+   per question:
+   - `get_results`, `rank_areas`, `compare_snapshots`, `get_context` and `outcome_overview` for results and context;
+   - `search_indicators` and `get_definition` for metadata;
+   - `get_projects`, which lists the World Bank projects behind a number and checks they add up to the published total;
+   - `run_sql` as a last resort: one `SELECT` over allow-listed views, parsed by sqlglot, with a forced `LIMIT 200`.
 
-Your prototype should feature:
+   Arguments are validated with pydantic before any query runs: indicator and area codes against allow-lists, snapshot
+   years, institutions. Errors come back to the model as structured hints, so it can correct itself.
+4. **Proof-Carrying Numbers.**
+   - **Claims:** every value a tool returns is registered as a *claim*, recording the entity, measure, snapshot, source
+     and raw value.
+   - **Rendering:** the answer's numbers are rendered **by the server** from those claims, each with a ✓ whose tooltip
+     shows its provenance.
+   - **Model text:** the model writes only a short interpretation, and it is validated. It may contain no digits and may
+     name only places that appear in the facts. If it fails, it is dropped, and the user sees that it was withheld.
+5. **Data-quality rules in code, not prompts.**
+   - **Delivery rate:** shown only when 0 ≤ achieved ≤ expected. Achieved above expected is labelled a data check.
+   - **Undisclosed values:** IFC values the API doesn't disclose are shown as "not disclosed".
+   - **Units:** emissions values arrive in tonnes although labelled megatonnes, and are corrected.
+   - **Project counts:** shown only where the project rows reconcile with the published total.
 
-1. **Modern, Immersive UI/UX & Dynamic Visualizations**:
+**Error handling.** The app degrades in steps rather than failing:
+- **Model or network errors:** the user gets a friendly message and charts keep working.
+- **Invalid tool arguments:** returned to the model with a hint.
+- **Tool budget:** capped at 6 calls per question.
+- **Rate limit:** per-session.
+- **Input length:** bounded.
+- **Database:** DuckDB is opened read-only with external access disabled.
 
-   - Move beyond traditional static tables.
-   - Provide an intuitive, visually polished interface suited for diverse audiences worldwide.
-   - Include interactive visual elements (charts, comparative metrics, breakdowns by region/country/thematic outcome area).
-2. **LLM-Powered Natural Language Analytics Interface**:
+Design history and reviews:
+- [`docs/platform_architecture.md`](docs/platform_architecture.md) and [`docs/platform_design.md`](docs/platform_design.md);
+- a stage-by-stage root-cause review of an early wrong research answer:
+  [`docs/review/research_pipeline_review.md`](docs/review/research_pipeline_review.md).
 
-   - Embed an interactive query interface where users can ask questions in plain natural language about the WBG Results data (e.g., *"Which regions made the most progress in digital access in recent years?"*, *"Compare outcome indicators across fragile and conflict-affected states"*, or *"What are the top 3 lagging indicators in climate resilience?"*).
-   - The LLM must be integrated to query, filter, or reason over the underlying database (e.g., via Text-to-SQL/Pandas code generation, function calling / tool use, or structured RAG) and return **grounded, accurate analytical answers** rather than unverified hallucinations.
-   - Wherever relevant, have the LLM summarize key trends and highlight quantitative findings.
-3. **Model Choice & Technical Justification**:
+### Model choice and justification
 
-   - You have complete autonomy in selecting which LLM model and provider to use (e.g., OpenAI GPT-4o / GPT-4o-mini, Anthropic Claude 3.5 Sonnet / Haiku, Google Gemini Flash, open-source models via Groq, Ollama, Hugging Face, etc.).
-   - Provide a clear written justification of your model choice in your documentation (including any quick testing conducted, if applicable), addressing:
-     - Accuracy and reasoning capabilities for structured data analysis.
-     - Speed / latency considerations for a snappy user experience.
-     - Cost efficiency and scalability.
-     - Guardrails against hallucinated numbers or false data attribution.
-   - **Note**: A well-reasoned, thoughtful model justification will be awarded additional points.
+**Default:** Claude **Haiku 5.5** as the router and Claude **Sonnet 5.5** for the analysis tool loop, switchable through
+`.env`. Every pairing was tested on **30 golden questions** whose answers come from the live Scorecard API (built with
+`python manage.py run_evals --build`). The set covers:
+- filters;
+- single-area lookups;
+- comparisons and rankings;
+- definitions;
+- questions with no data;
+- out-of-scope requests.
 
----
+A question counts as correct only if:
+- the intent and filters are right;
+- every expected number appears among the verified claims;
+- there are no errors.
 
-### Deliverables for Question 1:
+Run on the current build (2026-10-17):
 
-1. **Source Code**: Fully runnable application code, with clear local setup and execution instructions in your README.
-2. **Architecture & LLM Strategy Note** (in your report or README):
-   - Diagram or concise description of the application architecture and data flow.
-   - Detailed explanation of how the LLM interacts with the database (prompt design, tool calling / code execution, error handling).
-   - Your model choice justification.
-3. **Reproducibility & Visual Preview**:
-   - **Plug-and-Play Setup**: The reviewing team will test and interact with your platform directly by plugging in our own API key / model endpoint. You must include a clear `.env.example` file documenting all required environment variables (e.g., `LLM_API_KEY`, `LLM_MODEL_NAME`, or custom endpoint URL) and 2–3 standard terminal commands in your README to run the application locally.
-   - **Embedded Screenshots**: Embed 2–3 high-resolution screenshots directly in your repository README displaying the user interface layout and sample LLM query interactions for quick visual reference.
-   - *(Optional)*: If you deploy your application to a free hosting service (e.g., Streamlit Community Cloud, Hugging Face Spaces, Vercel, etc.), you are welcome to provide a live URL as well.
-4. **AI Coding Assistant Prompting Exchange**:
-   - You are completely free to use any AI-assisted coding agent of your choice (e.g., GitHub Copilot, Claude Code, Cursor, Windsurf, Aider, ChatGPT, etc.) to develop this prototype.
-   - **Mandatory**: You must export and include the **full prompting exchange / chat conversation history** between you and the AI coding assistant used during development (e.g., as Markdown, HTML, JSON, or text export files in your submission repository). **Failure to include the complete AI assistant chat conversations will result in a penalty and deduction of points in the assessment.**
+| Router : main model | Accuracy | Numbers correct | Filters correct | Verified numbers | p50 latency | p95 latency | $ / question | $ / 1,000 questions |
+|---|---|---|---|---|---|---|---|---|
+| Haiku 5.5 : Haiku 5.5 | 100% | 18/18 | 8/8 | 100% | 4.7 s | 6.9 s | $0.0008 | $0.76 |
+| **Haiku 5.5 : Sonnet 5.5 (default)** | **100%** | **18/18** | **8/8** | **100%** | **5.2 s** | **7.4 s** | **$0.012** | **$11.87** |
+| Sonnet 5.5 : Opus 5.5 | 100% | 18/18 | 8/8 | 100% | 7.3 s | 12.4 s | $0.028 | $28.23 |
 
----
+Opus adds latency and cost (2.4× the default) without improving accuracy on this set, because answers are grounded in tools rather than in model knowledge.
 
-## Question 2 — CPF-PAD Alignment Case Study: Uncertainty & Bias Analysis (50 Points)
+Full per-question results are in [`q1_prototype/assistant/evals/results/`](q1_prototype/assistant/evals/results/).
 
-### Context & Case Study Background
-
-The World Bank Group prepares a **Country Partnership Framework (CPF)** for each client country. The CPF defines outcome areas — high-level strategic goals the Bank aims to support in that country (e.g., improving fiscal sustainability, expanding access to quality education). Individual **Projects** are appraised in **Project Appraisal Documents (PADs)**, which describe the project's objectives, components, expected outcomes, and design rationale.
-
-A key question for the institution is: **how well are our projects aligned with country-level strategic goals as outlined in the partnership framework?**
-
-To explore automated alignment scoring at scale, the team previously implemented a pilot assessment pipeline using a state-of-the-art Large Language Model (LLM).
-
-#### The Pilot Setup & Methodology
-
-- **Inputs**:
-  - 4 CPF outcome area descriptions from a country partnership framework (`CPF 1: Fiscal Management & Governance`, `CPF 2: Climate-Resilient Agriculture`, `CPF 3: Human Capital & Primary Education`, `CPF 4: Digital Infrastructure & Financial Inclusion`).
-  - 4 Project Appraisal Document (PAD) extracts describing project components and planned activities (`PAD A: Public Sector Modernization`, `PAD B: Rural Irrigation & Agri-tech`, `PAD C: Basic Education Reform`, `PAD D: Broadband Connectivity & SME Digital Payments`).
-- **Prompting & Scoring Strategy**: A rubric-guided zero-shot prompt instructed the model to evaluate how well each project aligns with each CPF outcome area on a scale from **1 (No Alignment)** to **5 (Strong Direct Alignment)**, accompanied by a brief rationale.
-- **Pilot Results (Baseline Alignment Matrix)**:
-
-| Project (PAD)                    | CPF 1: Fiscal & Governance | CPF 2: Climate Agriculture | CPF 3: Education | CPF 4: Digital & Finance |
-| :------------------------------- | :------------------------: | :------------------------: | :--------------: | :----------------------: |
-| **PAD A (Public Sector)**        |          **4.6**           |            1.2             |       2.1        |           3.8            |
-| **PAD B (Rural Irrigation)**     |            2.0             |          **4.8**           |       1.5        |           2.4            |
-| **PAD C (Education Reform)**     |            1.8             |            1.1             |     **4.9**      |           2.2            |
-| **PAD D (Broadband & Payments)** |            3.1             |            1.9             |       2.0        |         **4.7**          |
-
-The pilot produced deterministic single-point estimates. Before this approach can be adopted for operational decision-making, senior leadership requires a critical methodological assessment focusing on **measurement uncertainty** and **potential systematic biases**.
-
-*(Note: You do **not** need to build or run an LLM evaluation pipeline for this question. Treat the setup and baseline matrix above as the given case study for your analysis.)*
-
----
-
-### Part A — Uncertainty Quantification Framework
-
-LLM-generated scores are single point estimates. A score of `3.8` or `4.6` gives decision-makers no visibility into model confidence, prompt sensitivity, or borderline ambiguity.
-
-**Develop a methodology to quantify uncertainty for this alignment scoring system.** There is no single correct approach — we want to evaluate your technical and conceptual reasoning.
-
-Your response should address:
-
-1. **Proposed Uncertainty Method**: Detail a concrete approach to quantify uncertainty for each cell in the alignment matrix (e.g., temperature/sampling self-consistency, prompt paraphrasing/perturbation, multi-model consensus, token log-probability / confidence metrics, or conformal prediction).
-2. **Methodological Rationale**: Explain *why* your proposed method captures meaningful semantic and measurement uncertainty rather than trivial token-level noise.
-3. **LLM Uncertainty vs. Traditional Statistical Models**: Discuss the specific challenges and nuances of measuring uncertainty in LLM-generated evaluative scores compared to traditional econometric or statistical estimators.
-4. **Communication to Leadership**: How would you present these uncertainty metrics to senior leaders to help them distinguish between high-confidence alignments and borderline or ambiguous cases?
-
----
-
-### Part B — Verbosity Bias Investigation
-
-A colleague raises a concern:
-
-> *"This scoring approach might create an incentive for project teams to write longer, more verbose PADs. If longer documents score higher simply because they contain more text, we'd be rewarding administrative bloat rather than genuine alignment."*
-
-Investigate this concern and propose an experimental safeguard:
-
-1. **Develop a hypothesis** about whether and why document length or syntactic verbosity might (or might not) bias LLM-based alignment scoring.
-2. **Design an experimental procedure / test** to investigate your hypothesis (explain the experimental setup, manipulation of documents—e.g., text truncation, summarization, synthetic padding—and the evaluation metrics you would use).
-3. **Write an executive narrative report** (2–3 paragraphs) presenting your reasoning, potential risks, and concrete recommendations for pipeline guardrails (e.g., length normalization, extraction filters, rubric constraints). This report should be written for a technically literate senior leader (e.g., a lead economist or policy manager).
-
----
-
-## Question 3 — Scorecard Analytics & Executive Slide Deck (50 Points)
-
-### Context
-
-Beyond public communications on the external website of the WBG Scorecard, senior leadership needs to use the data for managerial purposes—tracking institutional results, identifying operational bottlenecks, allocating resources strategically, and conducting high-level stocktakes to guide decision-making.
-
-In addition to the WBG Corporate Scorecard ([https://scorecard.worldbank.org](https://scorecard.worldbank.org)), you may also draw on other publicly available World Bank data sources for individual projects (such as the [Documents & Reports API](https://documents.worldbank.org)) or more generally the [World Bank Open Data API](https://data.worldbank.org) — if they help strengthen your narrative (not required, however).
-
-### Part A — Data Pipeline
-
-Build a **reproducible data pipeline** that:
-
-1. Pulls data from the WBG Corporate Scorecard (via its API, data downloads, or whatever access method you identify).
-2. Ingests, cleans, and structures the data for analysis.
-3. Is documented well enough that someone else on the team could run it.
-
-You are free to choose any area or tier of the Scorecard. Your pipeline should be robust and handle the data as-is (don't assume it will be clean).
-
-### Part B — Executive Slide Deck
-
-Imagine you are preparing a **3-slide stocktake** for the Managing Director and other senior leaders. Pick **one area** of the Scorecard and tell the story of how the Bank is performing.
-
-Your 3 slides should:
-
-- Present a clear, data-driven narrative.
-- Be visually polished and appropriate for a senior, non-technical audience.
-- Include at least one well-designed chart or visualization.
-- Address the following question:
-
-> Based on the Scorecard data and the Bank's current operational footprint, which areas and countries would you suggest prioritizing in a three-year plan for your chosen thematic area? What does the data tell us about where the biggest gaps or opportunities are?
-
-You may use any tool to produce the slides (PowerPoint, Python-pptx, Quarto, LaTeX Beamer, Canva, Google Slides, etc.). Include the final slides as a PDF or HTML in your submission.
+- **Accuracy and reasoning.**
+  - **Why the scores tie:** all pairings are accurate here because correctness does not depend on the model. Numbers are
+    fetched by typed tools and rendered by the server, the router's outputs are validated against allow-lists, and
+    research and briefings are deterministic.
+  - **Where model size matters:** planning several tool calls for open, multi-part questions, such as "which countries…
+    and which projects are behind Nigeria's numbers?", and writing a careful interpretation. That is why Sonnet is the
+    default main model.
+  - **When to drop to Haiku:** the table shows Haiku alone is a sound choice when cost matters most.
+- **Speed.** A small model routes every message in about 1 second. Most requests (filters, definitions, briefings) need no
+  further model call, and answers stream progress events as the work happens.
+- **Cost and scale.**
+  - **Per question:** about $0.012 with the default and $0.0008 with Haiku only. The research and briefing paths cost only
+    the router call.
+  - **Limits:** sessions are rate-limited, and the tool loop is capped at 6 calls.
+- **Guardrails against made-up numbers.**
+  - **Numbers:** the model cannot print a number. Numbers are rendered from claims with provenance; model text with digits,
+    or naming places not in the facts, is dropped.
+  - **Comparisons:** where model-written comparisons proved unreliable in testing (for example, "the region furthest
+    behind" when another region was further behind), the text was replaced by statements computed from the data.
+  - **SQL and arguments:** SQL is read-only and allow-listed, and tool arguments are validated.
+- **Portability.** All providers run through LiteLLM. Claude-specific settings (the `effort` level, no `temperature`) are
+  applied only to Anthropic models, so OpenAI, Gemini or Ollama models can be configured in `.env`.
 
 ---
 
-## Submission Requirements
+## Q3 · Data pipeline and executive deck
 
-Submit a single **`.zip` file** named `firstname_lastname_assessment.zip` containing your full replication package.
+**Part A: pipeline** ([`pipeline/README.md`](pipeline/README.md)). `python -m pipeline` pulls three Scorecard snapshots (FY24
+to FY26), about 2,300 parallel API requests with retries, plus Data360. It writes raw extracts unmodified, then cleans and types them. Cleaning handles:
+- numbers stored as text and in scientific notation;
+- ISO2-like Bank codes;
+- period ranges;
+- repeated keys;
+- IDA21 repeat project rows;
+- disability-inclusive projects, which are an attribute rather than a breakdown;
+- the FY26 `FCV` code.
 
-Unless explicitly labeled *(Optional)*, listed items are required for the questions you choose to complete. You are required to complete at least two questions; you are not required to complete all three.
+It loads DuckDB views and writes a data-quality report: duplicates, achieved above expected, region-sum mismatches, and
+project-to-total reconciliation (16 of 19 indicators reconcile exactly in FY26).
 
-### Your submission must include:
-
-1. **A top-level `README.md`** specifying which questions you prioritized/completed, along with clear setup and execution instructions for your code.
-2. **All source code**, organized in a clean directory structure (e.g., `q1_prototype/`, `q2_case_study/`, `q3_scorecard_deck/`).
-3. **Deliverables and outputs for your completed questions (minimum 2)**:
-
-   - **For Question 1 (Web Prototype)**:
-     - Fully runnable application source code with plug-and-play local execution instructions.
-     - `.env.example` template for the reviewing team to plug in an API key/endpoint.
-     - Architecture, LLM integration design, and model choice justification write-up.
-     - 2–3 high-resolution screenshots embedded in the README showing the UI and sample LLM query interactions.
-     - *(Optional)* Live hosted link if deployed.
-   - **For Question 2 (Uncertainty & Bias Case Study)**:
-     - Uncertainty quantification framework write-up (Q2A).
-     - Verbosity bias hypothesis, experimental test design, and executive advisory note (Q2B).
-       *(Can be submitted as Markdown, Jupyter Notebook, or PDF).*
-   - **For Question 3 (Scorecard Analytics & Slide Deck)**:
-     - Reproducible Scorecard data pipeline code and documentation (Q3A).
-     - Executive 3-slide deck (Q3B) — as a PDF or HTML.
-4. **Environment specification**: `requirements.txt`, `environment.yml`, `package.json`, `pyproject.toml`, or equivalent — so we can recreate your environment.
-5. **Data**: Include the raw data extracts or scripts/API instructions used to fetch the data for Questions 1 and 3.
-6. **Full AI Coding Assistant Prompting Logs / Chat History**: If you used any AI-assisted coding agent or tool (such as GitHub Copilot, Claude Code, Cursor, Windsurf, Aider, ChatGPT, etc.) during the development of your prototype or code, you **must include the complete, unedited prompting exchanges and chat conversation transcripts** in your repository (e.g., saved in a `chat_logs/` or `ai_prompts/` folder). **Submissions that fail to provide these chat logs will incur a penalty and deduction of points.**
-
-### What we value in submissions:
-
-- **Innovation & Technical Judgment**: Thoughtful integration of LLM technologies into an intuitive, functional web interface, with well-argued model and architecture choices.
-- **Analytical & Methodological Rigor**: Depth of reasoning in handling LLM uncertainty, measurement error, and verbosity bias.
-- **Communication Quality**: The executive advisory notes, architectural documentation, and slide deck are as critical as the code.
-- **Clean, Modular Code**: Well-organized, readable, reproducible code with sensible structure and documentation.
-- **Transparency in AI Collaboration**: Clear documentation and unedited logs of how you guided, prompted, and steered your AI coding assistant.
-
-### What you may use:
-
-- Any programming language (Python or R preferred).
-- Any LLM API (OpenAI, Anthropic, Google, open-source models, etc.). If you use a paid API, that is fine — we are evaluating your approach, not your budget.
-- Any libraries, frameworks, or tools you find useful.
-- AI coding assistants (GitHub Copilot, Claude Code, Cursor, Windsurf, ChatGPT Codex, etc.) are permitted and encouraged. We are evaluating your judgment, design decisions, prompt engineering, and analytical reasoning. However, **you must include the complete chat conversation history in your submission — omitting it will result in point deductions.**
+**Part B: 3-slide stocktake on No Learning Poverty** ([Q3 README](q3_scorecard_deck/README.md)).
+- **Portfolio:** it has supported 326.6M students of the 439.2M expected (74%).
+- **Regions:** Western & Central Africa holds the most still to deliver.
+- **Priority countries:** selected by one rule, most still to deliver: **Nigeria, Philippines and Uganda**.
+- **Reproducibility:** the deck is the app's briefing export. Its notebook rebuilds every slide from the public APIs and
+  passed 12 of 12 checks.
 
 ---
 
-*Good luck. We look forward to reviewing your work.*
+## Data
+
+| Path | Content |
+|---|---|
+| `data/raw/fy2024 … fy2026/`, `data/raw/global/` | Unmodified API extracts (Parquet, all columns as text) |
+| `data/processed/*.parquet` | Clean, typed tables |
+| `data/scorecard.duckdb` | Tables + analysis views read by the app |
+| `data/processed/data_quality.json` | Data-quality report from the last run |
+
+Sources and API access, including how the Scorecard's public API key is read at run time from the site's JavaScript
+bundle, are documented in [`pipeline/README.md`](pipeline/README.md).
+
+## AI coding assistant logs
+
+The whole project was built with **Claude Code** (Anthropic). [`chat_logs/`](chat_logs/) holds the **complete, unedited**
+session transcript and the transcripts of two research subagents:
+- **Main transcript:** `chat_logs/57c09fbc-a25d-4f8b-a99b-bcb158d09225.jsonl.gz`. The raw file exceeds GitHub's 100 MB
+  limit, so it is gzip-compressed; this is lossless, and `gunzip -k` restores the identical file.
+- **Subagents:** `chat_logs/57c09fbc-…/subagents/*.jsonl`.
+- **Refreshing:** [`chat_logs/sync_logs.sh`](chat_logs/sync_logs.sh) re-copies the logs from Claude Code's session store.
