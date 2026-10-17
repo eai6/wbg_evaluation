@@ -1,0 +1,33 @@
+2026-10-17 12:49:14,670 INFO pipeline.extract: fetched CMS outcomes: 15
+2026-10-17 12:49:14,722 INFO pipeline.extract: fetched CMS stories: 14
+2026-10-17 12:49:16,774 INFO pipeline.extract: fetched Data360 WB_WDI_SP_POP_TOTL: 2915 rows
+2026-10-17 12:49:18,963 INFO pipeline.extract: fetched Data360 WB_WDI_NY_GDP_PCAP_CD: 2803 rows
+2026-10-17 12:49:23,385 INFO pipeline.extract: fetched active projects: 2666
+2026-10-17 12:49:23,524 INFO pipeline.extract: fetched indicators fy2024: 52 rows
+2026-10-17 12:49:23,589 INFO pipeline.extract: fetched sub_indicators fy2024: 22 rows
+2026-10-17 12:49:23,664 INFO pipeline.extract: fetched countries fy2024: 249 rows
+2026-10-17 12:50:25,954 INFO pipeline.extract: fetched summary fy2024: 77963 rows from 261 requests (0 failed)
+2026-10-17 12:50:27,234 INFO pipeline.extract: fetched projects fy2024: 12710 rows
+2026-10-17 12:50:27,447 INFO pipeline.extract: fetched indicators fy2025: 52 rows
+2026-10-17 12:50:27,549 INFO pipeline.extract: fetched sub_indicators fy2025: 22 rows
+2026-10-17 12:50:27,733 INFO pipeline.extract: fetched countries fy2025: 249 rows
+2026-10-17 12:52:21,705 INFO pipeline.extract: fetched summary fy2025: 90537 rows from 261 requests (0 failed)
+2026-10-17 12:52:22,889 INFO pipeline.extract: fetched projects fy2025: 15123 rows
+2026-10-17 12:52:23,075 INFO pipeline.extract: fetched indicators fy2026: 52 rows
+2026-10-17 12:52:23,128 INFO pipeline.extract: fetched sub_indicators fy2026: 20 rows
+2026-10-17 12:52:23,188 INFO pipeline.extract: fetched countries fy2026: 249 rows
+2026-10-17 12:52:26,274 INFO pipeline.extract: fetched summary fy2026: 88867 rows from 261 requests (0 failed)
+2026-10-17 12:52:29,426 INFO pipeline.extract: fetched projects fy2026: 15581 rows
+2026-10-17 12:52:31,215 INFO pipeline.load: wrote 10 tables to /Users/edwardamoah/Documents/GitHub/wbg_evaluation/data/scorecard.duckdb
+2026-10-17 12:52:31,222 INFO pipeline.validate: check row_counts                 6 rows
+2026-10-17 12:52:31,223 INFO pipeline.validate: check snapshots                  3 rows
+2026-10-17 12:52:31,226 INFO pipeline.validate: check duplicate_result_keys      6 rows
+2026-10-17 12:52:31,228 INFO pipeline.validate: check achieved_above_expected    50 rows
+2026-10-17 12:52:31,230 INFO pipeline.validate: check results_without_total      8 rows
+2026-10-17 12:52:31,233 INFO pipeline.validate: check regions_vs_world           15 rows
+2026-10-17 12:52:31,233 INFO pipeline.validate: check unmapped_project_countries 1 rows
+
+Done in 197s -> /Users/edwardamoah/Documents/GitHub/wbg_evaluation/data/scorecard.duckdb
+rows: {'results': 25366, 'context': 227113, 'projects': 43414, 'areas': 255, 'active_projects': 2666, 'wdi': 4717}
+snapshots: [(2024, '2025-04-16'), (2025, '2026-04-10'), (2026, '2026-10-11')]
+data-quality: 6 duplicate keys, 50 achieved>expected rows, 8 indicators without a world total, 15 region-sum mismatches -> data/processed/data_quality.json

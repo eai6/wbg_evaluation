@@ -1,0 +1,822 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scorecard Explorer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/plotly.js-dist-min@2.35.2/plotly.min.js"></script>
+<script src="https://unpkg.com/lucide@0.453.0/dist/umd/lucide.min.js"></script>
+<style>
+/* Tokens aligned with worldbank.org (components-variable.css) and the Scorecard site */
+:root{
+  color-scheme: light;
+  --brand-dark:#002244; --brand:#009fda; --primary:#004370; --link:#0071bc; --nav:#012740;
+  --page:#f2f6f9; --tint:#f6fcff; --surface:#ffffff; --surface-2:#e7edf3; --ink:#0b0b0b; --ink-2:#4a4f55; --muted:#7a7f85;
+  --grid:#e3e7eb; --axis:#c3c9cf; --ring:rgba(0,34,68,.10);
+  --v-people:#f39c12; --v-prosperity:#8e3a96; --v-planet:#1f9d55; --v-infra:#c0392b; --v-digital:#2f6fb3; --v-cross:#0f8b8d;
+  --s1:#0071bc; --s2:#eb6834; --s3:#1baf7a;
+  --seq-track:#cde7f9; --seq-fill:#0071bc; --seq-strong:#004370;
+  --good-text:#006300; --chip:#e9f7fd; --shadow:0 1px 2px rgba(0,34,68,.05),0 8px 24px rgba(0,34,68,.07);
+  --font:"Open Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--ink);font:15px/1.55 var(--font)}
+button{font:inherit;color:inherit}
+a{color:var(--link);cursor:pointer;text-decoration:none}
+a:hover{text-decoration:underline}
+.mock-banner{background:#fff8e6;color:#6b5200;font-size:12px;padding:4px 16px;text-align:center;height:26px}
+header.top{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:16px;padding:0 32px;height:60px;background:var(--nav);color:#fff}
+.brand{font-weight:700;font-size:16px;cursor:pointer;display:flex;align-items:center;gap:10px}
+.brand .sep{width:1px;height:24px;background:rgba(255,255,255,.35)}
+.brand small{font-weight:400;opacity:.8;font-size:13px}
+header.top nav{margin-left:auto;display:flex;gap:2px}
+header.top nav button{background:none;border:0;border-bottom:2px solid transparent;color:#fff;text-transform:uppercase;font-size:12.5px;font-weight:600;letter-spacing:.04em;padding:20px 12px 18px;cursor:pointer;opacity:.85}
+header.top nav button:hover,header.top nav button.on{opacity:1;border-bottom-color:var(--brand)}
+main{max-width:1320px;margin:0 auto;padding:0 32px 72px}
+.view{display:none}.view.active{display:block}
+.chip{border:1px solid var(--ring);background:var(--surface);border-radius:999px;padding:5px 13px;font-size:13px;cursor:pointer;color:var(--ink-2);display:inline-flex;align-items:center;gap:6px}
+.chip:hover{border-color:var(--link);color:var(--ink)}
+.chip.on{background:var(--chip);border-color:var(--link);color:var(--primary);font-weight:600}
+.chip.ai{background:var(--chip);border-color:#b7dff3;color:var(--primary);font-weight:600}
+.btn{background:var(--primary);color:#fff;border:0;border-radius:8px;padding:10px 18px;font-weight:600;cursor:pointer}
+.btn:hover{background:var(--brand-dark)}
+.iconbtn{background:none;border:0;border-radius:8px;padding:8px;cursor:pointer;color:var(--ink-2);display:grid;place-items:center}
+.iconbtn:hover{background:var(--surface-2)}
+.btn-sm{border:1px solid var(--ring);background:var(--surface);border-radius:8px;padding:5px 10px;font-size:12.5px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.btn-sm:hover{border-color:var(--link)}
+.na{font-size:13px;color:var(--muted)}
+.section-h{display:flex;align-items:baseline;justify-content:space-between;margin:44px 0 14px}
+.section-h h2{font-size:22px;font-weight:600;margin:0;letter-spacing:-.01em}
+
+/* ---------- Landing ---------- */
+.hero{margin:0 -32px;padding:44px 32px 30px;background:linear-gradient(180deg,var(--tint),var(--page))}
+.hero-in{max-width:1320px;margin:0 auto}
+.hero h1{font-size:34px;line-height:1.15;letter-spacing:-.02em;margin:0 0 6px;font-weight:300}
+.hero h1 b{font-weight:700}
+.hero p{margin:0 0 18px;color:var(--ink-2)}
+.ask{display:flex;gap:6px;align-items:center;background:var(--surface);border:1px solid var(--ring);border-radius:12px;padding:6px;box-shadow:var(--shadow);max-width:820px}
+.ask input{flex:1;border:0;background:transparent;font:inherit;font-size:16px;padding:10px 12px;color:var(--ink);outline:none}
+.try{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.home-answer{margin-top:16px;display:none;max-width:820px;background:var(--surface);border-radius:10px;padding:18px 20px;box-shadow:var(--shadow)}
+.vbar{display:flex;flex-wrap:wrap;gap:8px;margin:24px 0 14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
+.tile{background:var(--surface);border-radius:10px;padding:22px 22px 20px;cursor:pointer;display:flex;flex-direction:column;min-height:236px;box-shadow:0 1px 2px rgba(0,34,68,.05);transition:transform .15s,box-shadow .15s,opacity .2s;border:2px solid transparent}
+.tile:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.tile.dim{opacity:.3}.tile.hl{border-color:var(--link)}
+.ic{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;border:1.5px solid currentColor;flex:none}
+.ic svg{width:20px;height:20px;stroke-width:1.6}
+.tile h3{margin:14px 0 0;font-size:19px;line-height:1.3;font-weight:300;color:var(--ink-2)}
+.tile h3 b{color:var(--ink);font-weight:700}
+.fig{margin-top:auto;display:flex;align-items:flex-end;gap:14px;padding-top:18px}
+.bars{display:flex;align-items:flex-end;gap:3px;height:52px}
+.bars span{width:9px;border-radius:3px 3px 0 0;display:block}
+.fig .num{font-size:42px;line-height:1;font-weight:300;letter-spacing:-.03em}
+.fig .num small{font-size:15px;font-weight:700;letter-spacing:0;margin-left:4px}
+.fig .exp{color:var(--ink-2);font-size:14.5px;margin-top:6px}
+.stories{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+.story{background:var(--surface);border-radius:10px;overflow:hidden;box-shadow:0 1px 2px rgba(0,34,68,.05);display:flex;flex-direction:column;cursor:pointer;transition:box-shadow .15s}
+.story:hover{box-shadow:var(--shadow)}
+.story img{width:100%;height:150px;object-fit:cover;display:block;background:var(--surface-2)}
+.story .b{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+.story .k{font-size:11px;text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+.story .t{font-size:15px;font-weight:600;line-height:1.35}
+.story .a{margin-top:auto;font-size:13px;color:var(--link);font-weight:600}
+
+/* ---------- Indicator workspace: chat + artifacts ---------- */
+#view-explore{max-width:none}
+.ws-head{display:flex;align-items:center;gap:12px;padding:14px 0 12px}
+.ws-head .ic{width:34px;height:34px}.ws-head .ic svg{width:18px;height:18px}
+.ws-head h1{margin:0;font-size:22px;font-weight:400;letter-spacing:-.01em}
+.ws-head .crumbs{font-size:13px;color:var(--muted)}
+.ws{display:grid;grid-template-columns:minmax(360px,5fr) minmax(0,7fr);gap:16px;height:calc(100vh - 26px - 60px - 70px)}
+.chatcol{background:var(--surface);border-radius:12px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 1px 2px rgba(0,34,68,.05)}
+.thread{flex:1;overflow:auto;padding:20px 22px;display:flex;flex-direction:column;gap:14px}
+.msg.user{align-self:flex-end;background:var(--chip);border-radius:14px 14px 4px 14px;padding:8px 12px;max-width:85%}
+.msg.sys{font-size:13px;color:var(--ink-2);border-left:2px solid var(--brand);padding:2px 0 2px 10px}
+.msg.bot{display:flex;flex-direction:column;gap:8px}
+.msg.bot ul,.msg.bot ol{margin:0;padding-left:20px}
+.welcome h3{margin:0 0 4px;font-size:18px;font-weight:600}
+.acard{border:1px solid var(--ring);border-radius:10px;padding:10px 12px;background:var(--tint)}
+.acard .t{font-size:12px;color:var(--muted)}
+.acard .rows{display:grid;grid-template-columns:auto 1fr;gap:2px 14px;margin-top:4px;font-size:14px}
+.artref{display:flex;align-items:center;gap:12px;border:1px solid var(--ring);border-radius:10px;padding:10px 12px;cursor:pointer;background:#fff;transition:border-color .15s}
+.artref:hover{border-color:var(--link)}
+.artref .ai{width:34px;height:34px;border-radius:8px;background:var(--chip);color:var(--primary);display:grid;place-items:center;flex:none}
+.artref b{display:block;font-size:14px}.artref span{font-size:12px;color:var(--muted)}
+.how{font-size:12.5px;color:var(--ink-2)}.how summary{cursor:pointer;color:var(--muted)}
+.fu{display:flex;flex-wrap:wrap;gap:6px}
+.status{font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:8px}
+.dots{display:inline-flex;gap:3px}.dots i{width:5px;height:5px;border-radius:50%;background:var(--muted);animation:b 1s infinite}
+.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
+@keyframes b{0%,100%{opacity:.25}50%{opacity:1}}
+.composer{border-top:1px solid var(--grid);padding:10px 14px 14px;background:#fff}
+.quick{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;scrollbar-width:thin}
+.quick .chip{white-space:nowrap;font-size:12.5px;padding:4px 11px}
+.c-input{display:flex;gap:6px;align-items:flex-end;border:1px solid var(--ring);border-radius:12px;padding:6px 6px 6px 12px;background:var(--tint)}
+.c-input textarea{flex:1;border:0;outline:none;font:inherit;font-size:15px;resize:none;background:transparent;padding:6px 0;max-height:120px}
+.c-foot{font-size:11.5px;color:var(--muted);margin-top:6px;display:flex;justify-content:space-between}
+/* artifact panel */
+.artcol{background:var(--surface);border-radius:12px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 1px 2px rgba(0,34,68,.05)}
+.tabs{display:flex;gap:2px;padding:8px 10px 0;border-bottom:1px solid var(--grid);overflow-x:auto;background:#fbfcfd}
+.tab{display:flex;align-items:center;gap:6px;border:0;background:none;padding:8px 12px;border-bottom:2px solid transparent;cursor:pointer;font-size:13px;color:var(--ink-2);white-space:nowrap}
+.tab.on{border-bottom-color:var(--primary);color:var(--ink);font-weight:600}
+.tab svg{width:15px;height:15px}
+.abar{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid var(--grid)}
+.abar .t{flex:1;font-weight:600;font-size:14px}
+.abody{flex:1;overflow:auto;padding:16px 18px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.filters label{font-size:12px;color:var(--muted);margin:0 2px 0 4px}
+.filters select{font:inherit;font-size:13px;padding:5px 8px;border-radius:999px;border:1px solid var(--ring);background:var(--surface);color:var(--ink);max-width:220px}
+.filters select.set{border-color:var(--link);background:var(--chip);font-weight:600}
+.seg{display:inline-flex;border:1px solid var(--ring);border-radius:999px;overflow:hidden;background:var(--surface)}
+.seg button{border:0;background:none;padding:5px 12px;font-size:13px;cursor:pointer;color:var(--ink-2)}
+.seg button.on{background:var(--chip);color:var(--primary);font-weight:700}
+.card{border:1px solid var(--grid);border-radius:10px;padding:16px;margin-bottom:14px}
+.card h2{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 10px;font-weight:700}
+.two{display:grid;grid-template-columns:230px minmax(0,1fr);gap:16px;align-items:start}
+.stat .label{font-size:15.5px;line-height:1.3;font-weight:600}
+.stat .hero-num{font-size:40px;font-weight:300;letter-spacing:-.03em;line-height:1.1;margin-top:8px}
+.stat .pair{display:flex;gap:22px;margin-top:8px}
+.stat .pair div{font-size:30px;font-weight:300;letter-spacing:-.02em;line-height:1.1}
+.stat .pair small{display:block;font-size:12px;color:var(--muted);font-weight:600}
+.stat .note{font-size:12.5px;color:var(--muted);margin-top:8px}
+.meter{height:8px;border-radius:4px;background:var(--seq-track);overflow:hidden;margin-top:12px}
+.meter>span{display:block;height:100%;background:var(--seq-fill);border-radius:4px}
+.meter-row{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-2);margin-top:4px}
+.chart{width:100%;height:280px}
+.views{display:flex;gap:8px;justify-content:space-between;align-items:center;margin:0 0 4px;flex-wrap:wrap}
+.ind-pick{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.prov{font-size:12px;color:var(--muted);margin-top:10px;border-top:1px dashed var(--grid);padding-top:8px}
+/* deck */
+.slidewrap{position:relative;width:100%;margin-bottom:18px;border-radius:8px;box-shadow:0 0 0 1px var(--grid);overflow:hidden}
+.slide{width:1280px;height:720px;transform-origin:0 0;position:absolute;left:0;top:0;padding:46px 60px 58px;display:flex;flex-direction:column;background:#fff;overflow:hidden}
+.slide::before{content:"";position:absolute;left:0;top:0;bottom:0;width:10px;background:var(--brand-dark)}
+.slide .kick{font-size:14px;letter-spacing:.1em;text-transform:uppercase;color:var(--brand);font-weight:700}
+.slide h3{margin:8px 0 22px;font-size:34px;line-height:1.18;font-weight:600;color:var(--brand-dark);letter-spacing:-.01em}
+.slide .n{position:absolute;right:40px;bottom:22px;font-size:13px;color:var(--muted)}
+.slide .src{position:absolute;left:60px;right:120px;bottom:20px;font-size:12px;color:var(--muted);line-height:1.35}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin:4px 0 26px}
+.kpi{background:var(--tint);border-radius:10px;padding:18px 20px}
+.kpi .v{font-size:46px;font-weight:300;letter-spacing:-.02em;line-height:1.05}
+.kpi .l{font-size:14.5px;color:var(--ink-2);margin-top:6px;line-height:1.35}
+.sgrid{display:grid;grid-template-columns:690px 1fr;gap:34px;flex:1;min-height:0;align-items:start}
+.slide ul,.slide ol{margin:4px 0 0;padding-left:22px;font-size:17px;line-height:1.45}.slide li{margin-bottom:8px}
+.slide .slab{font-size:15px;font-weight:700;margin-top:4px}
+.slide img.dchart{width:690px;height:430px;display:block}
+.slide .note{font-size:14px;color:var(--muted);margin-top:12px;line-height:1.4}
+/* notebook */
+.cell{border:1px solid var(--grid);border-radius:8px;margin-bottom:10px;overflow:hidden}
+.cell .h{font-size:11px;color:var(--muted);padding:4px 10px;background:#fafbfc;border-bottom:1px solid var(--grid)}
+.cell pre{margin:0;padding:10px 12px;font:12px/1.5 "Roboto Mono",ui-monospace,Menlo,monospace;white-space:pre-wrap;color:#1f2933}
+.cell.md pre{font-family:var(--font);font-size:13px}
+/* video */
+.video{display:grid;grid-template-columns:240px 1fr;border-radius:10px;overflow:hidden;border:1px solid var(--grid)}
+.presenter{background:linear-gradient(160deg,#012740,#004370);color:#fff;padding:18px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center}
+.avatar{width:120px;height:120px;border-radius:50%;background:radial-gradient(circle at 50% 38%,#cde7f9 0 22%,transparent 23%),radial-gradient(ellipse at 50% 92%,#cde7f9 0 46%,transparent 47%),#0071bc;position:relative;margin-top:6px}
+.avatar.talk::after{content:"";position:absolute;inset:-10px;border-radius:50%;border:3px solid var(--brand);animation:ring 1.1s infinite}
+@keyframes ring{0%{transform:scale(.95);opacity:1}100%{transform:scale(1.15);opacity:0}}
+.presenter .lbl{font-size:11.5px;opacity:.75}
+.captions{background:rgba(0,0,0,.35);border-radius:8px;padding:10px 12px;font-size:13.5px;min-height:110px;text-align:left;width:100%}
+.stage{padding:14px 16px}
+.scenes{display:flex;gap:6px;margin-bottom:6px;flex-wrap:wrap}
+.scenes span{font-size:12px;padding:3px 10px;border-radius:999px;background:var(--surface-2);color:var(--ink-2)}
+.scenes span.on{background:var(--primary);color:#fff}
+/* verified numbers */
+.claim{white-space:nowrap;font-weight:700;border-bottom:1px dotted var(--axis);cursor:help}
+.claim .b{font-size:10.5px;margin-left:2px;vertical-align:1px;color:var(--good-text)}
+.claim.bad .b{color:#b07800}
+.legend-v{font-size:11.5px;color:var(--muted)}
+dialog{border:0;border-radius:14px;padding:26px;box-shadow:0 20px 60px rgba(0,0,0,.25);max-width:640px}
+dialog::backdrop{background:rgba(0,20,40,.45)}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--brand-dark);color:#fff;padding:8px 14px;border-radius:10px;font-size:13px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:60}
+.toast.show{opacity:1}
+@media (max-width:1050px){.ws{grid-template-columns:1fr;height:auto}.chatcol{height:620px}.artcol{min-height:700px}.two,.sgrid,.video{grid-template-columns:1fr}}
+@media (max-width:600px){main{padding:0 16px 48px}.hero{margin:0 -16px;padding:28px 16px}header.top{padding:0 16px}header.top nav button{padding:20px 6px 18px}.hero h1{font-size:26px}.fig .num{font-size:34px}.kpis{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="mock-banner">Prototype mockup · live WBG Scorecard data, FY<span class="fy"></span> snapshot (<span id="snapdate"></span>) · assistant replies are scripted here; the app uses the LLM</div>
+<header class="top">
+  <div class="brand" onclick="go('home')">Scorecard Explorer <span class="sep"></span><small>Prototype</small></div>
+  <nav>
+    <button class="on" id="nav-home" onclick="go('home')">Outcomes</button>
+    <button onclick="go('home');setTimeout(()=>$('stories-h').scrollIntoView({behavior:'smooth'}),50)">Stories</button>
+    <button onclick="$('modal').showModal()">How it works</button>
+  </nav>
+</header>
+
+<main>
+<!-- ================= LANDING ================= -->
+<section class="view active" id="view-home">
+  <div class="hero"><div class="hero-in">
+    <h1>How is the <b>World Bank Group</b> delivering?</h1>
+    <p>Results across 15 outcome areas. Explore, or just ask.</p>
+    <form class="ask" onsubmit="homeAsk(event)">
+      <i data-lucide="sparkles" style="width:18px;height:18px;color:var(--brand);margin-left:8px"></i>
+      <input id="home-q" placeholder="Ask a question about the results…" autocomplete="off">
+      <button class="btn">Ask</button>
+    </form>
+    <div class="try">
+      <button class="chip" onclick="homeAsk(null,'Energy access in Western Africa')">Energy access in Western Africa</button>
+      <button class="chip" onclick="homeAsk(null,'Which outcome areas have the biggest gaps?')">Biggest gaps</button>
+      <button class="chip" onclick="homeAsk(null,'Students supported in Ghana')">Students supported in Ghana</button>
+    </div>
+    <div class="home-answer" id="home-answer"></div>
+  </div></div>
+  <div class="vbar" id="vfilters"></div>
+  <div class="grid" id="tiles"></div>
+  <div class="section-h" id="stories-h"><h2>Results stories</h2><a onclick="showAll=!showAll;renderStories()" id="stories-toggle">See all</a></div>
+  <div class="stories" id="stories"></div>
+</section>
+
+<!-- ================= INDICATOR WORKSPACE ================= -->
+<section class="view" id="view-explore">
+  <div class="ws-head">
+    <div class="ic" id="ex-ic"></div>
+    <div><div class="crumbs"><a onclick="go('home')">Outcomes</a> /</div><h1 id="ex-title"></h1></div>
+  </div>
+  <div class="ws">
+    <!-- chat -->
+    <div class="chatcol">
+      <div class="thread" id="msgs"></div>
+      <div class="composer">
+        <div class="quick" id="quick"></div>
+        <form class="c-input" onsubmit="dockAsk(event)">
+          <textarea id="dock-q" rows="1" placeholder="Ask about this outcome area…" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();dockAsk()}"></textarea>
+          <button class="btn" style="padding:8px 14px"><i data-lucide="arrow-up" style="width:18px;height:18px"></i></button>
+        </form>
+        <div class="c-foot"><span><span class="claim"><span class="b">✓</span></span> numbers are verified against Scorecard data</span><span>Artifacts open on the right →</span></div>
+      </div>
+    </div>
+    <!-- artifacts -->
+    <div class="artcol">
+      <div class="tabs" id="tabs"></div>
+      <div class="abar" id="abar"></div>
+      <div class="abody" id="abody"></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<div class="toast" id="toast"></div>
+<dialog id="modal">
+  <h3 style="margin-top:0">How it works</h3>
+  <p><b>Data.</b> WBG Corporate Scorecard API (results, client context, metadata, stories), loaded by a pipeline into a local database.</p>
+  <p><b>Questions.</b> A fast model classifies each message (set filters, analyze, explain, create artifact, clarify, out of scope). Analysis runs typed, read-only queries; answers and artifacts are built only from their results.</p>
+  <p><b>Artifacts.</b> Figures, video explainers and briefing decks are generated from verified data. Each one can be exported as a Jupyter notebook that re-downloads the same data from the Scorecard API and reproduces it.</p>
+  <p><b>Verified numbers.</b> Every figure links to its source row: <span class="claim">12.1M<span class="b">✓</span></span>. Untraceable numbers are marked <span class="claim bad">12M<span class="b">⚠</span></span>.</p>
+  <form method="dialog" style="text-align:right"><button class="btn">Close</button></form>
+</dialog>
+
+<script id="data" type="application/json">/*DATA*/</script>
+<script>
+const D=JSON.parse(document.getElementById('data').textContent);
+const $=id=>document.getElementById(id);
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const REG={ACW:'All countries',AFE:'Eastern & Southern Africa',AFW:'Western & Central Africa',EAP:'East Asia & Pacific',ECA:'Europe & Central Asia',LCR:'Latin America & Caribbean',MENAAP:'MENA, Afghanistan & Pakistan',SAR:'South Asia',FCS:'Fragile & conflict-affected'};
+const REGIONS=['AFE','AFW','EAP','ECA','LCR','MENAAP','SAR'];
+const VERT={'People':'--v-people','Prosperity':'--v-prosperity','Planet':'--v-planet','Infrastructure':'--v-infra','Digital':'--v-digital','Cross-cutting themes':'--v-cross'};
+const ICON={1:'shield',2:'book-open',3:'heart-pulse',4:'landmark',5:'leaf',6:'droplets',7:'wheat',8:'bus',9:'zap',10:'wifi',11:'smartphone',12:'users',13:'house',14:'briefcase',15:'trending-up'};
+const areaName=a=>REG[a]||((D.names[a]||[a])[0]).replace(/^(.+?), (.+? of)$/,'$2 $1').replace(/^(.+?), (Rep\.|The)$/,'$1');
+const isCountry=a=>a&&a.length===3&&!!D.names[a];
+const regionOf=a=>(D.names[a]||[])[1];
+document.querySelectorAll('.fy').forEach(e=>e.textContent=D.snapshot_fy.slice(2)); $('snapdate').textContent=D.snapshot_date;
+
+/* ---------- formatting & verified numbers ---------- */
+function compact(v){const a=Math.abs(v);
+  if(a>=1e9)return(v/1e9).toFixed(1).replace(/\.0$/,'')+'B'; if(a>=1e6)return(v/1e6).toFixed(a>=1e8?0:1).replace(/\.0$/,'')+'M';
+  if(a>=1e3)return(v/1e3).toFixed(1).replace(/\.0$/,'')+'K'; return(Math.round(v*10)/10)+'';}
+function fmt(v,u){if(v==null)return'—'; if(u==='USD')return'$'+compact(v); if(u==='Percentage')return Math.round(v)+'%';
+  if(u&&/MtCO2/.test(u))return compact(v*1e6)+' tCO₂e/yr'; if(u&&/Hectare/.test(u))return compact(v)+' ha'; if(u&&/Gigawatt/.test(u))return compact(v)+' GW'; return compact(v);}
+function spoken(v,u){if(v==null)return'no data';const a=Math.abs(v);if(u==='Percentage')return Math.round(v)+' percent';
+  if(a>=1e9)return(v/1e9).toFixed(1)+' billion';if(a>=1e6)return(v/1e6).toFixed(1)+' million';if(a>=1e3)return Math.round(v/1e3)+' thousand';return Math.round(v)+'';}
+const pct=(a,e)=>(a!=null&&e)?a/e:null;
+const claim=(t,s)=>`<span class="claim" title="${s.replace(/"/g,'&quot;')}">${t}<span class="b">✓</span></span>`;
+const src=(ind,area,field,raw)=>`Source: WBG Scorecard API · ${ind} · ${areaName(area)} · ${field} · FY${S.fy.slice(2)} snapshot · raw ${raw==null?'n/a':(Math.round(raw*100)/100).toLocaleString()}`;
+function shortTitle(name){let t=name.replace(/^(Number|Percentage|Total)( of)? /i,'').replace(/\(.*?\)/g,'').trim();t=t.charAt(0).toUpperCase()+t.slice(1);const i=t.indexOf(' ');return i>0?`<b>${t.slice(0,i)}</b>${t.slice(i)}`:`<b>${t}</b>`;}
+const icon=(n,s=20)=>`<i data-lucide="${ICON[n]||'circle'}" style="width:${s}px;height:${s}px"></i>`;
+const li=(n,s=16)=>`<i data-lucide="${n}" style="width:${s}px;height:${s}px"></i>`;
+
+/* ---------- data access ---------- */
+const OUT=D.outcomes.filter(o=>o.name);
+function val(ind,st=S){if(st.org!=='WBG')return(D.ORG[st.org]||{})[ind];if(st.fy!==D.snapshot_fy)return(D.FY[st.fy]||{})[ind];return((st.sex==='F'?D.RF:D.R)[st.area]||{})[ind];}
+function subFallback(ind,area){const s=(D.SUB[area]||{})[ind];if(!s||!s.length)return null;const b=s.reduce((m,x)=>(x[3]||0)>(m[3]||0)?x:m);return{name:b[1],v:[b[2],b[3]]};}
+function primary(o){const pick=o.results.map(r=>({r,v:D.R.ACW[r.code]})).filter(x=>x.v&&x.v[1]!=null);
+  const ben=pick.find(x=>x.r.unit==='Beneficiaries'&&x.v[0]!=null)||pick.find(x=>x.v[0]!=null)||pick[0];
+  if(ben)return{...ben.r,v:ben.v};for(const r of o.results){const s=subFallback(r.code,'ACW');if(s)return{...r,name:s.name,v:s.v};}return null;}
+function ctxPick(o,area){for(const c of o.context){const s=(D.CTX[area]||{})[c.code];if(s&&Object.keys(s).length>=2)return{c,s};}
+  for(const c of o.context){const s=(D.CTX.ACW||{})[c.code];if(s&&Object.keys(s).length)return{c,s,fallback:true};}return null;}
+const cur=()=>{const o=OUT.find(x=>x.n===S.n);return{o,r:o.results.find(x=>x.code===S.ind)||o.results[0]};};
+
+/* ---------- Landing ---------- */
+let vFilter='All',highlight=null,showAll=false;
+function renderVFilters(){$('vfilters').innerHTML=['All',...Object.keys(VERT)].map(v=>`<button class="chip ${v===vFilter?'on':''}" onclick="vFilter='${v}';renderVFilters();renderTiles()">${v==='All'?'All':`<span style="width:8px;height:8px;border-radius:50%;background:var(${VERT[v]})"></span>${v}`}</button>`).join('');}
+function renderTiles(){$('tiles').innerHTML=OUT.map(o=>{const p=primary(o),col=`var(${VERT[o.vertical]||'--muted'})`,dim=(vFilter!=='All'&&o.vertical!==vFilter)||(highlight&&!highlight.includes(o.n));
+    let fig='<div class="fig"><span class="na">See details</span></div>';
+    if(p){const[a,e]=p.v,r=pct(a,e);const bars=`<div class="bars" aria-hidden="true"><span style="height:${a!=null&&e>0?Math.max(4,Math.min(1,r)*52):0}px;background:${col}"></span><span style="height:52px;background:color-mix(in srgb, ${col} 22%, white)"></span></div>`;
+      fig=a!=null?`<div class="fig">${bars}<div><div class="num">${fmt(a,p.unit)}<small>Achieved</small></div><div class="exp">${fmt(e,p.unit)} Expected</div></div></div>`:`<div class="fig">${bars}<div><div class="exp">${fmt(e,p.unit)} Expected</div></div></div>`;}
+    return`<article class="tile ${dim?'dim':''} ${highlight&&highlight.includes(o.n)?'hl':''}" tabindex="0" onclick="openOutcome(${o.n})" onkeydown="if(event.key==='Enter')openOutcome(${o.n})" title="${o.name}"><div class="ic" style="color:${col}">${icon(o.n)}</div><h3>${p?shortTitle(p.name):`<b>${o.name}</b>`}</h3>${fig}</article>`;}).join('');lucide.createIcons();}
+function renderStories(){const list=(D.stories||[]).slice(0,showAll?99:4);$('stories').innerHTML=list.map(s=>{const o=OUT.find(x=>String(x.n)===s.outcomes[0]);
+  return`<article class="story" onclick="${s.url?`window.open('${s.url}','_blank')`:''}"><img src="${s.img}" alt="${(s.alt||'').replace(/"/g,'')}" loading="lazy"><div class="b"><div class="k" style="color:var(${VERT[o?.vertical]||'--muted'})">${o?o.name:''}</div><div class="t">${s.title}</div><div class="a">Read the story →</div></div></article>`;}).join('');$('stories-toggle').textContent=showAll?'Show fewer':'See all';}
+
+/* ---------- keyword "router" (stands in for the LLM in this mockup) ---------- */
+const TOPIC=[[/energy|electric|power/,9],[/learn|educat|school|student|read/,2],[/health|uhc|stunt/,3],[/tax|debt|fiscal|macro/,4],[/climat|resilien|planet|ghg|emission|forest|ecosys/,5],[/water|sanitation|wash|hygien/,6],[/food|nutrition|hunger/,7],[/transport|road|connected/,8],[/broadband|internet|connectivity/,10],[/digital service|e-gov|payment/,11],[/gender|equality/,12],[/displac|refugee|host communit/,13],[/job|employ/,14],[/private|investment|capital/,15],[/poor|safety net|social protect/,1]];
+const AREAS=[[/west(ern)?( (and|&) central)? africa|central africa|\bafw\b/,'AFW'],[/east(ern)?( (and|&) southern)? africa|southern africa|\bafe\b/,'AFE'],[/east asia|pacific|\beap\b/,'EAP'],[/europe|central asia|\beca\b/,'ECA'],[/latin|caribbean|\blcr\b/,'LCR'],[/middle east|north africa|\bmena/,'MENAAP'],[/south asia|\bsar\b/,'SAR'],[/fragil|\bfcs\b|conflict-affected/,'FCS'],[/world|global|all countries/,'ACW']];
+function parse(q){const l=q.toLowerCase(),e={};
+  for(const[re,n]of TOPIC)if(re.test(l)){e.topic=n;break;}
+  const areas=[];for(const[re,c]of AREAS)if(re.test(l)&&!areas.includes(c))areas.push(c);
+  for(const[iso,v]of Object.entries(D.names)){const nm=v[0];if(nm&&nm.length>3&&new RegExp('\\b'+nm.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\b').test(l)&&D.R[iso])areas.push(iso);}
+  if(areas.length)e.areas=areas;if(/girl|women|woman|female/.test(l))e.sex='F';
+  if(/\bifc\b/.test(l))e.org='IFC';else if(/\bmiga\b/.test(l))e.org='MIGA';else if(/\bworld bank\b(?! group)/.test(l))e.org='WB';
+  const fy=l.match(/fy ?(2[456])|\b20(2[456])\b/);if(fy)e.fy='20'+(fy[1]||fy[2]);
+  e.compare=/compare|versus|\bvs\b|than/.test(l);e.rank=/lag|worst|best|top|rank|biggest|largest|least|struggl|behind|weak|falling/.test(l);
+  e.byCountry=/countr|econom/.test(l);e.define=/what (does|is)|mean|defin/.test(l);e.summary=/summar|overview|what (does this|this) show/.test(l);
+  e.strategic=/priorit|three-year|3-year|multi-year|\bplan\b|strateg|where should|opportunit|allocate|footprint/.test(l);e.video=/video|explain(er)? (this|with)|walk me/.test(l);e.deck=/slide|deck|presentation|briefing|brief/.test(l);e.notebook=/notebook|jupyter|download (the )?data|export/.test(l);e.figure=/chart|figure|plot|graph|visuali/.test(l);
+  return e;}
+
+/* ---------- Landing ask ---------- */
+function homeAsk(ev,preset){if(ev)ev.preventDefault();const q=preset||$('home-q').value.trim();if(!q)return;$('home-q').value=q;const e=parse(q),box=$('home-answer');
+  if(window.__pendingQ&&e.topic&&!e.strategic){box.style.display='none';openResearch(e.topic,window.__pendingQ,{chosenBy:'user'});return;}
+  if(e.strategic){if(e.topic){box.style.display='none';openResearch(e.topic,q,{chosenBy:'user'});return;}
+    const ranked=chooseArea(),pick=ranked[0];window.__pendingQ=q;box.style.display='block';highlight=null;renderTiles();
+    box.innerHTML=`<div class="status">${li('bot',14)} Research agent · scoping</div><p style="margin:6px 0 4px">No thematic area was named, so I scanned all 15 outcome areas and picked <b>${pick.o.name}</b>: the largest remaining gap among areas with country-level results and need data. Starting the analysis…</p><div class="na">To analyze a different area, type it in the box above (e.g. "education").</div>`;
+    lucide.createIcons();setTimeout(()=>openResearch(pick.o.n,q,{chosenBy:'agent',ranked}),1400);return;}
+  if(e.topic&&!(e.rank&&!e.areas)){box.style.display='none';highlight=null;renderTiles();openOutcome(e.topic,{},q);return;}
+  box.style.display='block';
+  if(e.rank){const ranked=OUT.map(o=>({o,p:primary(o)})).filter(x=>x.p&&x.p.v[0]!=null&&x.p.unit==='Beneficiaries').map(x=>({...x,r:x.p.v[0]/x.p.v[1]})).sort((a,b)=>a.r-b.r).slice(0,3);
+    highlight=ranked.map(x=>x.o.n);renderTiles();
+    box.innerHTML=`<p style="margin:0 0 6px"><b>Furthest from expected results</b> (people reached, all countries, FY${D.snapshot_fy.slice(2)}):</p><ol style="margin:0 0 6px;padding-left:20px">${ranked.map(x=>`<li>${x.o.name}: ${claim(Math.round(x.r*100)+'%',`Achieved ÷ expected, computed in code from ${x.p.code}`)} of expected</li>`).join('')}</ol><div class="legend-v">Highlighted below. <a onclick="highlight=null;renderTiles();$('home-answer').style.display='none'">Clear</a></div>`;return;}
+  highlight=null;renderTiles();box.innerHTML=`<p style="margin:0 0 8px">Which outcome area do you mean?</p><div class="fu">${[2,9,3].map(n=>`<button class="chip" onclick="homeAsk(null,'${q.replace(/'/g,'')} ${OUT.find(o=>o.n===n).name}')">${OUT.find(o=>o.n===n).name}</button>`).join('')}</div>`;}
+
+/* =====================================================================
+   Indicator workspace: state, chat, artifacts
+   ===================================================================== */
+let S={n:9,ind:null,org:'WBG',area:'ACW',sex:'_T',fy:D.snapshot_fy,view:'map',mapField:0};
+let ARTS=[],ACTIVE=null,seq=0;
+function openOutcome(n,f={},q=null){if(!new Error().stack.includes('openResearch'))LASTQ=null;
+  const o=OUT.find(x=>x.n===n);S={...S,n,ind:(primary(o)||o.results[0]).code,org:'WBG',area:'ACW',sex:'_T',fy:D.snapshot_fy,view:'map',mapField:0};
+  $('ex-title').textContent=o.name;$('ex-ic').style.color=`var(${VERT[o.vertical]})`;$('ex-ic').innerHTML=icon(n,18);
+  ARTS=[{id:'overview',type:'overview',title:'Overview'}];ACTIVE='overview';$('msgs').innerHTML='';
+  $('quick').innerHTML=[['list-checks','Summarize this view','Summarize this view'],['bar-chart-3','Make a figure','make a figure comparing regions'],['clapperboard','Video explainer','explain this with a video'],['presentation','3-slide briefing','make a 3-slide briefing for leadership'],['notebook-pen','Export notebook','export a jupyter notebook']]
+    .map(([i,l,qq])=>`<button class="chip ai" onclick="dockAsk(null,'${qq}')">${li(i,14)}${l}</button>`).join('')+['girls in western africa','which countries are struggling?','what does expected mean?'].map(t=>`<button class="chip" onclick="dockAsk(null,'${t}')">${t}</button>`).join('');
+  addBot(`<div class="welcome"><h3>${o.name}</h3><div class="na" style="font-size:14px">${o.desc||''}</div></div><div>Ask me anything about this outcome area. I can filter the overview, compare areas, and create <b>figures</b>, <b>video explainers</b> and <b>briefing decks</b>, each exportable as a <b>Jupyter notebook</b> with the underlying data.</div>`);
+  go('explore');renderTabs();showArt('overview');lucide.createIcons();
+  if(q){addMsg('user',q);const e=parse(q);const ff={};if(e.areas)ff.area=e.areas[0];if(e.sex)ff.sex=e.sex;if(e.org)ff.org=e.org;if(e.fy)ff.fy=e.fy;applyFilters(ff,true);}
+}
+function validate(f){const n={...S,...f};if((n.org!=='WBG'||n.fy!==D.snapshot_fy)&&(n.area!=='ACW'||n.sex!=='_T')){
+  if(f.org||f.fy){n.area='ACW';n.sex='_T';toast('Mockup: institution and earlier snapshots are shown for all countries');}else{n.org='WBG';n.fy=D.snapshot_fy;toast('Mockup: area and sex filters use the latest WBG snapshot');}}return n;}
+function setF(f){S=validate(f);if(ACTIVE!=='overview')showArt('overview');else renderOverview();}
+function applyFilters(f,fromChat){S=validate(f);showArt('overview');
+  const parts=[];if(f.area)parts.push(areaName(S.area));if(f.sex)parts.push('female');if(f.org)parts.push(S.org);if(f.fy)parts.push('FY'+S.fy.slice(2));
+  if(fromChat&&parts.length)addMsg('sys',`Overview filtered: ${parts.join(', ')} · <a onclick="setF({area:'ACW',sex:'_T',org:'WBG',fy:D.snapshot_fy});this.textContent='undone'">undo</a>`);}
+
+/* ---------- artifacts panel ---------- */
+const TYPEICON={overview:'layout-dashboard',figure:'bar-chart-3',video:'clapperboard',deck:'presentation',notebook:'notebook-pen'};
+function renderTabs(){$('tabs').innerHTML=ARTS.map(a=>`<button class="tab ${a.id===ACTIVE?'on':''}" onclick="showArt('${a.id}')">${li(TYPEICON[a.type],15)}${a.title.length>26?a.title.slice(0,24)+'…':a.title}</button>`).join('');lucide.createIcons();}
+function addArt(a){a.id=a.id||('a'+(++seq));ARTS.push(a);ACTIVE=a.id;renderTabs();showArt(a.id);
+  addMsg('bot',`<div class="artref" onclick="showArt('${a.id}')"><div class="ai">${li(TYPEICON[a.type],18)}</div><div><b>${a.title}</b><span>${{figure:'Figure',video:'Video explainer',deck:'Presentation · 3 slides',notebook:'Jupyter notebook'}[a.type]} · built from verified Scorecard data · click to open</span></div></div>`);lucide.createIcons();return a;}
+function showArt(id){ACTIVE=id;stopTalk();renderTabs();const a=ARTS.find(x=>x.id===id);const bar=$('abar'),body=$('abody');body.scrollTop=0;
+  const exp=`<button class="btn-sm" onclick="exportNotebook('${id}')">${li('notebook-pen',14)}Export notebook</button>`;
+  if(a.type==='overview'){bar.innerHTML=`<span class="t">Overview · ${cur().o.name}</span>${exp}`;body.innerHTML=overviewHTML();renderOverview();}
+  else if(a.type==='figure'){bar.innerHTML=`<span class="t">${a.title}</span><button class="btn-sm" onclick="Plotly.downloadImage('art-fig',{format:'png',filename:'scorecard_figure',width:1200,height:700})">${li('download',14)}PNG</button>${exp}`;
+    body.innerHTML=`<div class="chart" id="art-fig" style="height:${a.sub==='matrix'?520:Math.max(260,a.rows.length*46+60)}px"></div><div class="prov">${a.prov}</div>`;a.sub==='matrix'?drawMatrix('art-fig',a.R,a.r):bullet('art-fig',a.rows,a.unit,a.hl);}
+  else if(a.type==='video'){bar.innerHTML=`<span class="t">${a.title}</span><button class="btn" style="padding:6px 14px" onclick="playVideo('${id}')">▶ Play</button><button class="btn-sm" onclick="stopTalk()">■ Stop</button>${exp}`;body.innerHTML=videoHTML(a);showScene(a,0);}
+  else if(a.type==='deck'){bar.innerHTML=`<span class="t">${a.title}</span><button class="btn-sm" onclick="exportDeck('${id}')">${li('file-down',14)}Export deck (HTML/PDF)</button>${exp}`;body.innerHTML=deckHTML(a);drawDeck(a);}
+  else if(a.type==='notebook'){bar.innerHTML=`<span class="t">${a.title}</span><button class="btn" style="padding:6px 14px" onclick="downloadNotebook('${id}')">${li('download',14)} Download .ipynb</button>`;body.innerHTML=notebookHTML(a);}
+  lucide.createIcons();}
+
+/* ---------- overview artifact (filters + the two Scorecard figures) ---------- */
+function overviewHTML(){const countries=Object.keys(D.R).filter(isCountry).sort((a,b)=>areaName(a).localeCompare(areaName(b)));
+  return`<div class="filters">
+    <label>Institution</label><select id="f-org" onchange="setF({org:this.value})"><option value="WBG">World Bank Group</option><option value="WB">World Bank</option><option value="IFC">IFC</option><option value="MIGA">MIGA</option></select>
+    <label>Area</label><select id="f-area" onchange="setF({area:this.value})"><option value="ACW">All countries</option><optgroup label="Regions">${REGIONS.map(a=>`<option value="${a}">${REG[a]}</option>`).join('')}</optgroup><optgroup label="Country groups"><option value="FCS">${REG.FCS}</option></optgroup><optgroup label="Countries">${countries.map(a=>`<option value="${a}">${areaName(a)}</option>`).join('')}</optgroup></select>
+    <label>Sex</label><div class="seg" id="f-sex"><button data-v="_T" onclick="setF({sex:'_T'})">All</button><button data-v="F" onclick="setF({sex:'F'})">Female</button></div>
+    <label>Snapshot</label><div class="seg" id="f-fy">${['2024','2025','2026'].map(f=>`<button data-v="${f}" onclick="setF({fy:'${f}'})">FY${f.slice(2)}</button>`).join('')}</div></div>
+  <div class="card"><h2>Client context</h2><div class="two"><div class="stat" id="ctx-stat"></div><div class="chart" id="ctx-chart" style="height:230px"></div></div></div>
+  <div class="card"><h2>Results from WBG operations</h2><div class="ind-pick" id="ind-pick"></div><div class="two"><div class="stat" id="res-stat"></div><div><div class="views" id="res-views"></div><div class="chart" id="res-chart" style="height:290px"></div></div></div></div>`;}
+function renderOverview(){const{o}=cur();if(!$('f-org'))return;
+  $('f-org').value=S.org;$('f-area').value=S.area;$('f-org').classList.toggle('set',S.org!=='WBG');$('f-area').classList.toggle('set',S.area!=='ACW');
+  document.querySelectorAll('#f-sex button').forEach(b=>b.classList.toggle('on',b.dataset.v===S.sex));document.querySelectorAll('#f-fy button').forEach(b=>b.classList.toggle('on',b.dataset.v===S.fy));
+  renderContext(o);renderResults(o);}
+const axis=()=>({gridcolor:css('--grid'),linecolor:css('--axis'),tickfont:{color:css('--muted'),size:11},zeroline:false});
+const base=(x={})=>({paper_bgcolor:'rgba(0,0,0,0)',plot_bgcolor:'rgba(0,0,0,0)',font:{family:css('--font'),color:css('--ink-2'),size:x.__fs||12},margin:{l:44,r:16,t:8,b:32},hoverlabel:{bgcolor:'#fff',bordercolor:css('--axis'),font:{color:css('--ink'),family:css('--font')}},showlegend:false,...x});
+const CFG={displayModeBar:false,responsive:true};
+function renderContext(o){const area=S.area,cp=ctxPick(o,area);
+  if(!cp){$('ctx-stat').innerHTML='<div class="na">No client-context series for this outcome area.</div>';Plotly.purge('ctx-chart');return;}
+  const code=cp.c.code,list=[];const add=a=>{const s=(D.CTX[a]||{})[code];if(s&&Object.keys(s).length&&!list.find(x=>x.a===a))list.push({a,s});};
+  add(area);if(isCountry(area))add(regionOf(area));add('ACW');const main=list[0],last=Object.keys(main.s).at(-1),mv=main.s[last];
+  $('ctx-stat').innerHTML=`<div class="label">${cp.c.name}</div><div class="hero-num">${cp.c.unit==='Percentage'?mv.toFixed(1)+'%':fmt(mv,cp.c.unit)}</div><div class="note">${areaName(main.a)} · ${last}${main.a!==area?` · no data for ${areaName(area)}`:''}</div>`;
+  const cols=['--s1','--s2','--muted'];
+  const tr=list.map((x,i)=>({x:Object.keys(x.s).map(Number),y:Object.values(x.s),type:'scatter',mode:Object.keys(x.s).length>1?'lines':'markers',name:areaName(x.a),line:{color:css(cols[i]),width:2},marker:{size:8,color:css(cols[i])},hovertemplate:`${areaName(x.a)} %{x}: %{y:.1f}<extra></extra>`}));
+  const ann=list.map(x=>({x:+Object.keys(x.s).at(-1),y:Object.values(x.s).at(-1),text:` ${areaName(x.a).split(/[ ,&]/)[0]} ${Object.values(x.s).at(-1).toFixed(1)}`,showarrow:false,xanchor:'left',font:{size:11,color:css('--ink-2')}}));
+  Plotly.react('ctx-chart',tr,base({xaxis:{...axis(),tickformat:'d'},yaxis:{...axis(),rangemode:'tozero'},margin:{l:36,r:90,t:10,b:28},annotations:ann,hovermode:'x unified'}),CFG);}
+function renderResults(o){
+  $('ind-pick').innerHTML=o.results.length>1?o.results.map(r=>`<button class="chip ${r.code===S.ind?'on':''}" onclick="S.ind='${r.code}';renderOverview()">${r.name.length>44?r.name.slice(0,42)+'…':r.name}</button>`).join(''):'';
+  const r=o.results.find(x=>x.code===S.ind)||o.results[0];let v=val(r.code),note='';
+  if((!v||v[1]==null)&&S.org==='WBG'&&S.fy===D.snapshot_fy&&S.sex==='_T'){const s=subFallback(r.code,S.area);if(s){v=s.v;note=`Shown: ${s.name}.`;}}
+  const p=v?pct(v[0],v[1]):null;
+  $('res-stat').innerHTML=`<div class="label">${r.name}</div>`+(!v?`<div class="na" style="margin-top:10px">No results reported for ${areaName(S.area)}.</div>`:
+   `<div class="pair"><div>${fmt(v[0],r.unit)}<small>Achieved</small></div><div style="color:var(--ink-2)">${fmt(v[1],r.unit)}<small>Expected</small></div></div>${p!=null&&r.unit!=='Percentage'&&v[1]>0?`<div class="meter"><span style="width:${Math.min(100,p*100)}%"></span></div><div class="meter-row"><span>${areaName(S.area)}</span><span>${Math.round(p*100)}% of expected</span></div>`:''}<div class="note">${note} Active portfolio · FY${S.fy.slice(2)}</div>`);
+  const views=[['map','Map'],['region','By region'],['org','By institution'],['fy','Over time']];
+  $('res-views').innerHTML=`<div class="seg">${views.map(([k,l])=>`<button class="${S.view===k?'on':''}" onclick="S.view='${k}';renderOverview()">${l}</button>`).join('')}</div><div class="seg">${S.view==='map'?['Achieved','Expected'].map((l,i)=>`<button class="${S.mapField===i?'on':''}" onclick="S.mapField=${i};renderOverview()">${l}</button>`).join(''):''}</div>`;
+  draw('res-chart',r,S.view);}
+function bullet(el,rows,unit,hl){const y=rows.map(x=>x.label);
+  const track={type:'bar',orientation:'h',y,x:rows.map(x=>x.v[1]),marker:{color:css('--seq-track')},width:.6,customdata:rows.map(x=>fmt(x.v[1],unit)),hovertemplate:'%{y}<br>expected %{customdata}<extra></extra>',name:'Expected'};
+  const fill={type:'bar',orientation:'h',y,x:rows.map(x=>x.v[0]),marker:{color:rows.map(x=>x.key===hl?css('--seq-strong'):css('--seq-fill'))},width:.34,customdata:rows.map(x=>fmt(x.v[0],unit)),hovertemplate:'%{y}<br>achieved %{customdata}<extra></extra>',name:'Achieved'};
+  const ann=rows.map(x=>({x:Math.max(x.v[1]||0,x.v[0]||0),y:x.label,text:x.v[0]!=null&&x.v[1]>0?`  ${Math.round(x.v[0]/x.v[1]*100)}%`:'',showarrow:false,xanchor:'left',font:{size:el.startsWith('dk')?14:11,color:css('--ink-2')}}));
+  Plotly.react(el,[track,fill],base({__fs:el.startsWith('dk')?14:12,barmode:'overlay',showlegend:!el.startsWith('dk'),legend:{orientation:'h',y:1.1,x:0,font:{size:11}},xaxis:{...axis(),tickformat:'~s'},yaxis:{...axis(),autorange:'reversed',gridcolor:'rgba(0,0,0,0)'},margin:{l:Math.min(240,10+(el.startsWith('dk')?7.6:6.4)*Math.max(...rows.map(x=>x.label.length))),r:50,t:el.startsWith('dk')?6:30,b:34},annotations:ann}),CFG);}
+function draw(el,r,view){const tbl=S.sex==='F'?D.RF:D.R;
+  if(view==='map'){let locs=Object.keys(tbl).filter(a=>isCountry(a)&&tbl[a][r.code]&&tbl[a][r.code][S.mapField]!=null);
+    const focus=REGIONS.includes(S.area)?S.area:(isCountry(S.area)?regionOf(S.area):null);if(focus)locs=locs.filter(a=>regionOf(a)===focus);
+    if(!locs.length)return empty(el,'No country-level results for this selection.');
+    Plotly.react(el,[{type:'choropleth',locations:locs,z:locs.map(a=>tbl[a][r.code][S.mapField]),text:locs.map(a=>`<b>${areaName(a)}</b><br>Achieved ${fmt(tbl[a][r.code][0],r.unit)}<br>Expected ${fmt(tbl[a][r.code][1],r.unit)}`),hovertemplate:'%{text}<extra></extra>',
+      colorscale:[[0,'#cde7f9'],[.5,'#0071bc'],[1,'#002244']],zmin:0,marker:{line:{color:locs.map(a=>a===S.area?'#0b0b0b':'#ffffff'),width:locs.map(a=>a===S.area?2:.5)}},colorbar:{orientation:'h',thickness:8,len:.5,x:.5,y:-.02,tickformat:'~s',tickfont:{size:10,color:css('--muted')},outlinewidth:0}}],
+      base({geo:{showframe:false,showcoastlines:false,projection:{type:'natural earth'},bgcolor:'rgba(0,0,0,0)',landcolor:'#e6eaee',showland:true,countrycolor:'#ffffff',showcountries:true,fitbounds:focus?'locations':false,lataxis:focus?undefined:{range:[-45,72]}},margin:{l:0,r:0,t:0,b:24}}),CFG);
+    $(el).removeAllListeners?.('plotly_click');$(el).on('plotly_click',ev=>{const a=ev.points[0].location;setF({area:a});addMsg('sys',`Map click → overview filtered: ${areaName(a)} · <a onclick="setF({area:'ACW'});this.textContent='undone'">undo</a>`);});
+  }else if(view==='region'){const rows=regionRows(r.code,tbl);rows.length?bullet(el,rows,r.unit,isCountry(S.area)?regionOf(S.area):S.area):empty(el,'No regional breakdown for this indicator.');
+  }else if(view==='org'){const rows=['WB','IFC','MIGA'].map(k=>({key:k,label:{WB:'World Bank',IFC:'IFC',MIGA:'MIGA'}[k],v:(D.ORG[k]||{})[r.code]})).filter(x=>x.v&&x.v[1]!=null);rows.length?bullet(el,rows,r.unit,S.org):empty(el,'No institution breakdown for this indicator.');
+  }else{const fys=['2024','2025','2026'],vs=fys.map(f=>(D.FY[f]||{})[r.code]||[null,null]);
+    const tr=[['Expected',1,'--s2'],['Achieved',0,'--s1']].map(([n,i,c])=>({type:'scatter',mode:'lines+markers',x:fys.map(f=>'FY'+f.slice(2)),y:vs.map(v=>v[i]),name:n,line:{color:css(c),width:2},marker:{size:9,color:css(c),line:{color:'#fff',width:2}},hovertemplate:`${n} %{x}: %{y:.3s}<extra></extra>`}));
+    Plotly.react(el,tr,base({showlegend:true,legend:{orientation:'h',y:1.12,font:{size:11}},xaxis:{...axis(),type:'category'},yaxis:{...axis(),tickformat:'~s',rangemode:'tozero'}}),CFG);}}
+function empty(el,m){Plotly.purge(el);$(el).innerHTML=`<div class="na" style="padding:60px 0;text-align:center">${m}</div>`;}
+const regionRows=(code,tbl=D.R)=>REGIONS.map(a=>({key:a,label:REG[a],v:(tbl[a]||{})[code]})).filter(x=>x.v&&x.v[1]!=null).sort((a,b)=>b.v[1]-a.v[1]);
+function countryRows(code,region,tbl=D.R){return Object.keys(tbl).filter(a=>isCountry(a)&&(!region||region==='ACW'||regionOf(a)===region||(region==='FCS'&&D.names[a][3]==='Y'))).map(a=>({key:a,label:areaName(a),v:tbl[a][code]})).filter(x=>x.v&&x.v[0]!=null&&x.v[1]>0);}
+
+/* ---------- insights (shared by summary, video, deck) ---------- */
+function insights(){const{o,r}=cur(),v=val(r.code),tbl=S.sex==='F'?D.RF:D.R,out=[];
+  if(v&&v[0]!=null&&v[1])out.push({html:`${areaName(S.area)}: ${claim(fmt(v[0],r.unit),src(r.code,S.area,'achieved',v[0]))} achieved of ${claim(fmt(v[1],r.unit),src(r.code,S.area,'expected',v[1]))} expected (${claim(Math.round(v[0]/v[1]*100)+'%',src(r.code,S.area,'achieved ÷ expected, computed',v[0]/v[1]*100))}).`,
+    say:`In ${areaName(S.area)}, World Bank Group operations have so far reached ${spoken(v[0],r.unit)}, out of ${spoken(v[1],r.unit)} expected from the active portfolio. That is ${Math.round(v[0]/v[1]*100)} percent.`,scene:'Headline',chart:'org'});
+  const rows=regionRows(r.code,tbl).filter(x=>x.v[0]!=null);
+  if(rows.length>2){const g=rows.reduce((m,x)=>(x.v[1]-x.v[0])>(m.v[1]-m.v[0])?x:m);
+    out.push({html:`Largest remaining gap: ${REG[g.key]}, ${claim(fmt(g.v[1]-g.v[0],r.unit),src(r.code,g.key,'expected − achieved, computed',g.v[1]-g.v[0]))} still to deliver.`,say:`Across regions, the largest remaining gap is in ${REG[g.key]}, where ${spoken(g.v[1]-g.v[0],r.unit)} are still to be delivered.`,scene:'Regions',chart:'region'});}
+  const a=(D.FY['2025']||{})[r.code],c=(D.FY['2026']||{})[r.code];
+  if(a&&c&&a[0]&&c[0])out.push({html:`All countries: achieved went from ${claim(fmt(a[0],r.unit),'FY25 snapshot · '+r.code)} (FY25) to ${claim(fmt(c[0],r.unit),'FY26 snapshot · '+r.code)} (FY26).`,say:`Over time, results moved from ${spoken(a[0],r.unit)} in the fiscal 2025 snapshot to ${spoken(c[0],r.unit)} in fiscal 2026.`,scene:'Over time',chart:'fy'});
+  return{o,r,items:out};}
+
+/* ---------- chat ---------- */
+function addMsg(k,h){const d=document.createElement('div');d.className='msg '+k;d.innerHTML=h;$('msgs').appendChild(d);$('msgs').scrollTop=1e9;return d;}
+const addBot=h=>addMsg('bot',h);
+function thinking(steps,done){const d=addBot(`<div class="status"><span class="dots"><i></i><i></i><i></i></span><span>${steps[0]}</span></div>`);let i=0;
+  const t=setInterval(()=>{i++;if(i<steps.length)d.querySelector('span:last-child').textContent=steps[i];else{clearInterval(t);d.remove();done();lucide.createIcons();}},550);}
+function dockAsk(ev,preset){if(ev)ev.preventDefault();const q=preset||$('dock-q').value.trim();if(!q)return;$('dock-q').value='';addMsg('user',q);
+  const e=parse(q),{o,r}=cur();
+  if(e.strategic){if(e.topic&&e.topic!==S.n){openResearch(e.topic,q,{chosenBy:'user'});return;}LASTQ=q;runResearch();return;}
+  if(LASTQ&&e.topic&&!e.compare&&!e.rank&&!e.figure&&!e.deck&&!e.video&&!e.notebook&&!e.summary&&!e.define){openResearch(e.topic,LASTQ,{chosenBy:'user'});return;}
+  if(e.notebook){thinking(['Collecting the data behind the current artifact…','Writing notebook cells…'],()=>{exportNotebook(ACTIVE);});return;}
+  if(e.deck){thinking(['Analyzing gaps by region and country…','Scoring priorities (need × remaining gap)…','Drafting 3 slides…','Verifying every number…'],()=>{const a=makeDeck();addBot(`<div>Here is a 3-slide briefing on <b>${o.name}</b>. Every figure is verified (hover the ✓). Export it as HTML/PDF, or as a notebook that reproduces the analysis.</div>`);});return;}
+  if(e.video){thinking(['Building a script from verified insights…','Preparing scenes…'],()=>{makeVideo();addBot('<div>Press <b>▶ Play</b> in the artifact panel. Ask a follow-up any time in the chat.</div>');});return;}
+  if(e.summary){thinking(['Reading the current view…','Writing summary…','Verifying numbers…'],()=>{const{items}=insights();addBot(items.length?`<div><b>What this view shows</b></div><ul>${items.map(x=>`<li>${x.html}</li>`).join('')}</ul><div class="fu"><button class="chip ai" onclick="dockAsk(null,'explain this with a video')">${li('clapperboard',14)}Video explainer</button><button class="chip ai" onclick="dockAsk(null,'make a 3-slide briefing')">${li('presentation',14)}3-slide briefing</button></div>`:'<div class="na">Not enough data in this view to summarize.</div>');});return;}
+  if(e.topic&&e.topic!==S.n&&!e.compare){setTimeout(()=>openOutcome(e.topic,{},q),300);return;}
+  if(e.define){thinking(['Looking up indicator metadata…'],()=>addBot(`<div><b>Achieved</b> is what WBG-financed operations have delivered so far. <b>Expected</b> is what the active portfolio is expected to deliver by completion. It is not a corporate target.</div><div class="how"><details><summary>Source</summary>Scorecard metadata · ${r.code}</details></div>`));return;}
+  if(e.rank&&(e.byCountry||(e.areas||[]).some(a=>REGIONS.includes(a)||a==='FCS'))){
+    const region=(e.areas||[]).find(a=>REGIONS.includes(a)||a==='FCS')||(isCountry(S.area)?regionOf(S.area):S.area);const tbl=e.sex==='F'?D.RF:D.R;
+    const rows=countryRows(r.code,region,tbl).filter(x=>x.v[1]>=Math.max(1,0.002*(D.R.ACW[r.code]||[0,0])[1])).map(x=>({...x,p:x.v[0]/x.v[1]})).sort((a,b)=>a.p-b.p).slice(0,8);
+    thinking([`rank_areas(${r.code}, COUNTRY, region=${region}, metric=ratio)`,'Verifying numbers…'],()=>{
+      if(!rows.length){addBot('<div>No country-level results to rank for that selection.</div>');return;}
+      addBot(`<div>Countries in <b>${areaName(region)}</b> furthest behind their expected results (${r.name.toLowerCase()}, FY${S.fy.slice(2)}; countries with very small portfolios excluded):</div><ol>${rows.slice(0,3).map(x=>`<li>${x.label}: ${claim(Math.round(x.p*100)+'%',src(r.code,x.key,'ratio, computed',x.p*100))} (${claim(fmt(x.v[0],r.unit),src(r.code,x.key,'achieved',x.v[0]))} of ${claim(fmt(x.v[1],r.unit),src(r.code,x.key,'expected',x.v[1]))})</li>`).join('')}</ol>
+        <div class="how"><details><summary>How I got this</summary><code>rank_areas(ind=${r.code}, area_type=COUNTRY, region=${region}, metric=ratio, order=asc)</code> · minimum portfolio size filter applied</details></div>
+        <div class="fu"><button class="chip" onclick="dockAsk(null,'${rows[0].label.toLowerCase()}')">Show ${rows[0].label}</button></div>`);
+      addArt({type:'figure',title:`Lagging countries · ${areaName(region)}`,rows,unit:r.unit,ind:r.code,areas:rows.map(x=>x.key),hl:null,prov:`Source: WBG Scorecard API · ${r.code} · country level · FY${S.fy.slice(2)} snapshot ${D.snapshot_date}. Bars: achieved (dark) over expected (light); labels = achieved ÷ expected, computed in code.`});});return;}
+  if((e.compare&&(e.areas||[]).length)||e.figure){
+    let areas=e.areas&&e.areas.length?(e.areas.length>1?e.areas:[S.area,e.areas[0]]):REGIONS;if(e.sex)S.sex=e.sex;const tbl=S.sex==='F'?D.RF:D.R;
+    const rows=[...new Set(areas)].map(a=>({key:a,label:areaName(a),v:(tbl[a]||{})[r.code]})).filter(x=>x.v&&x.v[0]!=null);
+    thinking(['Querying results…','Building figure…','Verifying numbers…'],()=>{if(!rows.length){addBot('<div>No comparable values for that selection.</div>');return;}
+      if(rows.length<=3)addBot(`<div class="acard"><div class="t">${r.name}${S.sex==='F'?' · female':''} · FY${S.fy.slice(2)}</div><div class="rows">${rows.map(x=>`<b>${x.label}</b><span>${claim(fmt(x.v[0],r.unit),src(r.code,x.key,'achieved',x.v[0]))} of ${claim(fmt(x.v[1],r.unit),src(r.code,x.key,'expected',x.v[1]))} · ${claim(Math.round(x.v[0]/x.v[1]*100)+'%',src(r.code,x.key,'ratio, computed',x.v[0]/x.v[1]*100))}</span>`).join('')}</div></div>`);
+      const best=rows.reduce((m,x)=>x.v[0]/x.v[1]>m.v[0]/m.v[1]?x:m);addBot(`<div>${best.label} is furthest along relative to its expected results.</div><div class="how"><details><summary>How I got this</summary><code>get_results(${r.code}, [${rows.map(x=>x.key).join(', ')}], sex=${S.sex})</code> · ratios computed in code</details></div>`);
+      addArt({type:'figure',title:rows.length>3?`Achieved vs expected by region`:`${rows.map(x=>x.label.split(' ')[0]).join(' vs ')}`,rows,unit:r.unit,ind:r.code,areas:rows.map(x=>x.key),hl:null,prov:`Source: WBG Scorecard API · ${r.code}${S.sex==='F'?' · female':''} · FY${S.fy.slice(2)} snapshot ${D.snapshot_date}. Labels = achieved ÷ expected, computed in code.`});});return;}
+  if(e.rank){const tbl=S.sex==='F'?D.RF:D.R,rows=regionRows(r.code,tbl).filter(x=>x.v[0]!=null).map(x=>({...x,p:x.v[0]/x.v[1]})).sort((a,b)=>a.p-b.p);
+    thinking(['Ranking regions…','Verifying numbers…'],()=>{if(!rows.length){addBot('<div>No regional breakdown for this indicator.</div>');return;}
+      addBot(`<div>Regions with the lowest delivery relative to expected:</div><ol>${rows.slice(0,3).map(x=>`<li>${x.label}: ${claim(Math.round(x.p*100)+'%',src(r.code,x.key,'ratio, computed',x.p*100))} (${claim(fmt(x.v[0],r.unit),src(r.code,x.key,'achieved',x.v[0]))} of ${claim(fmt(x.v[1],r.unit),src(r.code,x.key,'expected',x.v[1]))})</li>`).join('')}</ol><div class="fu"><button class="chip" onclick="dockAsk(null,'which countries in ${rows[0].label.toLowerCase()} are struggling?')">Countries in ${rows[0].label}</button></div>`);
+      S.view='region';showArt('overview');});return;}
+  if(e.areas||e.sex||e.org||e.fy){const f={};if(e.areas)f.area=e.areas[0];if(e.sex)f.sex=e.sex;if(e.org)f.org=e.org;if(e.fy)f.fy=e.fy;thinking(['Setting filters…'],()=>applyFilters(f,true));return;}
+  thinking(['…'],()=>addBot(`<div>I can answer questions about World Bank Group Scorecard results, and create figures, explainers, briefings and notebooks. Try:</div><div class="fu"><button class="chip" onclick="dockAsk(null,'which countries are struggling?')">Which countries are struggling?</button><button class="chip" onclick="dockAsk(null,'make a 3-slide briefing')">3-slide briefing</button></div>`));}
+
+/* ---------- video artifact ---------- */
+let talking=false;
+function makeVideo(){const{o,r,items}=insights();if(!items.length){toast('Not enough data for an explainer');return;}
+  const steps=[{say:`Here is a quick look at ${o.name}, focusing on ${r.name.toLowerCase()}, for ${areaName(S.area)}.`,scene:'Intro',chart:'map'},...items,{say:'That is the picture today. Ask me a follow-up question in the chat.',scene:'Ask me',chart:'region'}];
+  return addArt({type:'video',title:`Explainer · ${o.name.split(' ').slice(0,3).join(' ')}`,steps,ind:r.code,areas:['ACW',...REGIONS],state:{...S}});}
+function videoHTML(a){return`<div class="video"><div class="presenter"><div class="avatar" id="avatar"></div><div class="lbl">AI presenter (concept)</div><div class="captions" id="captions">Press ▶ Play to start.</div></div>
+  <div class="stage"><div class="scenes">${a.steps.map((s,i)=>`<span id="sc${i}">${i+1}. ${s.scene}</span>`).join('')}</div><div class="chart" id="xp-chart" style="height:300px"></div></div></div>
+  <div class="prov">Script generated only from verified claims (✓). Browser speech stands in for a generated presenter video; see docs/vision_voice_video.md. Source: WBG Scorecard API · ${a.ind} · FY${S.fy.slice(2)}.</div>`;}
+function showScene(a,i){document.querySelectorAll('.scenes span').forEach((s,j)=>s.classList.toggle('on',j===i));const r=cur().r,k=S.view;S.view=a.steps[i].chart;draw('xp-chart',r,S.view);S.view=k;}
+function playVideo(id){const a=ARTS.find(x=>x.id===id);stopTalk();talking=true;let i=0;
+  const next=()=>{if(!talking||i>=a.steps.length){$('avatar')?.classList.remove('talk');talking=false;return;}showScene(a,i);const st=a.steps[i];$('captions').textContent=st.say;$('avatar').classList.add('talk');
+    if('speechSynthesis' in window){const u=new SpeechSynthesisUtterance(st.say);u.rate=1.02;u.onend=()=>{i++;setTimeout(next,300);};speechSynthesis.speak(u);}else setTimeout(()=>{i++;next();},st.say.length*55);};next();}
+function stopTalk(){talking=false;if('speechSynthesis' in window)speechSynthesis.cancel();$('avatar')?.classList.remove('talk');}
+
+/* ---------- research agent: cross-organization prioritization ---------- */
+const SECT={1:/Social Protection/,2:/Education/,3:/Health/,4:/Central Government|Public Administration - (Finance|Other)|Tax/,5:/Forestry|Environment|Flood|Disaster|Climate/,6:/Water|Sanitation/,7:/Agri|Food|Fishing|Irrigation|Livestock/,8:/Road|Transport|Rail|Port|Aviation/,9:/Energy|Solar|Renewable|Hydro|Power|Electric|Transmission|Thermal|Geothermal/,10:/ICT/,11:/ICT|Digital/,12:/Social|Banking|Finance/,13:/Social|Displac/,14:/Labor|Employment|SME|Private/,15:/Private|Banking|Capital Markets|Finance/};
+function quantile(arr,q){const s=[...arr].sort((a,b)=>a-b);if(!s.length)return 0;const pos=(s.length-1)*q,lo=Math.floor(pos),hi=Math.ceil(pos);return s[lo]+(s[hi]-s[lo])*(pos-lo);}
+function needIndicator(o){let best=null;for(const c of o.context){const n=Object.keys(D.CTX).filter(a=>isCountry(a)&&D.CTX[a][c.code]).length;if(!best||n>best.n)best={c,n};}return best&&best.c;}
+function researchData(o,r){
+  const need=needIndicator(o),neg=need&&NEG.test(need.name),popShare=need&&need.unit==='Percentage'&&/population|people/i.test(need.name),sect=SECT[o.n];
+  const rows=Object.keys(D.names).filter(isCountry).map(a=>{const v=(D.R[a]||{})[r.code],s=need&&(D.CTX[a]||{})[need.code],y=s?Object.keys(s).at(-1):null,ctx=s?s[y]:null,pop=(D.POP[a]||[])[1]??null;
+    const pr=((D.PR||{})[r.code]||{})[a],act=sect?(D.ACTIVE||[]).filter(x=>x[0]===a&&sect.test(x[2])):[];
+    const peopleNeed=popShare&&ctx!=null&&pop?(neg?pop*ctx/100:pop*(100-ctx)/100):null;
+    return{key:a,label:areaName(a),region:regionOf(a),fcv:D.names[a][3]==='Y',ach:v?v[0]:null,exp:v?v[1]:null,gap:v&&v[0]!=null?v[1]-v[0]:null,ratio:v&&v[0]!=null&&v[1]>0?v[0]/v[1]:null,
+      ctx,ctxYear:y,pop,peopleNeed,nProj:pr?pr[0]:0,cmt:pr?pr[1]:0,nActive:act.length,cmtActive:act.reduce((s,x)=>s+x[1],0)};}).filter(x=>x.exp!=null||x.ctx!=null);
+  const withRes=rows.filter(x=>x.exp>0&&x.ratio!=null),thr=quantile(withRes.map(x=>x.exp),0.6);
+  const accelerate=withRes.filter(x=>x.exp>=thr&&x.ratio<0.4).sort((a,b)=>b.gap-a.gap).slice(0,4);
+  const accSet=new Set(accelerate.map(x=>x.key));
+  const nrows=rows.filter(x=>x.peopleNeed!=null).map(x=>({...x,coverage:(x.exp||0)/x.peopleNeed}));
+  const expand=(popShare?nrows.filter(x=>x.coverage<0.25&&!accSet.has(x.key)).sort((a,b)=>b.peopleNeed-a.peopleNeed):rows.filter(x=>x.ctx!=null&&!accSet.has(x.key)&&!(x.exp>0)).sort((a,b)=>(neg?b.ctx-a.ctx:a.ctx-b.ctx))).slice(0,4);
+  const strong=withRes.filter(x=>x.ratio>=0.75&&x.ratio<=1.05&&x.exp>=quantile(withRes.map(x=>x.exp),0.5)).sort((a,b)=>b.ach-a.ach).slice(0,2);
+  const overshoot=withRes.filter(x=>x.ratio>1.05).sort((a,b)=>b.ratio-a.ratio);
+  const reg=REGIONS.map(k=>{const rr=rows.filter(x=>x.region===k);return{key:k,label:REG[k],need:rr.reduce((s,x)=>s+(x.peopleNeed||0),0),gap:((D.R[k]||{})[r.code]||[0,0]).reduce((a,b,i)=>i?b-a:a,0)};});
+  const totNeed=reg.reduce((s,x)=>s+x.need,0),topReg=[...reg].sort((a,b)=>b.need-a.need)[0];
+  return{need,neg,popShare,rows,accelerate,expand,strong,overshoot,reg,totNeed,topReg,sect,
+    sources:{results:withRes.length,ctx:rows.filter(x=>x.ctx!=null).length,pop:rows.filter(x=>x.pop).length,pr:rows.filter(x=>x.nProj).length,cmt:rows.reduce((s,x)=>s+x.cmt,0),active:rows.reduce((s,x)=>s+x.nActive,0),cmtActive:rows.reduce((s,x)=>s+x.cmtActive,0)}};}
+function chooseArea(){ // rule: largest remaining gap, among areas with enough country-level results AND need data
+  return OUT.map(o=>{const p=primary(o);if(!p||p.v[0]==null||p.unit!=='Beneficiaries')return null;const need=needIndicator(o);
+    const nRes=Object.keys(D.R).filter(a=>isCountry(a)&&(D.R[a][p.code]||[])[1]>0).length,nNeed=need?Object.keys(D.CTX).filter(a=>isCountry(a)&&D.CTX[a][need.code]).length:0;
+    const gap=p.v[1]-p.v[0],ok=nRes>=40&&nNeed>=80;return{o,p,need,nRes,nNeed,gap,score:ok?gap:gap*0.1,ok};}).filter(Boolean).sort((a,b)=>b.score-a.score);}
+let LASTQ=null;
+function openResearch(n,q,scope={}){$('home-answer').style.display='none';window.__pendingQ=null;LASTQ=q||'Which areas and countries should we prioritize in a three-year plan, and where are the biggest gaps or opportunities?';
+  openOutcome(n);addMsg('user',LASTQ);
+  if(scope.chosenBy==='agent'){const r=scope.ranked,pk=r[0];
+    addMsg('sys',`<b>Scope:</b> no thematic area named, so I compared all 15 outcome areas. Picked <b>${pk.o.name}</b>: remaining gap ${claim(fmt(pk.gap),'Computed: expected − achieved, all countries, '+pk.p.code)} with results for ${pk.nRes} countries and need data for ${pk.nNeed}. Runners-up: ${r.slice(1,3).map(x=>`${x.o.name} (${fmt(x.gap)} gap${x.ok?'':', thin country data'})`).join('; ')}. <span class="na">Type another area to re-run.</span>`);}
+  runResearch();}
+function runResearch(){const{o,r}=cur(),R=researchData(o,r),u=r.unit;
+  const steps=[['database','Scorecard results by country',`get_results(${r.code}, COUNTRY, FY${S.fy.slice(2)}) → ${R.sources.results} countries with results`],
+    ['activity','Client-context need',`get_context_series(${R.need?R.need.code:'—'}, COUNTRY) → ${R.sources.ctx} countries`],
+    ['users','Population (World Bank Data360)',`get_wdi_context(WB_WDI_SP_POP_TOTL) → ${R.sources.pop} countries`],
+    ['briefcase','Operational footprint',`Scorecard project-level (${R.sources.pr} countries, $${compact(R.sources.cmt)} WB commitments) + Projects API (${R.sources.active} active ${o.name.split(' ')[0].toLowerCase()}-sector projects)`],
+    ['scale','Prioritization',`accelerate = large portfolio, delivery < 40% · expand = highest unmet need, pipeline covers < 25%`],
+    ['presentation','Briefing, figure & notebook','writing from verified results only']];
+  const card=addBot(`<div class="acard"><div class="t">${li('bot',13)} Research agent · plan</div><ol style="margin:6px 0 0;padding-left:20px;font-size:13.5px" id="plan">${steps.map((s,i)=>`<li id="st${i}" style="opacity:.45">${s[1]}<div class="na" style="font-size:12px"></div></li>`).join('')}</ol></div>`);lucide.createIcons();
+  let i=0;const tick=setInterval(()=>{if(i>0){const p=$('st'+(i-1));p.style.opacity=1;p.querySelector('.na').innerHTML='✓ '+steps[i-1][2];}
+    if(i<steps.length){$('st'+i).style.opacity=1;$('st'+i).querySelector('.na').innerHTML=`<span class="dots"><i></i><i></i><i></i></span>`;i++;}else{clearInterval(tick);finishResearch(o,r,R);}},700);}
+function finishResearch(o,r,R){const u=r.unit,tot=D.R.ACW[r.code]||[0,0],fy=S.fy.slice(2);
+  const c=(t,a,f,raw)=>claim(t,src(r.code,a,f,raw)),cn=(t,s)=>claim(t,s);
+  const shortNeed=R.need?(R.need.name.length>46?R.need.name.slice(0,R.need.name.lastIndexOf(' ',44))+'…':R.need.name).toLowerCase():'';
+  const needTxt=x=>R.popShare?`${cn(fmt(x.peopleNeed),`Computed: population (Data360 WB_WDI_SP_POP_TOTL ${(D.POP[x.key]||[])[0]}) × ${R.neg?'':'(100 − '}${R.need.code} ${x.ctxYear}${R.neg?'':')'} / 100`)} people ${R.neg?'affected':'without access'}`:`${cn(x.ctx.toFixed(1)+(R.need.unit==='Percentage'?'%':''),`Client context · ${R.need.code} · ${x.label} · ${x.ctxYear}`)} ${shortNeed}`;
+  const regShare=R.totNeed?R.topReg.need/R.totNeed:null;
+  addBot(`<div><b>Three-year priorities: ${o.name}</b> (Scorecard FY${fy}, client context, Data360 population, operational footprint)</div>
+   <ol>
+    <li><b>Regional focus: ${R.topReg.label}.</b> ${R.popShare&&regShare?`It holds ${cn(Math.round(regShare*100)+'%','Computed: regional share of people in need across WBG client countries')} of the people ${R.neg?'affected':'without access'} in client countries`:'It has the highest need'}, and the portfolio still has ${c(fmt(Math.max(0,R.topReg.gap),u),R.topReg.key,'remaining gap, computed',R.topReg.gap)} to deliver there.</li>
+    <li><b>Accelerate delivery</b> where portfolios are large but behind (achieved below 40% of expected): ${R.accelerate.map(x=>`${x.label} (${c(Math.round(x.ratio*100)+'%',x.key,'ratio, computed',x.ratio*100)} of ${c(fmt(x.exp,u),x.key,'expected',x.exp)})`).join(', ')||'none flagged'}. Focus: implementation support, procurement and connection bottlenecks.</li>
+    <li><b>Expand the footprint</b> where need far exceeds the pipeline: ${R.expand.map(x=>`${x.label} (${needTxt(x)}; expected results ${x.exp?c(fmt(x.exp,u),x.key,'expected',x.exp):'none reported'})`).join(', ')||'none flagged'}. These are the largest opportunities for new operations or scale-up.</li>
+    ${R.strong.length?`<li><b>Learn from strong delivery:</b> ${R.strong.map(x=>`${x.label} (${c(Math.round(x.ratio*100)+'%',x.key,'ratio, computed',x.ratio*100)})`).join(', ')}.</li>`:''}
+   </ol>
+   <div><b>Biggest gap overall:</b> ${c(fmt(tot[1]-tot[0],u),'ACW','remaining gap, computed',tot[1]-tot[0])} of expected results are still to be delivered (${c(Math.round(tot[0]/tot[1]*100)+'%','ACW','ratio, computed',tot[0]/tot[1]*100)} achieved).</div>
+   <div class="how"><details><summary>Method & caveats</summary>Results: Scorecard FY${fy}, WBG totals by country. Need: ${R.need?R.need.code:''} (latest year). Population: Data360 WDI. Footprint: Scorecard project-level contributions (World Bank only, not IFC/MIGA) and active projects from the World Bank Projects API matched by sector name (approximate; whole-project commitments). "Expected" = active portfolio, not a corporate target; beneficiaries may include improved existing connections, so coverage vs need is indicative.${R.overshoot.length?` <b>Data check:</b> ${R.overshoot.length} countr${R.overshoot.length>1?'ies report':'y reports'} achieved above expected (e.g. ${R.overshoot.slice(0,3).map(x=>`${x.label} ${Math.round(x.ratio*100)}%`).join(', ')}), likely from revised or closing projects; excluded from "strong delivery" and flagged for review.`:''}</details></div>`);
+  addArt({type:'figure',sub:'matrix',title:'Opportunity matrix',R,r,ind:r.code,areas:R.rows.map(x=>x.key),prov:`Each dot is a client country. x: ${R.popShare?'people '+(R.neg?'affected':'without access')+' (population × need share)':R.need?.name}; y: expected results from the active portfolio; size: active ${o.name.split(' ')[0].toLowerCase()}-sector commitments (Projects API). Orange = accelerate, blue = expand. Sources: Scorecard FY${fy}, Data360, Projects API.`});
+  makeDeck(R);addArt({type:'notebook',title:'Notebook · research pipeline',cells:nbResearchCells(o,r,R)});
+  addBot(`<div>Artifacts: <b>Opportunity matrix</b>, a <b>3-slide briefing</b> and a <b>notebook</b> that re-pulls all four sources and reproduces this analysis.</div><div class="na" style="margin-top:2px">Want a different thematic area? Just type it (e.g. "health" or "water").</div><div class="fu"><button class="chip" onclick="showArt(ARTS.find(a=>a.type==='deck').id)">${li('presentation',14)}Open briefing</button>${chooseArea().filter(x=>x.o.n!==o.n&&x.ok).slice(0,2).map(x=>`<button class="chip" onclick="dockAsk(null,'${x.o.name.split(' ').slice(0,2).join(' ').toLowerCase().replace(/,/g,'')} instead')">Re-run for ${x.o.name}</button>`).join('')}<button class="chip" onclick="dockAsk(null,'which countries in ${R.topReg.label.toLowerCase()} are struggling?')">Countries in ${R.topReg.label}</button></div>`);lucide.createIcons();}
+function drawMatrix(el,R,r){const pts=R.rows.filter(x=>(R.popShare?x.peopleNeed:x.ctx)!=null),acc=new Set(R.accelerate.map(x=>x.key)),exp=new Set(R.expand.map(x=>x.key));
+  const xv=x=>R.popShare?Math.max(x.peopleNeed,1e4):(R.neg?x.ctx:100-x.ctx),yv=x=>Math.max(x.exp||0,1e4);
+  const grp=(f,name,col,size)=>{const g=pts.filter(f);return{type:'scatter',mode:'markers+text',name,x:g.map(xv),y:g.map(yv),text:g.map(x=>acc.has(x.key)||exp.has(x.key)?x.label:''),textposition:'top center',textfont:{size:el.startsWith('dk')?13:10.5,color:css('--ink')},
+    marker:{size:g.map(x=>size?Math.max(8,Math.min(30,6+Math.sqrt(x.cmtActive||0)/2.2)):7),color:col,opacity:size?.9:.55,line:{color:'#fff',width:1.5}},customdata:g.map(x=>[x.label,R.popShare?fmt(x.peopleNeed):x.ctx?.toFixed(1),x.exp?fmt(x.exp,r.unit):'none',x.ratio!=null?Math.round(x.ratio*100)+'%':'—',x.nActive,'$'+compact((x.cmtActive||0)*1e6)]),
+    hovertemplate:'<b>%{customdata[0]}</b><br>need %{customdata[1]}<br>expected %{customdata[2]} · delivered %{customdata[3]}<br>active projects %{customdata[4]} (%{customdata[5]})<extra></extra>'};};
+  const small=el.startsWith('dk');const fs=small?13:12;Plotly.react(el,[grp(x=>!acc.has(x.key)&&!exp.has(x.key),'Other client countries',css('--axis'),false),grp(x=>acc.has(x.key),'Accelerate delivery',css('--s2'),true),grp(x=>exp.has(x.key),'Expand footprint',css('--s1'),true)],
+    base({__fs:fs,showlegend:!small,legend:{orientation:'h',y:1.1,x:0,font:{size:11}},xaxis:{...axis(),type:R.popShare?'log':'linear',tickformat:'~s',title:{text:R.popShare?`People ${R.neg?'affected':'without access'} (need)`:R.need.name.slice(0,50),font:{size:11}}},yaxis:{...axis(),type:'log',tickformat:'~s',title:{text:'Expected results (active portfolio)',font:{size:small?13:11}}},margin:small?{l:70,r:14,t:10,b:54}:{l:60,r:12,t:30,b:44}}),CFG);}
+
+/* ---------- deck artifact (3-slide leadership briefing) ---------- */
+const NEG=/cannot|poverty|stunt|insecur|risk|hazard|displaced|not in education|unemploy|distress|vulnerab|emission/i;
+function makeDeck(RR){const{o,r}=cur(),tot=D.R.ACW[r.code]||[null,null],prev=(D.FY['2025']||{})[r.code];
+  const regions=regionRows(r.code).filter(x=>x.v[0]!=null);
+  // need indicator: the context indicator with the widest country coverage
+  let need=null;for(const c of o.context){const n=Object.keys(D.CTX).filter(a=>isCountry(a)&&D.CTX[a][c.code]).length;if(!need||n>need.n)need={c,n};}
+  const latest=a=>{const s=need&&(D.CTX[a]||{})[need.c.code];if(!s)return null;const y=Object.keys(s).at(-1);return{y,v:s[y]};};
+  const needScore=x=>x==null?null:(NEG.test(need.c.name)?x:(need.c.unit==='Percentage'?100-x:-x));
+  let cs=countryRows(r.code,'ACW').map(x=>({...x,gap:x.v[1]-x.v[0],ratio:x.v[0]/x.v[1],ctx:latest(x.key)})).filter(x=>x.gap>0);
+  const gr=[...cs].sort((a,b)=>b.gap-a.gap).map(x=>x.key),withNeed=cs.filter(x=>x.ctx),nr=[...withNeed].sort((a,b)=>needScore(b.ctx.v)-needScore(a.ctx.v)).map(x=>x.key);
+  cs.forEach(x=>{const g=1-gr.indexOf(x.key)/gr.length,n=x.ctx?1-nr.indexOf(x.key)/nr.length:0.5;x.score=0.6*g+0.4*n;});
+  const top=[...cs].sort((a,b)=>b.score-a.score).slice(0,5);
+  const topRegion=regions.reduce((m,x)=>(x.v[1]-x.v[0])>(m.v[1]-m.v[0])?x:m,regions[0]);
+  const shareTop=top.reduce((s,x)=>s+x.gap,0)/(tot[1]-tot[0]);
+  return addArt({type:'deck',title:`Briefing · ${o.name.split(' ').slice(0,3).join(' ')}`,o,r,tot,prev,regions,need,cs,top,topRegion,shareTop,RR:RR||researchData(o,r),ind:r.code,areas:['ACW',...REGIONS,...cs.map(x=>x.key)]});}
+function deckHTML(a){const{o,r,tot,prev,regions,need,top,topRegion,shareTop}=a,u=r.unit,fy='FY'+D.snapshot_fy.slice(2),srcl=`Source: WBG Scorecard API (${r.code}), ${fy} snapshot ${D.snapshot_date}${need?`; client context ${need.c.code}`:''}. Ratios and scores computed in code.`;
+  const ctxW=need&&(D.CTX.ACW||{})[need.c.code],ctxLast=ctxW?Object.keys(ctxW).at(-1):null;
+  const c=(t,area,f,raw)=>claim(t,`Source: WBG Scorecard API · ${r.code} · ${areaName(area)} · ${f} · ${fy} · raw ${raw==null?'n/a':Math.round(raw).toLocaleString()}`);
+  return`<div class="slidewrap"><div class="slide"><div class="kick">${o.name} · Leadership stocktake · ${fy}</div><h3>The portfolio has delivered ${Math.round(tot[0]/tot[1]*100)}% of expected results; the remaining ${fmt(tot[1]-tot[0],u)} is concentrated in a few places</h3>
+    <div class="kpis"><div class="kpi"><div class="v">${c(fmt(tot[0],u),'ACW','achieved',tot[0])}</div><div class="l">${r.name.replace(/^Number of /,'')}: achieved</div></div>
+      <div class="kpi"><div class="v">${c(fmt(tot[1],u),'ACW','expected',tot[1])}</div><div class="l">Expected from active portfolio</div></div>
+      <div class="kpi"><div class="v">${prev&&prev[0]?c('+'+fmt(tot[0]-prev[0],u),'ACW','change FY25→FY26, computed',tot[0]-prev[0]):'—'}</div><div class="l">Achieved since FY25 snapshot</div></div>
+      <div class="kpi"><div class="v">${ctxW?claim((need.c.unit==='Percentage'?ctxW[ctxLast].toFixed(1)+'%':fmt(ctxW[ctxLast],need.c.unit)),`Client context · ${need.c.code} · World · ${ctxLast}`):'—'}</div><div class="l">${need?need.c.name.slice(0,60):''} (world, ${ctxLast||''})</div></div></div>
+    <ul><li>Delivery is ${c(Math.round(tot[0]/tot[1]*100)+'%','ACW','ratio, computed',tot[0]/tot[1]*100)} of what the active portfolio expects; ${c(fmt(tot[1]-tot[0],u),'ACW','remaining gap, computed',tot[1]-tot[0])} remain to be delivered.</li>
+    <li>${REG[topRegion.key]} holds the largest remaining gap: ${c(fmt(topRegion.v[1]-topRegion.v[0],u),topRegion.key,'remaining gap, computed',topRegion.v[1]-topRegion.v[0])}.</li></ul>
+    <div class="src">${srcl}</div><div class="n">1 / 3</div></div></div>
+  <div class="slidewrap"><div class="slide"><div class="kick">Where the gaps are</div><h3>${REG[topRegion.key]} carries the largest remaining gap; delivery rates vary from ${Math.round(Math.min(...regions.map(x=>x.v[0]/x.v[1]))*100)}% to ${Math.round(Math.max(...regions.map(x=>x.v[0]/x.v[1]))*100)}% across regions</h3>
+    <div class="sgrid"><img class="dchart" id="dk-reg" alt="Achieved vs expected by region"><div><ul>${[...regions].sort((x,y)=>(y.v[1]-y.v[0])-(x.v[1]-x.v[0])).slice(0,3).map(x=>`<li><b>${x.label}</b>: ${c(fmt(x.v[1]-x.v[0],u),x.key,'remaining gap, computed',x.v[1]-x.v[0])} still to deliver (${c(Math.round(x.v[0]/x.v[1]*100)+'%',x.key,'ratio, computed',x.v[0]/x.v[1]*100)} achieved)</li>`).join('')}</ul>
+      <div class="note">Bars: achieved (dark) within expected (light). "Expected" reflects the active portfolio, not a corporate target.</div></div></div>
+    <div class="src">${srcl}</div><div class="n">2 / 3</div></div></div>
+  <div class="slidewrap"><div class="slide"><div class="kick">Three-year priorities</div><h3>Accelerate in ${a.RR.accelerate.slice(0,2).map(x=>x.label).join(' and ')||'large portfolios'}; expand where need is largest: ${a.RR.expand.slice(0,2).map(x=>x.label).join(' and ')}</h3>
+    <div class="sgrid"><img class="dchart" id="dk-pri" alt="Opportunity matrix"><div>
+      <div class="slab" style="color:var(--s2)">● Accelerate delivery <span style="font-weight:400;color:var(--muted)">(large portfolio, &lt;40% delivered)</span></div><ul>${a.RR.accelerate.slice(0,3).map(x=>`<li><b>${x.label}</b>: ${c(Math.round(x.ratio*100)+'%',x.key,'ratio, computed',x.ratio*100)} of ${c(fmt(x.exp,u),x.key,'expected',x.exp)}</li>`).join('')}</ul>
+      <div class="slab" style="color:var(--s1);margin-top:10px">● Expand footprint <span style="font-weight:400;color:var(--muted)">(highest unmet need)</span></div><ul>${a.RR.expand.slice(0,3).map(x=>`<li><b>${x.label}</b>: ${a.RR.popShare?claim(fmt(x.peopleNeed),'Computed: population × need share')+' people in need':claim(x.ctx.toFixed(1),'Client context · '+x.label)}; pipeline ${x.exp?c(fmt(x.exp,u),x.key,'expected',x.exp):'none'}</li>`).join('')}</ul>
+      <div style="margin-top:10px;font-size:16px"><b>Region:</b> ${a.RR.topReg.label} first: largest need${a.RR.popShare&&a.RR.totNeed?` (${claim(Math.round(a.RR.topReg.need/a.RR.totNeed*100)+'%','Computed: regional share of people in need')})`:''} and remaining gap.</div></div></div>
+    <div class="src">${srcl} Population: Data360 WDI. Footprint: Scorecard project-level + Projects API (sector match, approximate).</div><div class="n">3 / 3</div></div></div>`;}
+async function deckImage(id,draw){const tmp=document.createElement('div');tmp.id=id+'-tmp';tmp.style.cssText='position:absolute;left:-10000px;top:0;width:690px;height:430px';document.body.appendChild(tmp);
+  draw(tmp.id);const src=await Plotly.toImage(tmp,{format:'png',width:690,height:430,scale:2});Plotly.purge(tmp);tmp.remove();const img=$(id);if(img)img.src=src;}
+function fitSlides(){document.querySelectorAll('.slidewrap').forEach(w=>{const s=w.clientWidth/1280;w.style.height=(720*s)+'px';w.firstElementChild.style.transform=`scale(${s})`;});}
+window.addEventListener('resize',fitSlides);
+async function drawDeck(a){fitSlides();const u=a.r.unit;
+  await deckImage('dk-reg',el=>bullet(el,a.regions,u,a.topRegion.key));
+  await deckImage('dk-pri',el=>drawMatrix(el,a.RR,a.r));return;
+  const pts=a.cs.filter(x=>x.ctx),lab=new Set(a.top.map(x=>x.key));if(!pts.length){empty('dk-pri','No client-context data to compare against.');return;}
+  const nx=x=>NEG.test(a.need.c.name)?x.ctx.v:(a.need.c.unit==='Percentage'?100-x.ctx.v:x.ctx.v);
+  Plotly.react('dk-pri',[{type:'scatter',mode:'markers+text',x:pts.map(nx),y:pts.map(x=>x.gap),text:pts.map(x=>lab.has(x.key)?x.label:''),textposition:'top center',textfont:{size:10,color:css('--ink')},
+    marker:{size:pts.map(x=>lab.has(x.key)?12:7),color:pts.map(x=>lab.has(x.key)?css('--seq-strong'):css('--seq-track')),line:{color:'#fff',width:1.5}},customdata:pts.map(x=>[x.label,fmt(x.gap,u),x.ctx.v.toFixed(1)]),hovertemplate:'%{customdata[0]}<br>remaining gap %{customdata[1]}<br>context %{customdata[2]}<extra></extra>'}],
+    base({xaxis:{...axis(),title:{text:(NEG.test(a.need.c.name)?'':'Need: 100 − ')+a.need.c.name.slice(0,48)+(a.need.c.unit==='Percentage'?' (%)':''),font:{size:10.5}}},yaxis:{...axis(),type:'log',title:{text:'Remaining gap (expected − achieved)',font:{size:10.5}},tickformat:'~s'},margin:{l:56,r:10,t:8,b:42}}),CFG);}
+async function exportDeck(id){const a=ARTS.find(x=>x.id===id);toast('Rendering deck…');
+  const html=$('abody').innerHTML;
+  const styles=[...document.querySelectorAll('style')].map(s=>s.outerHTML).join('');
+  const doc=`<!doctype html><html><head><meta charset="utf-8"><title>${a.title}</title><link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">${styles}<style>body{background:#fff;padding:24px}.slidewrap{height:auto!important;width:1280px;margin:0 auto 24px;box-shadow:0 0 0 1px #e3e7eb;page-break-after:always}.slide{position:relative!important;transform:none!important}.claim{border:0}.claim .b{display:none}@media print{body{padding:0}.slidewrap{box-shadow:none;margin:0}}@page{size:1280px 720px;margin:0}</style></head><body>${html}<script>setTimeout(()=>window.print(),800)<\/script></body></html>`;
+  const w=window.open(URL.createObjectURL(new Blob([doc],{type:'text/html'})),'_blank');if(!w)toast('Allow pop-ups to export the deck');}
+
+/* ---------- notebook export (reproducible pipeline for any artifact) ---------- */
+function nbCells(a){const{o,r}=cur(),fy=+D.snapshot_fy,areas=(a.areas&&a.areas.length?a.areas:[S.area==='ACW'?'ACW':S.area,...(isCountry(S.area)?[]:REGIONS)]).filter((x,i,arr)=>arr.indexOf(x)===i).slice(0,40);
+  const spec=areas.map(x=>x==='FCS'?['FCS','FCS']:REGIONS.includes(x)||x==='ACW'?['REGION',x]:['COUNTRY',(D.names[x]||[])[2]]).filter(x=>x[1]);
+  const expect={};areas.forEach(x=>{const v=(D.R[x]||{})[r.code];if(v)expect[x]=v;});
+  const md=(s)=>({cell_type:'markdown',metadata:{},source:s}),code=(s)=>({cell_type:'code',metadata:{},execution_count:null,outputs:[],source:s});
+  return[
+md(`# ${a.title}\n\n**Outcome area:** ${o.name}  \n**Indicator:** ${r.name} (\`${r.code}\`)  \n**Snapshot:** FY${String(fy).slice(2)} (${D.snapshot_date})  \n**Generated by:** Scorecard Explorer, ${new Date().toISOString().slice(0,10)}\n\nThis notebook re-downloads the exact data behind the artifact from the public **WBG Corporate Scorecard API**, cleans it into a tidy table, checks it against the values shown in the app (✓ verification), reproduces the figure and saves the data to CSV.`),
+md(`## 1. Setup\nRequires \`requests\`, \`pandas\` and \`plotly\` (\`pip install requests pandas plotly\`).`),
+code(`import os, re, json, requests, pandas as pd
+
+BASE = "https://ext.api.worldbank.org/api/Scorecard/"
+SNAPSHOT_FY = ${fy}
+INDICATOR = "${r.code}"
+AREAS = ${JSON.stringify(spec)}  # (area type, code); countries use ISO2 codes
+
+def scorecard_api_key():
+    """The Scorecard website ships a public API key in its JavaScript bundle; read it from there
+    (or set SCORECARD_API_KEY to override)."""
+    if os.getenv("SCORECARD_API_KEY"):
+        return os.environ["SCORECARD_API_KEY"]
+    html = requests.get("https://scorecard.worldbank.org/", timeout=30).text
+    bundle = re.search(r'src="(main\\.[0-9a-f]+\\.js)"', html).group(1)
+    js = requests.get("https://scorecard.worldbank.org/" + bundle, timeout=60).text
+    return re.search(r'apiKey:\\{data:"([0-9a-f]+)"', js).group(1)
+
+HEADERS = {"apikey": scorecard_api_key(), "User-Agent": "scorecard-explorer-notebook"}`),
+md(`## 2. Pull\nThe API returns Databricks SQL result sets (\`manifest.schema.columns\` + \`result.data_array\`), with every value as a string.`),
+code(`def fetch_summary(area_type, area_code, org="ALL", fy=SNAPSHOT_FY):
+    url = f"{BASE}getSCSUMMARYDATA?refareatype={area_type}&refareacode={area_code}&orgCode={org}&snapshotfy={fy}"
+    payload = requests.get(url, headers=HEADERS, timeout=90).json()
+    cols = [c["name"] for c in payload["manifest"]["schema"]["columns"]]
+    return pd.DataFrame(payload["result"].get("data_array") or [], columns=cols)
+
+raw = pd.concat([fetch_summary(t, c) for t, c in AREAS], ignore_index=True)
+raw.shape`),
+md(`## 3. Clean & structure\nKeep WBG totals for the indicator (no sub-indicator; sex/age/disability = \`_T\`), convert to numbers and compute the delivery ratio.`),
+code(`df = raw[
+    (raw.ind_code == INDICATOR) & (raw.org_code == "WBG") & raw.sub_ind_code.isna()
+    & (raw.sex_disaggregate_code == "_T") & (raw.age_disaggregate_code == "_T")
+    & (raw.disability_disaggregate_code == "_T")
+].copy()
+for col in ["ind_base_achieved_val", "ind_base_expected_val"]:
+    df[col] = pd.to_numeric(df[col], errors="coerce")
+tidy = (df.rename(columns={"ref_area_code": "area", "ref_area_name": "area_name",
+                           "ind_base_achieved_val": "achieved", "ind_base_expected_val": "expected"})
+          [["snapshot_fy", "snapshot_date", "area", "area_name", "achieved", "expected"]]
+          .drop_duplicates("area"))
+tidy["ratio"] = tidy.achieved / tidy.expected
+tidy["remaining_gap"] = tidy.expected - tidy.achieved
+tidy.sort_values("expected", ascending=False)`),
+md(`## 4. Verify against the values shown in the app\nEvery number in the artifact carried a ✓ proof. Re-check them here (they may differ if the Scorecard has been updated since the snapshot).`),
+code(`SHOWN = ${JSON.stringify(Object.fromEntries(Object.entries(expect).map(([k,v])=>[isCountry(k)?D.names[k][2]:k,v])))}  # area -> [achieved, expected]
+for area, (ach, exp) in SHOWN.items():
+    row = tidy[tidy.area == area]
+    ok = len(row) and abs(row.achieved.iloc[0] - ach) <= 0.5 and abs(row.expected.iloc[0] - exp) <= 0.5
+    print(("✓" if ok else "⚠"), area, ach, exp)`),
+md(`## 5. Reproduce the figure`),
+code(`import plotly.graph_objects as go
+t = tidy.sort_values("expected")
+fig = go.Figure([
+    go.Bar(y=t.area_name, x=t.expected, orientation="h", name="Expected", marker_color="#cde7f9"),
+    go.Bar(y=t.area_name, x=t.achieved, orientation="h", name="Achieved", marker_color="#0071bc", width=0.4),
+])
+fig.update_layout(barmode="overlay", title="${r.name.replace(/"/g,'')}: achieved vs expected (FY${String(fy).slice(2)})",
+                  template="simple_white", height=120 + 40 * len(t))
+fig.show()`),
+md(`## 6. Save`),
+code(`tidy.to_csv(f"scorecard_{INDICATOR}_FY{SNAPSHOT_FY}.csv", index=False)
+print("saved", len(tidy), "rows")`)];}
+function nbResearchCells(o,r,R){const fy=+D.snapshot_fy,md=s=>({cell_type:'markdown',metadata:{},source:s}),code=s=>({cell_type:'code',metadata:{},execution_count:null,outputs:[],source:s});
+  const iso=Object.fromEntries(R.rows.map(x=>[D.names[x.key][2],x.key]));
+  const shown={accelerate:R.accelerate.map(x=>[x.key,x.ach,x.exp]),expand:R.expand.map(x=>x.key)};
+  return[md(`# Three-year priorities: ${o.name}\n\n**Question:** Based on the Scorecard data and the Bank's current operational footprint, which areas and countries should a three-year plan prioritize? Where are the biggest gaps and opportunities?\n\n**Sources:** WBG Scorecard API (FY${String(fy).slice(2)} results + client context, by country) · World Bank Data360 (population) · World Bank Projects API (active portfolio).  \n**Generated by:** Scorecard Explorer research agent, ${new Date().toISOString().slice(0,10)}.\n\nThe notebook re-pulls every source, cleans and joins them, re-runs the prioritization rules and checks the result against what the app showed.`),
+  code(`import os, re, requests, pandas as pd, concurrent.futures as cf
+
+BASE = "https://ext.api.worldbank.org/api/Scorecard/"
+SNAPSHOT_FY = ${fy}
+INDICATOR = "${r.code}"            # WBG Results indicator
+NEED = "${R.need?R.need.code:''}"                # client-context need indicator
+NEED_IS_NEGATIVE = ${R.neg?'True':'False'}       # True if higher = worse
+NEED_IS_POP_SHARE = ${R.popShare?'True':'False'}  # % of population -> people in need
+SECTOR_PATTERN = r"${(R.sect||/./).source}"
+COUNTRIES = ${JSON.stringify(iso)}  # ISO2 -> ISO3 (WBG client countries in scope)
+
+def scorecard_api_key():
+    if os.getenv("SCORECARD_API_KEY"):
+        return os.environ["SCORECARD_API_KEY"]
+    html = requests.get("https://scorecard.worldbank.org/", timeout=30).text
+    bundle = re.search(r'src="(main\\.[0-9a-f]+\\.js)"', html).group(1)
+    js = requests.get("https://scorecard.worldbank.org/" + bundle, timeout=60).text
+    return re.search(r'apiKey:\\{data:"([0-9a-f]+)"', js).group(1)
+
+HEADERS = {"apikey": scorecard_api_key(), "User-Agent": "scorecard-explorer-notebook"}`),
+  md('## 1. Scorecard: results and client context for every country'),
+  code(`def fetch_country(iso2):
+    url = f"{BASE}getSCSUMMARYDATA?refareatype=COUNTRY&refareacode={iso2}&orgCode=ALL&snapshotfy={SNAPSHOT_FY}"
+    for attempt in range(3):
+        try:
+            p = requests.get(url, headers=HEADERS, timeout=90).json()
+            cols = [c["name"] for c in p["manifest"]["schema"]["columns"]]
+            return pd.DataFrame(p["result"].get("data_array") or [], columns=cols)
+        except Exception:
+            if attempt == 2: raise
+
+with cf.ThreadPoolExecutor(10) as ex:
+    raw = pd.concat(ex.map(fetch_country, COUNTRIES), ignore_index=True)
+tot = (raw.sub_ind_code.isna() & (raw.sex_disaggregate_code == "_T")
+       & (raw.age_disaggregate_code == "_T") & (raw.disability_disaggregate_code == "_T"))
+res = raw[tot & (raw.ind_code == INDICATOR) & (raw.org_code == "WBG")].copy()
+res["achieved"] = pd.to_numeric(res.ind_base_achieved_val, errors="coerce")
+res["expected"] = pd.to_numeric(res.ind_base_expected_val, errors="coerce")
+res = res.drop_duplicates("ref_area_code").set_index("ref_area_code")[["achieved", "expected"]]
+
+ctx = raw[tot & (raw.ind_code == NEED)].copy()
+ctx["value"] = pd.to_numeric(ctx.ind_achieved_val.where(ctx.ind_achieved_val.notna(), ctx.ind_base_achieved_val), errors="coerce")
+ctx = ctx.dropna(subset=["value"]).sort_values("ind_time_per").groupby("ref_area_code").last()[["value", "ind_time_per"]]
+print(len(res), "countries with results;", len(ctx), "with need data")`),
+  md('## 2. Data360: population'),
+  code(`d = requests.get("https://data360api.worldbank.org/data360/data", params={"DATABASE_ID": "WB_WDI",
+    "INDICATOR": "WB_WDI_SP_POP_TOTL", "timePeriodFrom": 2022, "timePeriodTo": 2024, "top": 1000, "skip": 0}, timeout=60).json()
+pop = (pd.DataFrame(d["value"]).assign(pop=lambda x: x.OBS_VALUE.astype(float))
+       .sort_values("TIME_PERIOD").groupby("REF_AREA").last()["pop"])`),
+  md('## 3. Projects API: active operational footprint in the sector'),
+  code(`rows, start = [], 0
+while True:
+    p = requests.get("https://search.worldbank.org/api/v2/projects", params={"format": "json", "status_exact": "Active",
+        "rows": 500, "os": start, "fl": "id,countrycode,totalcommamt,sector1,sector2,sector3"}, timeout=120).json()
+    batch = list(p["projects"].values()); rows += batch; start += 500
+    if not batch or start >= int(p["total"]): break
+act = []
+for pr in rows:
+    secs = "|".join(pr[k]["Name"] for k in ("sector1", "sector2", "sector3") if isinstance(pr.get(k), dict) and pr[k].get("Name"))
+    if not re.search(SECTOR_PATTERN, secs): continue
+    amt = float(str(pr.get("totalcommamt", "0")).replace(",", "") or 0) / 1e6
+    for c in pr.get("countrycode") or []:
+        act.append((c, amt))
+act = pd.DataFrame(act, columns=["iso2", "cmt_musd"]).groupby("iso2").agg(n_active=("cmt_musd", "size"), cmt_active_musd=("cmt_musd", "sum"))`),
+  md('## 4. Join, compute need, gap and delivery'),
+  code(`df = pd.DataFrame({"iso2": list(COUNTRIES), "iso3": list(COUNTRIES.values())}).set_index("iso2")
+df = df.join(res).join(ctx.rename(columns={"value": "need_value", "ind_time_per": "need_year"})).join(act)
+df["pop"] = df.iso3.map(pop)
+df["remaining_gap"] = df.expected - df.achieved
+df["ratio"] = df.achieved / df.expected
+if NEED_IS_POP_SHARE:
+    share = df.need_value if NEED_IS_NEGATIVE else 100 - df.need_value
+    df["people_in_need"] = df["pop"] * share / 100
+df = df[df.expected.notna() | df.need_value.notna()]
+df.sort_values("remaining_gap", ascending=False).head(10)`),
+  md('## 5. Prioritization rules (same as the app)\n- **Accelerate delivery:** expected ≥ 60th percentile and achieved < 40% of expected → top 4 by remaining gap.\n- **Expand footprint:** highest people in need where expected results cover < 25% of need → top 4.'),
+  code(`r = df[(df.expected > 0) & df.ratio.notna()]
+accelerate = r[(r.expected >= r.expected.quantile(0.6)) & (r.ratio < 0.4)].sort_values("remaining_gap", ascending=False).head(4)
+n = df[df.get("people_in_need").notna()].copy() if NEED_IS_POP_SHARE else df[df.need_value.notna()].copy()
+if NEED_IS_POP_SHARE:
+    n["coverage"] = n.expected.fillna(0) / n.people_in_need
+    expand = n[(n.coverage < 0.25) & ~n.iso3.isin(accelerate.iso3)].sort_values("people_in_need", ascending=False).head(4)
+else:
+    expand = n[~n.iso3.isin(accelerate.iso3) & ~(n.expected > 0)].sort_values("need_value", ascending=not NEED_IS_NEGATIVE).head(4)
+print("Accelerate:", list(accelerate.iso3)); print("Expand:", list(expand.iso3))`),
+  md('## 6. Verify against the app'),
+  code(`SHOWN = ${JSON.stringify(shown)}
+print("accelerate", "✓" if list(accelerate.iso3) == [x[0] for x in SHOWN["accelerate"]] else "⚠ (data updated since snapshot?)")
+print("expand    ", "✓" if list(expand.iso3) == SHOWN["expand"] else "⚠ (inputs updated since snapshot?)")
+for iso3, ach, exp in SHOWN["accelerate"]:
+    row = df[df.iso3 == iso3].iloc[0]
+    print(" ✓" if abs(row.achieved - ach) <= 0.5 and abs(row.expected - exp) <= 0.5 else " ⚠", iso3, ach, exp)`),
+  md('## 7. Opportunity matrix'),
+  code(`import plotly.express as px
+plot = df.dropna(subset=["people_in_need" if NEED_IS_POP_SHARE else "need_value"]).copy()
+plot["group"] = "Other"; plot.loc[plot.iso3.isin(accelerate.iso3), "group"] = "Accelerate delivery"; plot.loc[plot.iso3.isin(expand.iso3), "group"] = "Expand footprint"
+plot["expected_plot"] = plot.expected.fillna(0).clip(lower=1e4)
+fig = px.scatter(plot, x="people_in_need" if NEED_IS_POP_SHARE else "need_value", y="expected_plot", color="group",
+                 size=plot.cmt_active_musd.fillna(0).clip(lower=1), hover_name="iso3", log_x=NEED_IS_POP_SHARE, log_y=True,
+                 color_discrete_map={"Other": "#c3c9cf", "Accelerate delivery": "#eb6834", "Expand footprint": "#0071bc"},
+                 template="simple_white", title="Opportunity matrix: need vs expected results (size = active sector commitments)")
+fig.show()`),
+  code(`df.to_csv(f"priorities_{INDICATOR}_FY{SNAPSHOT_FY}.csv")
+print("saved", len(df), "countries")`)];}
+function exportNotebook(id){const src=ARTS.find(x=>x.id===id)||ARTS[0];
+  const a=addArt({type:'notebook',title:`Notebook · ${src.title}`,cells:nbCells(src)});downloadNotebook(a.id);
+  addBot('<div>The notebook re-downloads the same data from the Scorecard API, cleans it, checks it against the ✓ values, reproduces the figure and saves a CSV.</div>');}
+function notebookHTML(a){return a.cells.map((c,i)=>`<div class="cell ${c.cell_type==='markdown'?'md':''}"><div class="h">${c.cell_type==='markdown'?'Markdown':'In ['+(i)+']'}</div><pre>${c.source.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</pre></div>`).join('');}
+function downloadNotebook(id){const a=ARTS.find(x=>x.id===id);
+  const nb={nbformat:4,nbformat_minor:5,metadata:{kernelspec:{name:'python3',display_name:'Python 3',language:'python'},language_info:{name:'python'}},cells:a.cells.map(c=>({...c,source:c.source.split(/(?<=\n)/)}))};
+  const url=URL.createObjectURL(new Blob([JSON.stringify(nb,null,1)],{type:'application/x-ipynb+json'}));const l=document.createElement('a');l.href=url;l.download=a.title.replace(/[^a-z0-9]+/gi,'_').toLowerCase()+'.ipynb';l.click();toast('Notebook downloaded');window.__lastNotebook=nb;}
+
+/* ---------- shell ---------- */
+function go(v){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));$('view-'+v).classList.add('active');$('nav-home').classList.toggle('on',v==='home');window.scrollTo(0,0);if(v==='explore'&&ACTIVE==='overview')setTimeout(renderOverview,0);}
+function toast(t){const x=$('toast');x.textContent=t;x.classList.add('show');clearTimeout(x._t);x._t=setTimeout(()=>x.classList.remove('show'),2600);}
+renderVFilters();renderTiles();renderStories();lucide.createIcons();
+</script>
+</body>
+</html>

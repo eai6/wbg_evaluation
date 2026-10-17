@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+data/*.tmp.duckdb
+.DS_Store
+q1_prototype/app.sqlite3

@@ -1,0 +1,32 @@
+{% extends "explorer/base.html" %}
+{% load static %}
+{% block title %}{{ outcome.name }} · Scorecard Explorer{% endblock %}
+{% block content %}
+<section id="view-explore">
+  <div class="ws-head">
+    <div class="ic" style="color:var({{ color_var }})"><i data-lucide="{{ icon }}" style="width:18px;height:18px"></i></div>
+    <div><div class="crumbs"><a href="{% url 'home' %}">Outcomes</a> /</div><h1>{{ outcome.name }}</h1></div>
+  </div>
+  <div class="ws">
+    <div class="chatcol">
+      <div class="thread" id="msgs" aria-live="polite"></div>
+      <div class="composer">
+        <div class="quick" id="quick"></div>
+        <form class="c-input" id="chat-form">
+          <textarea id="dock-q" rows="1" maxlength="500" placeholder="Ask about this outcome area…"></textarea>
+          <button class="btn" style="padding:8px 14px" aria-label="Send"><i data-lucide="arrow-up" style="width:18px;height:18px"></i></button>
+        </form>
+        <div class="c-foot"><span><span class="claim"><span class="b">✓</span></span> numbers are verified against Scorecard data</span><span id="llm-status"></span></div>
+      </div>
+    </div>
+    <div class="artcol">
+      <div class="tabs" id="tabs"></div>
+      <div class="abar" id="abar"></div>
+      <div class="abody" id="abody"></div>
+    </div>
+  </div>
+</section>
+{{ boot|json_script:"boot" }}
+{% csrf_token %}
+{% endblock %}
+{% block scripts %}<script src="{% static 'explorer/charts.js' %}"></script><script src="{% static 'explorer/workspace.js' %}"></script>{% endblock %}

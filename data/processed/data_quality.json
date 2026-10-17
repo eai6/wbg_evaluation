@@ -1,0 +1,596 @@
+{
+ "row_counts": [
+  {
+   "t": "results",
+   "n": 25347
+  },
+  {
+   "t": "context",
+   "n": 227113
+  },
+  {
+   "t": "projects",
+   "n": 43414
+  },
+  {
+   "t": "areas",
+   "n": 255
+  },
+  {
+   "t": "active_projects",
+   "n": 2666
+  },
+  {
+   "t": "wdi",
+   "n": 4717
+  }
+ ],
+ "snapshots": [
+  {
+   "snapshot_fy": 2024,
+   "snapshot_date": "2025-04-16T00:00:00.000"
+  },
+  {
+   "snapshot_fy": 2025,
+   "snapshot_date": "2026-04-10T00:00:00.000"
+  },
+  {
+   "snapshot_fy": 2026,
+   "snapshot_date": "2026-10-11T00:00:00.000"
+  }
+ ],
+ "duplicate_result_keys": [],
+ "achieved_above_expected": [
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_DIG_ENA_SERV",
+   "area_code": "VNM",
+   "achieved": 389604.0,
+   "expected": 2.0,
+   "ratio": 194802.0
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_FIN_SERV_WOM",
+   "area_code": "MOZ",
+   "achieved": 7887520.0,
+   "expected": 725814.0,
+   "ratio": 10.87
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_REN_ENER_ENAB",
+   "area_code": "MDA",
+   "achieved": 1.439,
+   "expected": 0.171,
+   "ratio": 8.42
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_HEA_SERV",
+   "area_code": "TCD",
+   "achieved": 12400516.0,
+   "expected": 1520284.0,
+   "ratio": 8.16
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_SOC_SAF_PROG",
+   "area_code": "SEN",
+   "achieved": 3565220.0,
+   "expected": 520187.0,
+   "ratio": 6.85
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_DIG_ENA_SERV",
+   "area_code": "RWA",
+   "achieved": 7961131.0,
+   "expected": 1168004.0,
+   "ratio": 6.82
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_FIN_SERV_WOM",
+   "area_code": "COM",
+   "achieved": 187017.0,
+   "expected": 29271.0,
+   "ratio": 6.39
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_FIN_SERV_WOM",
+   "area_code": "LCA",
+   "achieved": 3787.0,
+   "expected": 636.0,
+   "ratio": 5.95
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_FOOD_NUTR_SECU",
+   "area_code": "TCD",
+   "achieved": 10403215.0,
+   "expected": 1771850.0,
+   "ratio": 5.87
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_FOOD_NUTR_SECU",
+   "area_code": "GHA",
+   "achieved": 21905958.0,
+   "expected": 3967125.0,
+   "ratio": 5.52
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_DIG_ENA_SERV",
+   "area_code": "HRV",
+   "achieved": 13000.0,
+   "expected": 2500.0,
+   "ratio": 5.2
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_DIG_ENA_SERV",
+   "area_code": "SSD",
+   "achieved": 722956.0,
+   "expected": 155109.0,
+   "ratio": 4.66
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_TER_AQU_HECT",
+   "area_code": "GTM",
+   "achieved": 27244.98,
+   "expected": 6000.0,
+   "ratio": 4.54
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_FIN_SERV_WOM",
+   "area_code": "MLI",
+   "achieved": 466079.0,
+   "expected": 105468.0,
+   "ratio": 4.42
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_FIN_SERV_WOM",
+   "area_code": "MDA",
+   "achieved": 12656.0,
+   "expected": 2877.0,
+   "ratio": 4.4
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_SOC_SAF_PROG",
+   "area_code": "SYC",
+   "achieved": 2080.0,
+   "expected": 530.0,
+   "ratio": 3.92
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_TER_AQU_HECT",
+   "area_code": "ECU",
+   "achieved": 5067.0,
+   "expected": 1300.3,
+   "ratio": 3.9
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_DIG_ENA_SERV",
+   "area_code": "MLI",
+   "achieved": 580793.0,
+   "expected": 151267.0,
+   "ratio": 3.84
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_BRO_INTE",
+   "area_code": "NER",
+   "achieved": 6939010.0,
+   "expected": 1933069.0,
+   "ratio": 3.59
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_FOOD_NUTR_SECU",
+   "area_code": "GUY",
+   "achieved": 172178.0,
+   "expected": 50000.0,
+   "ratio": 3.44
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_ACCS_TRANS_INFRA_SERV",
+   "area_code": "MLI",
+   "achieved": 2920626.0,
+   "expected": 850500.0,
+   "ratio": 3.43
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_FOOD_NUTR_SECU",
+   "area_code": "PNG",
+   "achieved": 20406.0,
+   "expected": 6000.0,
+   "ratio": 3.4
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_FOOD_NUTR_SECU",
+   "area_code": "SEN",
+   "achieved": 18540970.0,
+   "expected": 5592770.0,
+   "ratio": 3.32
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_DIG_ENA_SERV",
+   "area_code": "TUR",
+   "achieved": 9976564.0,
+   "expected": 3040452.0,
+   "ratio": 3.28
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_SOC_SAF_PROG",
+   "area_code": "IDN",
+   "achieved": 49860.0,
+   "expected": 15390.0,
+   "ratio": 3.24
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_FIN_SERV_WOM",
+   "area_code": "AFG",
+   "achieved": 22931.0,
+   "expected": 7200.0,
+   "ratio": 3.18
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_FOOD_NUTR_SECU",
+   "area_code": "COL",
+   "achieved": 8330.0,
+   "expected": 2751.0,
+   "ratio": 3.03
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_SOC_SAF_PROG",
+   "area_code": "BGD",
+   "achieved": 25316516.0,
+   "expected": 8484054.0,
+   "ratio": 2.98
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_FOOD_NUTR_SECU",
+   "area_code": "TLS",
+   "achieved": 52163.0,
+   "expected": 18736.0,
+   "ratio": 2.78
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_EDU_SUPP",
+   "area_code": "SLE",
+   "achieved": 3407759.0,
+   "expected": 1253202.0,
+   "ratio": 2.72
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_ACCS_TRANS_INFRA_SERV",
+   "area_code": "LKA",
+   "achieved": 878980.0,
+   "expected": 323614.0,
+   "ratio": 2.72
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_EDU_SUPP",
+   "area_code": "GEO",
+   "achieved": 304893.0,
+   "expected": 116000.0,
+   "ratio": 2.63
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_FIN_SERV_WOM",
+   "area_code": "GTM",
+   "achieved": 388266.0,
+   "expected": 148895.0,
+   "ratio": 2.61
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_RESI_CLIM_RISK",
+   "area_code": "GUY",
+   "achieved": 225658.0,
+   "expected": 87979.0,
+   "ratio": 2.56
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_DIG_ENA_SERV",
+   "area_code": "ECA",
+   "achieved": 12288848.0,
+   "expected": 4821372.0,
+   "ratio": 2.55
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_DISP_COMM_SERVICES",
+   "area_code": "MOZ",
+   "achieved": 2637863.0,
+   "expected": 1052544.0,
+   "ratio": 2.51
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_FIN_SERV_WOM",
+   "area_code": "ZMB",
+   "achieved": 6405629.0,
+   "expected": 2663857.0,
+   "ratio": 2.4
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_FOOD_NUTR_SECU",
+   "area_code": "CIV",
+   "achieved": 4588919.0,
+   "expected": 1934230.0,
+   "ratio": 2.37
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_FIN_SERV_WOM",
+   "area_code": "VNM",
+   "achieved": 1597273.0,
+   "expected": 679412.0,
+   "ratio": 2.35
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_DIG_ENA_SERV",
+   "area_code": "MWI",
+   "achieved": 15755320.0,
+   "expected": 6845430.0,
+   "ratio": 2.3
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_DIG_ENA_SERV",
+   "area_code": "UKR",
+   "achieved": 651864.0,
+   "expected": 294768.0,
+   "ratio": 2.21
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_DISP_COMM_SERVICES",
+   "area_code": "MLI",
+   "achieved": 464542.0,
+   "expected": 210975.0,
+   "ratio": 2.2
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_DIG_ENA_SERV",
+   "area_code": "XKX",
+   "achieved": 856845.0,
+   "expected": 393540.0,
+   "ratio": 2.18
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_FIN_SERV_WOM",
+   "area_code": "JAM",
+   "achieved": 2372.0,
+   "expected": 1100.0,
+   "ratio": 2.16
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_HEA_SERV",
+   "area_code": "IND",
+   "achieved": 169710002.0,
+   "expected": 79219926.0,
+   "ratio": 2.14
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_HEA_SERV",
+   "area_code": "MWI",
+   "achieved": 4263453.0,
+   "expected": 1995624.0,
+   "ratio": 2.14
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_EDU_SUPP",
+   "area_code": "SRB",
+   "achieved": 234325.0,
+   "expected": 110000.0,
+   "ratio": 2.13
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_DIG_ENA_SERV",
+   "area_code": "ETH",
+   "achieved": 62148880.0,
+   "expected": 29640245.0,
+   "ratio": 2.1
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_RESI_CLIM_RISK",
+   "area_code": "GIN",
+   "achieved": 682808.0,
+   "expected": 329096.0,
+   "ratio": 2.07
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_HEA_SERV",
+   "area_code": "SAR",
+   "achieved": 170415612.0,
+   "expected": 83261661.0,
+   "ratio": 2.05
+  }
+ ],
+ "results_without_total": [
+  {
+   "snapshot_fy": 2024,
+   "ind_code": "CSC_RES_FIN_SERV_WOM"
+  },
+  {
+   "snapshot_fy": 2024,
+   "ind_code": "CSC_RES_GEN_EQU_BENE"
+  },
+  {
+   "snapshot_fy": 2024,
+   "ind_code": "CSC_RES_WAT_SAN_HYG_TOT"
+  },
+  {
+   "snapshot_fy": 2025,
+   "ind_code": "CSC_RES_FIN_SERV_WOM"
+  },
+  {
+   "snapshot_fy": 2025,
+   "ind_code": "CSC_RES_GEN_EQU_BENE"
+  },
+  {
+   "snapshot_fy": 2025,
+   "ind_code": "CSC_RES_WAT_SAN_HYG_TOT"
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_GEN_EQU_BENE"
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_WAT_SAN_HYG_TOT"
+  }
+ ],
+ "regions_vs_world": [
+  {
+   "snapshot_fy": 2024,
+   "ind_code": "CSC_RES_SOC_SAF_PROG",
+   "world": 221834822.0,
+   "regions_sum": 178522667.0,
+   "ratio": 0.805
+  },
+  {
+   "snapshot_fy": 2024,
+   "ind_code": "CSC_RES_DISP_COMM_SERVICES",
+   "world": 12163864.0,
+   "regions_sum": 10243779.0,
+   "ratio": 0.842
+  },
+  {
+   "snapshot_fy": 2024,
+   "ind_code": "CSC_RES_REN_ENER_ENAB",
+   "world": 19.62559,
+   "regions_sum": 17.29169,
+   "ratio": 0.881
+  },
+  {
+   "snapshot_fy": 2024,
+   "ind_code": "CSC_RES_ELC_ACCS",
+   "world": 170684199.0,
+   "regions_sum": 159447167.0,
+   "ratio": 0.934
+  },
+  {
+   "snapshot_fy": 2024,
+   "ind_code": "CSC_RES_FOOD_NUTR_SECU",
+   "world": 200659082.0,
+   "regions_sum": 187706576.0,
+   "ratio": 0.935
+  },
+  {
+   "snapshot_fy": 2024,
+   "ind_code": "CSC_RES_TAX_REV_GDP",
+   "world": 17.0,
+   "regions_sum": 16.0,
+   "ratio": 0.941
+  },
+  {
+   "snapshot_fy": 2024,
+   "ind_code": "CSC_RES_DIG_ENA_SERV",
+   "world": 174301746.0,
+   "regions_sum": 165858189.0,
+   "ratio": 0.952
+  },
+  {
+   "snapshot_fy": 2024,
+   "ind_code": "CSC_RES_HEA_SERV",
+   "world": 381078118.0,
+   "regions_sum": 365263579.0,
+   "ratio": 0.959
+  },
+  {
+   "snapshot_fy": 2024,
+   "ind_code": "CSC_RES_RESI_CLIM_RISK",
+   "world": 123193775.0,
+   "regions_sum": 118283813.0,
+   "ratio": 0.96
+  },
+  {
+   "snapshot_fy": 2024,
+   "ind_code": "CSC_RES_BRO_INTE",
+   "world": 113937039.0,
+   "regions_sum": 110658541.0,
+   "ratio": 0.971
+  },
+  {
+   "snapshot_fy": 2024,
+   "ind_code": "CSC_RES_HEA_EMER_BENE",
+   "world": 42.0,
+   "regions_sum": 41.0,
+   "ratio": 0.976
+  },
+  {
+   "snapshot_fy": 2024,
+   "ind_code": "CSC_RES_ACCS_TRANS_INFRA_SERV",
+   "world": 142433632.0,
+   "regions_sum": 139526363.0,
+   "ratio": 0.98
+  },
+  {
+   "snapshot_fy": 2024,
+   "ind_code": "CSC_RES_DEBT_SUST_RISK",
+   "world": 59.3220338983,
+   "regions_sum": 382.1212121212,
+   "ratio": 6.441
+  },
+  {
+   "snapshot_fy": 2025,
+   "ind_code": "CSC_RES_DEBT_SUST_RISK",
+   "world": 60.3448275862,
+   "regions_sum": 410.9249084249,
+   "ratio": 6.81
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_DEBT_SUST_RISK",
+   "world": 58.6206896552,
+   "regions_sum": 406.2026862027,
+   "ratio": 6.929
+  }
+ ],
+ "unmapped_project_countries": [
+  {
+   "n": 196
+  }
+ ],
+ "failed_requests": {
+  "fy2026": [],
+  "fy2024": [],
+  "fy2025": []
+ }
+}

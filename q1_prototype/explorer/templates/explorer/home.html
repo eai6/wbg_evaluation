@@ -1,0 +1,52 @@
+{% extends "explorer/base.html" %}
+{% load static %}
+{% block content %}
+<section id="view-home">
+  <div class="hero"><div class="hero-in">
+    <h1>How is the <b>World Bank Group</b> delivering?</h1>
+    <p>Results across 15 outcome areas. Explore, or just ask.</p>
+    <form class="ask" id="home-form">
+      <i data-lucide="sparkles" style="width:18px;height:18px;color:var(--brand);margin-left:8px"></i>
+      <input id="home-q" name="q" placeholder="Ask a question about the results…" autocomplete="off" maxlength="500">
+      <button class="btn">Ask</button>
+    </form>
+    <div class="try">
+      <button class="chip" data-ask="Energy access in Western Africa">Energy access in Western Africa</button>
+      <button class="chip" data-ask="Which outcome areas are furthest from their expected results?">Furthest from expected</button>
+      <button class="chip" data-ask="Which areas and countries should a three-year plan prioritize? Where are the biggest gaps or opportunities?">Three-year priorities</button>
+    </div>
+    <div class="home-answer" id="home-answer"></div>
+  </div></div>
+
+  <div class="vbar" id="vfilters">
+    <button class="chip on" data-vert="All">All</button>
+    {% for v, var in verticals %}<button class="chip" data-vert="{{ v }}"><span style="width:8px;height:8px;border-radius:50%;background:var({{ var }})"></span>{{ v }}</button>{% endfor %}
+  </div>
+  <div class="grid" id="tiles">
+    {% for t in tiles %}
+    <a class="tile" href="{% url 'outcome' t.slug %}" data-vert="{{ t.vertical }}" data-outcome="{{ t.outcome_id }}" title="{{ t.name }}" style="text-decoration:none;color:inherit">
+      <div class="ic" style="color:var({{ t.color_var }})"><i data-lucide="{{ t.icon }}"></i></div>
+      <h3>{{ t.title_html|safe }}</h3>
+      {% if t.primary %}
+      <div class="fig">
+        <div class="bars" aria-hidden="true"><span style="height:{{ t.bar_px }}px;background:var({{ t.color_var }})"></span><span style="height:52px;background:color-mix(in srgb, var({{ t.color_var }}) 22%, white)"></span></div>
+        <div>{% if t.achieved_fmt %}<div class="num">{{ t.achieved_fmt }}<small>Achieved</small></div>{% endif %}<div class="exp">{{ t.expected_fmt }} Expected</div></div>
+      </div>
+      {% else %}<div class="fig"><span class="na">See details</span></div>{% endif %}
+    </a>
+    {% endfor %}
+  </div>
+
+  <div class="section-h" id="stories"><h2>Results stories</h2><a id="stories-toggle">See all</a></div>
+  <div class="stories" id="story-grid">
+    {% for s in stories %}
+    <a class="story" href="{{ s.url }}" target="_blank" rel="noopener" {% if forloop.counter > 4 %}data-more hidden{% endif %} style="text-decoration:none;color:inherit">
+      <img src="{{ s.image_url }}" alt="{{ s.alt }}" loading="lazy">
+      <div class="b"><div class="k" style="color:var({{ s.color_var }})">{{ s.outcome_name }}</div><div class="t">{{ s.title }}</div><div class="a">Read the story →</div></div>
+    </a>
+    {% endfor %}
+  </div>
+  <p class="na" style="margin-top:28px">Data: WBG Corporate Scorecard, FY{{ latest_fy }} snapshot ({{ snapshot_date }}). Bars compare achieved with expected results of the active portfolio.</p>
+</section>
+{% endblock %}
+{% block scripts %}<script src="{% static 'explorer/home.js' %}"></script>{% endblock %}
