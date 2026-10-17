@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import html
 import math
-import re
 
 VERTICALS = {"People": "--v-people", "Prosperity": "--v-prosperity", "Planet": "--v-planet",
              "Infrastructure": "--v-infra", "Digital": "--v-digital", "Cross-cutting themes": "--v-cross"}
@@ -19,8 +18,10 @@ def compact(v: float) -> str:
     a = abs(v)
     for div, suf in ((1e9, "B"), (1e6, "M"), (1e3, "K")):
         if a >= div:
-            digits = 0 if (suf == "M" and a >= 1e8) else 1
-            return f"{v / div:.{digits}f}".rstrip("0").rstrip(".") + suf
+            s = f"{v / div:.1f}"  # one decimal as on scorecard.worldbank.org (222.4M)
+            if "." in s:  # strip only decimal zeros ("41.0" -> "41"), never integer zeros ("300")
+                s = s.rstrip("0").rstrip(".")
+            return s + suf
     return f"{round(v, 1):g}"
 
 
@@ -33,7 +34,7 @@ def fmt(v, unit: str | None = None) -> str:
     if unit == "Percentage":
         return f"{v:.0f}%"
     if "MtCO2" in unit:
-        return compact(v * 1e6) + " tCO₂e/yr"
+        return compact(v) + " tCO₂e/yr"  # values arrive in tonnes despite the unit label (-344.8M = site's -344.8 Mt)
     if "Hectare" in unit:
         return compact(v) + " ha"
     if "Gigawatt" in unit:
@@ -43,8 +44,14 @@ def fmt(v, unit: str | None = None) -> str:
 
 def short_title_html(name: str) -> str:
     """'Number of people receiving…' -> '<b>People</b> receiving…' (Scorecard tile style)."""
-    t = re.sub(r"^(Number|Percentage|Total)( of)? ", "", name, flags=re.I)
-    t = re.sub(r"\(.*?\)", "", t).strip()
+    t = name
+    for prefix in ("Number of ", "Percentage of ", "Total of ", "Number ", "Percentage ", "Total "):
+        if t.lower().startswith(prefix.lower()):
+            t = t[len(prefix):]
+            break
+    if "(" in t and ")" in t.split("(", 1)[1]:  # drop a parenthetical note
+        t = t.split("(", 1)[0] + t.split("(", 1)[1].split(")", 1)[1]
+    t = " ".join(t.split())
     t = t[:1].upper() + t[1:]
     first, _, rest = t.partition(" ")
     return f"<b>{html.escape(first)}</b> {html.escape(rest)}"

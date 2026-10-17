@@ -126,7 +126,7 @@ def results_table(ind_codes: list[str], fy: int | None = None, sex: str = "_T") 
 def results_by_org(ind_codes: list[str], fy: int | None = None) -> dict:
     if not ind_codes:
         return {}
-    q = f"SELECT org, ind_code, achieved, expected FROM v_results WHERE area_code='ACW' AND org<>'WBG' AND snapshot_fy=? AND ind_code IN ({','.join('?' * len(ind_codes))})"
+    q = f"SELECT org, ind_code, achieved, expected FROM v_results WHERE area_code='ACW' AND org IN ('WB','IFC','MIGA') AND snapshot_fy=? AND ind_code IN ({','.join('?' * len(ind_codes))})"
     out: dict = {}
     for r in rows(q, [fy or latest_fy(), *ind_codes]):
         out.setdefault(r["org"], {})[r["ind_code"]] = [r["achieved"], r["expected"]]
@@ -207,5 +207,44 @@ def outcome_payload(outcome_id: int) -> dict:
         "SUB": subs,
         "CTX": context_series(ctx_codes),
         "areas": {k: {"name": v["label"], "type": v["area_type"], "region": v.get("region_code"), "iso2": v.get("iso2"),
-                      "fcs": bool(v.get("fcs"))} for k, v in areas().items()},
+                      "fcs": bool(v.get("fcs")), "income": v.get("income_code"), "ldc": bool(v.get("ldc")),
+                      "sids": bool(v.get("sids")), "small_state": bool(v.get("small_state"))} for k, v in areas().items()},
     }
+
+
+# ------------------------------------------------------------------------------------------------ indicator data page
+# Breakdowns as on the Scorecard "WBG Results Only" filter. At project level disability = 'Yes' marks a
+# disability-inclusive project, so the total ('T') keeps both disability codes there.
+BREAKDOWNS = {"T": ("_T", "_T", "_T"), "F": ("F", "_T", "_T"), "Y": ("_T", "Y14T24", "_T"), "D": ("_T", "_T", "Yes")}
+
+
+def indicator_detail(ind_code: str, fy: int | None = None) -> dict | None:
+    """Everything the Scorecard data page shows for one results indicator and snapshot:
+    V[sub][org][breakdown][area] = [achieved, expected] for every area (world, regions, FCS, countries) and
+    institution (WBG, WB, IFC, MIGA, IBRD, IDA), and the World Bank operations (projects) behind the numbers."""
+    ind = indicators().get(ind_code)
+    if not ind or ind["type"] != "results":
+        return None
+    fy = fy or latest_fy()
+    V: dict = {}
+    for r in rows("""SELECT sub_ind_code, org, sex, age, disability, area_code, achieved, expected FROM results
+                     WHERE ind_code=? AND snapshot_fy=? AND joint_programming='_T'""", [ind_code, fy]):
+        bd = next((k for k, v in BREAKDOWNS.items() if v == (r["sex"], r["age"], r["disability"])), None)
+        if bd:
+            V.setdefault(r["sub_ind_code"], {}).setdefault(r["org"], {}).setdefault(bd, {})[r["area_code"]] = [r["achieved"], r["expected"]]
+    projects = []
+    for r in rows("""SELECT sub_ind_code, sex, age, disability, proj_id, project_name, coalesce(area_code, cntry_code) area_code, region_code, achieved, expected,
+                            ibrd_achieved, ibrd_expected, ida_achieved, ida_expected, overlap_flag, url
+                     FROM projects WHERE ind_code=? AND snapshot_fy=? ORDER BY achieved DESC NULLS LAST""", [ind_code, fy]):
+        bds = [k for k, (s, a, d) in BREAKDOWNS.items() if r["sex"] == s and r["age"] == a and (d == r["disability"] or (k != "D" and d == "_T"))]
+        for bd in bds:
+            projects.append([r["sub_ind_code"], bd, r["proj_id"], r["project_name"], r["area_code"], r["region_code"], r["achieved"], r["expected"],
+                             r["overlap_flag"], r["url"], r["ibrd_achieved"], r["ibrd_expected"], r["ida_achieved"], r["ida_expected"]])
+    rec = one("SELECT projects, projects_achieved, projects_expected, wb_achieved, wb_expected, reconciles "
+              "FROM v_project_reconciliation WHERE ind_code=? AND snapshot_fy=?", [ind_code, fy])
+    subs = {r["sub_ind_code"]: r["name"] for r in rows("SELECT sub_ind_code, name FROM sub_indicators WHERE ind_code=?", [ind_code])}
+    return {"indicator": {k: ind[k] for k in ("ind_code", "display_name", "name", "unit", "description", "definition", "vertical", "outcome_id")},
+            "fy": fy, "subs": {k: subs.get(k, k) for k in V if k}, "V": V,
+            "project_cols": ["sub", "bd", "proj_id", "name", "area", "region", "achieved", "expected", "overlap", "url",
+                             "ibrd_achieved", "ibrd_expected", "ida_achieved", "ida_expected"],
+            "projects": projects, "reconciliation": rec}

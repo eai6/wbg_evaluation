@@ -8,7 +8,6 @@ from __future__ import annotations
 
 import logging
 import os
-import re
 import time
 from functools import lru_cache
 
@@ -48,14 +47,17 @@ def scorecard_keys() -> dict[str, str]:
     if all(env.values()):
         return env
     html = _get(config.SCORECARD_SITE, expect_json=False)
-    bundle = re.search(r'src="(main\.[0-9a-f]+\.js)"', html)
+    bundle = next((part.split('"', 1)[0] for part in html.split('src="')[1:] if part.startswith("main.")), None)
     if not bundle:
         raise ApiError("Could not find the Scorecard JS bundle; set SCORECARD_API_KEY and SCORECARD_CMS_KEY")
-    js = _get(config.SCORECARD_SITE + bundle.group(1), expect_json=False)
-    found = re.search(r'apiKey:\{data:"([0-9a-f]+)",cms:"([0-9a-f]+)"\}', js)
-    if not found:
+    js = _get(config.SCORECARD_SITE + bundle, expect_json=False)
+    marker = 'apiKey:{data:"'
+    if marker not in js:
         raise ApiError("API keys not found in the Scorecard bundle; set SCORECARD_API_KEY and SCORECARD_CMS_KEY")
-    return {"data": env["data"] or found.group(1), "cms": env["cms"] or found.group(2)}
+    rest = js.split(marker, 1)[1]
+    data_key = rest.split('"', 1)[0]
+    cms_key = rest.split('cms:"', 1)[1].split('"', 1)[0]
+    return {"data": env["data"] or data_key, "cms": env["cms"] or cms_key}
 
 
 def parse_statement(payload: dict) -> list[dict]:

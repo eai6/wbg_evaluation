@@ -18,8 +18,11 @@ CHECKS = {
     "duplicate_result_keys": """SELECT snapshot_fy, ind_code, org, area_code, count(*) n FROM v_results
                                 GROUP BY ALL HAVING count(*) > 1 ORDER BY n DESC LIMIT 20""",
     "achieved_above_expected": """SELECT snapshot_fy, ind_code, area_code, achieved, expected, round(delivery_ratio, 2) ratio
-                                  FROM v_results WHERE org = 'WBG' AND delivery_ratio > 1.05
+                                  FROM v_results WHERE org = 'WBG' AND quality_flag = 'achieved_above_expected'
                                   ORDER BY snapshot_fy DESC, ratio DESC LIMIT 50""",
+    "quality_flags": """SELECT snapshot_fy, org, quality_flag, count(*) n FROM v_results WHERE quality_flag IS NOT NULL
+                        GROUP BY ALL ORDER BY 1 DESC, 2, 3""",
+    "indicator_direction": """SELECT direction_source, direction, count(*) n FROM indicators WHERE type <> 'results' GROUP BY ALL ORDER BY 1, 2""",
     "results_without_total": """SELECT DISTINCT r.snapshot_fy, r.ind_code FROM results r
                                 WHERE r.area_code = 'ACW' AND r.org = 'WBG' AND NOT EXISTS (
                                   SELECT 1 FROM v_results v WHERE v.snapshot_fy = r.snapshot_fy AND v.ind_code = r.ind_code
@@ -31,6 +34,8 @@ CHECKS = {
                            FROM v_results v JOIN reg USING (snapshot_fy, ind_code)
                            WHERE v.org = 'WBG' AND v.area_code = 'ACW' AND abs(reg.s / nullif(v.achieved, 0) - 1) > 0.02
                            ORDER BY ratio LIMIT 30""",
+    "project_reconciliation": """SELECT ind_code, projects, round(projects_expected) projects_expected, round(wb_expected) wb_expected, reconciles
+                                 FROM v_project_reconciliation WHERE snapshot_fy = (SELECT max(snapshot_fy) FROM results) ORDER BY reconciles, ind_code""",
     "unmapped_project_countries": """SELECT count(*) n FROM active_projects WHERE area_code IS NULL""",
 }
 

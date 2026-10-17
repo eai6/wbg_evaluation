@@ -6,7 +6,7 @@
 <title>{% block title %}Scorecard Explorer{% endblock %}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{% static 'explorer/app.css' %}">
+<link rel="stylesheet" href="{% static 'explorer/app.css' %}?v={{ asset_v }}">
 <script src="https://cdn.jsdelivr.net/npm/plotly.js-dist-min@2.35.2/plotly.min.js"></script>
 <script src="https://unpkg.com/lucide@0.453.0/dist/umd/lucide.min.js"></script>
 </head>
@@ -15,21 +15,20 @@
   <a class="brand" href="{% url 'home' %}" style="color:#fff;text-decoration:none">Scorecard Explorer <span class="sep"></span><small>Prototype</small></a>
   <nav>
     <button class="{% if page == 'home' %}on{% endif %}" onclick="location.href='{% url 'home' %}'">Outcomes</button>
-    <button onclick="location.href='{% url 'home' %}#stories'">Stories</button>
     <button onclick="document.getElementById('modal').showModal()">How it works</button>
   </nav>
 </header>
-<main>{% block content %}{% endblock %}</main>
+<main class="{% block mainclass %}{% endblock %}">{% block content %}{% endblock %}</main>
 <div class="toast" id="toast"></div>
 <dialog id="modal">
   <h3 style="margin-top:0">How it works</h3>
-  <p><b>Data.</b> WBG Corporate Scorecard API (results, client context, metadata, stories), World Bank Data360 and the Projects API, loaded by a pipeline into a local read-only database (snapshot FY{{ latest_fy }}).</p>
+  <p><b>Data.</b> WBG Corporate Scorecard API (results, client context, metadata, projects), World Bank Data360 and the Projects API, loaded by a pipeline into a local read-only database (snapshot FY{{ latest_fy }}).</p>
   <p><b>Questions.</b> A fast model classifies each message (filter, analyze, explain, research, create artifact, clarify, out of scope). Analysis runs typed, read-only queries; answers and artifacts are written only from their results.</p>
   <p><b>Verified numbers.</b> Every figure taken from data links to its source row: <span class="claim">12.1M<span class="b">✓</span></span>. Numbers that can't be traced are marked <span class="claim bad">12M<span class="b">⚠</span></span>.</p>
   <p><b>Achieved vs expected.</b> “Expected” is what the active portfolio is expected to deliver, not a corporate target.</p>
   <form method="dialog" style="text-align:right"><button class="btn">Close</button></form>
 </dialog>
-<script src="{% static 'explorer/common.js' %}"></script>
+<script src="{% static 'explorer/common.js' %}?v={{ asset_v }}"></script>
 {% block scripts %}{% endblock %}
 </body>
 </html>

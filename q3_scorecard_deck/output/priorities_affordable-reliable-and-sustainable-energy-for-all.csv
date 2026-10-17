@@ -1,0 +1,146 @@
+code,name,region_name,lending,fcs,achieved,expected,flag,need_value,need_year,population,pop_year,people,still_to_deliver,delivery_rate,in_most_to_deliver,in_most_people
+ETH,Ethiopia,Eastern & Southern Africa,IDA,True,15685025.0,41554820.0,,56.6,2024,132059767.0,2024,57313938.878,25869795.0,0.37745380680267654,True,True
+NGA,Nigeria,Western & Central Africa,BLEND,True,9625411.0,31170041.0,,62.5,2024,232679478.0,2024,87254804.25,21544630.0,0.30880328325522577,True,True
+KEN,Kenya,Eastern & Southern Africa,BLEND,False,10828646.0,31469617.0,,77.0,2024,56432944.0,2024,12979577.12,20640971.0,0.34409843627903064,True,False
+UZB,Uzbekistan,Europe & Central Asia,BLEND,False,8797680.0,25691472.0,,100.0,2024,36361859.0,2024,0.0,16893792.0,0.342435809049789,True,False
+IND,India,South Asia,IBRD,False,76851814.0,93542125.0,,99.9,2024,1450935791.0,2024,1450935.7909999173,16690311.0,0.821574386940643,True,False
+MDG,Madagascar,Eastern & Southern Africa,IDA,False,4255621.0,18579559.0,,42.5,2024,31964956.0,2024,18379849.7,14323938.0,0.2290485473847899,False,False
+MOZ,Mozambique,Eastern & Southern Africa,IDA,True,4500300.0,16014309.0,,36.9,2024,34631766.0,2024,21852644.346,11514009.0,0.2810174325973103,False,False
+TJK,Tajikistan,Europe & Central Asia,IDA,False,195230.0,10115000.0,,99.9,2024,10590927.0,2024,10590.9269999994,9919770.0,0.019301038062283737,False,False
+UGA,Uganda,Eastern & Southern Africa,IDA,False,10581143.0,19727376.0,,55.3,2024,50015092.0,2024,22356746.124,9146233.0,0.5363684962460289,False,True
+COD,Democratic Republic of Congo,Eastern & Southern Africa,IDA,True,108668.0,6440137.0,,22.5,2024,109276265.0,2024,84689105.375,6331469.0,0.01687355408743634,False,True
+MWI,Malawi,Eastern & Southern Africa,IDA,False,2536541.0,8810650.0,,15.6,2024,21655286.0,2024,18277061.384,6274109.0,0.2878948772224524,False,False
+CIV,Cote d'Ivoire,Western & Central Africa,BLEND,False,10204078.0,15940392.0,,72.9,2024,31934230.0,2024,8654176.329999998,5736314.0,0.640139715510133,False,False
+NPL,Nepal,South Asia,IDA,False,0.0,5666611.0,,97.9,2024,29651054.0,2024,622672.1339999983,5666611.0,0.0,False,False
+SYR,Syrian Arab Republic,"MENA, Afghanistan & Pakistan",IDA,True,0.0,5488196.0,,89.3,2024,24672760.0,2024,2639985.3200000008,5488196.0,0.0,False,False
+TCD,Chad,Western & Central Africa,IDA,False,1702999.0,6837357.0,,13.4,2024,20299123.0,2024,17579040.518,5134358.0,0.24907270455528358,False,False
+PAK,Pakistan,"MENA, Afghanistan & Pakistan",BLEND,False,14958040.0,18993779.0,,95.7,2024,251269164.0,2024,10804574.051999994,4035739.0,0.7875231148051159,False,False
+MAR,Morocco,"MENA, Afghanistan & Pakistan",IBRD,False,527526.0,4434218.0,,100.0,2024,38081173.0,2024,0.0,3906692.0,0.11896708731956795,False,False
+ZAF,South Africa,Eastern & Southern Africa,IBRD,False,6947114.0,10427014.0,,90.2,2024,64007187.0,2024,6272704.325999998,3479900.0,0.6662611175164818,False,False
+SEN,Senegal,Western & Central Africa,IDA,False,2786640.0,6256514.0,,82.9,2024,18501984.0,2024,3163839.263999999,3469874.0,0.4453981881923384,False,False
+SOM,Federal Republic of Somalia,Eastern & Southern Africa,IDA,True,23423.0,3284283.0,,54.4,2024,19009151.0,2024,8668172.856,3260860.0,0.007131845824491982,False,False
+COL,Colombia,Latin America & Caribbean,IBRD,False,504908.0,3529758.0,,98.9,2024,52886363.0,2024,581749.992999997,3024850.0,0.14304323412539896,False,False
+IDN,Indonesia,East Asia & Pacific,IBRD,False,5278113.0,8180477.0,,99.9,2024,283487931.0,2024,283487.93099998386,2902364.0,0.6452084640052164,False,False
+TZA,Tanzania,Eastern & Southern Africa,IDA,False,14299358.0,17183496.0,,52.4,2024,68560157.0,2024,32634634.732000005,2884138.0,0.8321565064524704,False,True
+ZMB,Zambia,Eastern & Southern Africa,IDA,False,386909.0,2940652.0,,53.6,2024,21314956.0,2024,9890139.583999999,2553743.0,0.13157252201212521,False,False
+TGO,Togo,Western & Central Africa,IDA,False,200000.0,2374140.0,,61.1,2024,8406558.0,2024,3270151.062,2174140.0,0.0842410304362843,False,False
+NER,Niger,Western & Central Africa,IDA,True,70276.0,2081823.0,,21.3,2024,27032412.0,2024,21274508.244000003,2011547.0,0.03375695244024108,False,False
+RWA,Rwanda,Eastern & Southern Africa,IDA,False,1734137.0,3618286.0,,72.0,2024,14256567.0,2024,3991838.76,1884149.0,0.479270295382952,False,False
+KHM,Cambodia,East Asia & Pacific,IDA,False,209130.0,2065668.0,,99.2,2024,17638801.0,2024,141110.4079999995,1856538.0,0.10124085767896875,False,False
+IRQ,Iraq,"MENA, Afghanistan & Pakistan",IBRD,True,1000000.0,2850000.0,,100.0,2024,46042015.0,2024,0.0,1850000.0,0.3508771929824561,False,False
+GIN,Guinea,Western & Central Africa,IDA,False,2239684.0,3785810.0,,53.8,2024,14754785.0,2024,6816710.67,1546126.0,0.591599684083459,False,False
+BDI,Burundi,Eastern & Southern Africa,IDA,False,415200.0,1951951.0,,20.1,2024,14047786.0,2024,11224181.014,1536751.0,0.21271025758331025,False,False
+CAF,Central African Republic,Western & Central Africa,IDA,True,8778.0,1445200.0,,18.2,2024,5330690.0,2024,4360504.42,1436422.0,0.00607389980625519,False,False
+AGO,Angola,Eastern & Southern Africa,IBRD,False,0.0,1184432.0,,55.5,2024,37885849.0,2024,16859202.805,1184432.0,0.0,False,False
+SLE,Sierra Leone,Western & Central Africa,IDA,False,168427.0,1314650.0,,39.2,2024,8642022.0,2024,5254349.375999999,1146223.0,0.12811546799528392,False,False
+LBR,Liberia,Western & Central Africa,IDA,False,623499.0,1758088.0,,34.9,2024,5612817.0,2024,3653943.867,1134589.0,0.35464607004882576,False,False
+MRT,Mauritania,Western & Central Africa,IDA,False,236811.0,1255800.0,,52.2,2024,5169395.0,2024,2470970.81,1018989.0,0.18857381748686097,False,False
+LKA,Sri Lanka,South Asia,IDA,False,0.0,946337.0,,100.0,2024,21916000.0,2024,0.0,946337.0,0.0,False,False
+BFA,Burkina Faso,Western & Central Africa,IDA,True,292482.0,1230017.0,,34.0,2024,23548781.0,2024,15542195.46,937535.0,0.23778695741603573,False,False
+BEN,Benin,Western & Central Africa,IDA,False,714180.0,1625826.0,,59.0,2024,14462724.0,2024,5929716.84,911646.0,0.4392720992283307,False,False
+CMR,Cameroon,Western & Central Africa,BLEND,True,7085359.0,7922098.0,,72.0,2024,29123744.0,2024,8154648.32,836739.0,0.8943791152293243,False,False
+TUN,Tunisia,"MENA, Afghanistan & Pakistan",IBRD,False,249826.0,920507.0,,100.0,2024,12277109.0,2024,0.0,670681.0,0.2714004347604092,False,False
+LBN,Lebanon,"MENA, Afghanistan & Pakistan",IBRD,True,0.0,577349.0,,100.0,2024,5805962.0,2024,0.0,577349.0,0.0,False,False
+YEM,Republic of Yemen,"MENA, Afghanistan & Pakistan",IDA,True,6085465.0,6649248.0,,86.3,2024,40583164.0,2024,5559893.468,563783.0,0.9152110133356434,False,False
+LSO,Lesotho,Eastern & Southern Africa,IDA,False,5781.0,524971.0,,60.6,2024,2337423.0,2024,920944.662,519190.0,0.011012036855369153,False,False
+PER,Peru,Latin America & Caribbean,IBRD,False,0.0,426745.0,,96.5,2024,34217848.0,2024,1197624.68,426745.0,0.0,False,False
+PNG,Papua New Guinea,East Asia & Pacific,BLEND,True,0.0,425650.0,,43.3,2024,10576502.0,2024,5996876.634,425650.0,0.0,False,False
+GAB,Gabon,Western & Central Africa,IBRD,False,0.0,395352.0,,95.1,2024,2538952.0,2024,124408.64800000013,395352.0,0.0,False,False
+UKR,Ukraine,Europe & Central Asia,IBRD,True,5762.0,381895.0,,100.0,2024,37860221.0,2024,0.0,376133.0,0.015087916835779468,False,False
+SSD,South Sudan,Eastern & Southern Africa,IDA,True,0.0,340000.0,,5.4,2024,11943408.0,2024,11298463.968,340000.0,0.0,False,False
+COM,Comoros,Eastern & Southern Africa,IDA,False,0.0,281808.0,,91.7,2024,866628.0,2024,71930.12399999998,281808.0,0.0,False,False
+GHA,Ghana,Western & Central Africa,IDA,False,3319864.0,3593116.0,,91.9,2024,34427414.0,2024,2788620.533999998,273252.0,0.9239512445465162,False,False
+ARG,Argentina,Latin America & Caribbean,IBRD,False,6505.0,254784.0,,98.4,2024,45696159.0,2024,731138.5439999974,248279.0,0.025531430545089173,False,False
+HTI,Haiti,Latin America & Caribbean,IDA,True,705590.0,928290.0,,53.9,2024,11772557.0,2024,5427148.777000001,222700.0,0.76009652156115,False,False
+SWZ,Eswatini,Eastern & Southern Africa,BLEND,False,0.0,200000.0,,89.3,2024,1242822.0,2024,132981.95400000003,200000.0,0.0,False,False
+MLI,Mali,Western & Central Africa,IDA,True,132429.0,305319.0,,49.5,2024,24478595.0,2024,12361690.475,172890.0,0.43373979346192015,False,False
+GMB,Gambia,Western & Central Africa,IDA,False,969528.0,1131505.0,,69.0,2024,2759988.0,2024,855596.28,161977.0,0.8568481800787446,False,False
+SDN,Sudan,Eastern & Southern Africa,IDA,True,0.0,150000.0,,66.0,2024,50448963.0,2024,17152647.42,150000.0,0.0,False,False
+GNB,Guinea-Bissau,Western & Central Africa,IDA,False,208550.0,339999.0,,43.7,2024,2201352.0,2024,1239361.176,131449.0,0.6133841570122265,False,False
+AFG,Afghanistan,"MENA, Afghanistan & Pakistan",IDA,True,0.0,130913.0,,87.8,2024,42647492.0,2024,5202994.024000001,130913.0,0.0,False,False
+SLV,El Salvador,Latin America & Caribbean,IBRD,False,304308.0,413063.0,,98.7,2024,6338193.0,2024,82396.50899999982,108755.0,0.7367108649285944,False,False
+COG,Republic of Congo,Western & Central Africa,BLEND,False,120943.0,222943.0,,53.0,2024,6332961.0,2024,2976491.67,102000.0,0.5424839532974797,False,False
+BGD,Bangladesh,South Asia,IDA,False,5611649.0,5712025.0,,99.5,2024,173562364.0,2024,867811.82,100376.0,0.982427247779903,False,False
+SLB,Solomon Islands,East Asia & Pacific,IDA,False,2586.0,97425.0,,81.5,2024,819198.0,2024,151551.63,94839.0,0.026543494996150885,False,False
+BTN,Bhutan,South Asia,IDA,False,0.0,78639.0,,100.0,2024,791524.0,2024,0.0,78639.0,0.0,False,False
+GUY,Guyana,Latin America & Caribbean,IDA,False,0.0,76577.0,,93.0,2024,831087.0,2024,58176.09,76577.0,0.0,False,False
+MMR,Myanmar,East Asia & Pacific,IDA,True,4850573.0,4916028.0,,80.4,2024,54500091.0,2024,10682017.835999997,65455.0,0.9866853890986789,False,False
+STP,Sao Tome and Principe,Eastern & Southern Africa,IDA,False,800.0,45275.0,,77.7,2024,235536.0,2024,52524.52799999999,44475.0,0.0176697956929873,False,False
+NAM,Namibia,Eastern & Southern Africa,IBRD,False,41866.0,53320.0,,59.3,2024,3030131.0,2024,1233263.317,11454.0,0.7851837959489872,False,False
+GRD,Grenada,Latin America & Caribbean,BLEND,False,0.0,11052.0,,95.6,2024,117207.0,2024,5157.1080000000065,11052.0,0.0,False,False
+ZWE,Zimbabwe,Eastern & Southern Africa,BLEND,False,11046.0,20649.0,,62.0,2024,16634373.0,2024,6321061.74,9603.0,0.5349411593781781,False,False
+CPV,Cabo Verde,Western & Central Africa,BLEND,False,0.0,9010.0,,98.4,2024,524877.0,2024,8398.03199999997,9010.0,0.0,False,False
+FSM,Federated States of Micronesia,East Asia & Pacific,IDA,False,0.0,6387.0,,88.9,2024,113160.0,2024,12560.759999999993,6387.0,0.0,False,False
+LAO,Lao People's Democratic Republic,East Asia & Pacific,IDA,False,0.0,6356.0,,96.5,2024,7769819.0,2024,271943.665,6356.0,0.0,False,False
+DJI,Djibouti,"MENA, Afghanistan & Pakistan",IDA,False,199056.0,204124.0,,69.2,2024,1168722.0,2024,359966.37599999993,5068.0,0.9751719543022869,False,False
+TLS,Timor-Leste,East Asia & Pacific,BLEND,False,0.0,156.0,,94.3,2024,1400638.0,2024,79836.36600000004,156.0,0.0,False,False
+EGY,Arab Republic of Egypt,"MENA, Afghanistan & Pakistan",IBRD,False,4740706.0,4740707.0,,100.0,2024,116538258.0,2024,0.0,1.0,0.9999997890609987,False,False
+DZA,Algeria,"MENA, Afghanistan & Pakistan",IBRD,False,,,no_results,100.0,2024,46814308.0,2024,0.0,,,False,False
+MUS,Mauritius,Eastern & Southern Africa,IBRD,False,,,no_results,100.0,2024,1245779.0,2024,0.0,,,False,False
+VNM,Viet Nam,East Asia & Pacific,IBRD,False,111379.0,111379.0,,100.0,2024,100987686.0,2024,0.0,0.0,1.0,False,False
+ATG,Antigua and Barbuda,Latin America & Caribbean,IBRD,False,,,no_results,100.0,2024,93772.0,2024,0.0,,,False,False
+MNG,Mongolia,East Asia & Pacific,IBRD,False,129962.0,129962.0,,99.1,2024,3524788.0,2024,31723.0920000002,0.0,1.0,False,False
+SUR,Suriname,Latin America & Caribbean,BLEND,False,,,no_results,99.0,2024,634431.0,2024,6344.31,,,False,False
+JOR,Jordan,"MENA, Afghanistan & Pakistan",IBRD,False,0.0,0.0,expected_missing,100.0,2024,11552876.0,2024,0.0,,,False,False
+ARM,Armenia,Europe & Central Asia,IBRD,False,261783.0,173460.0,achieved_above_expected,100.0,2024,3033500.0,2024,0.0,,,False,False
+PHL,Philippines,East Asia & Pacific,IBRD,False,2194307.0,2194307.0,,94.8,2024,115843670.0,2024,6023870.840000004,0.0,1.0,False,False
+PAN,Panama,Latin America & Caribbean,IBRD,False,,,no_results,96.0,2024,4515577.0,2024,180623.08,,,False,False
+MNE,Montenegro,Europe & Central Asia,IBRD,False,,,no_results,100.0,2024,623525.0,2024,0.0,,,False,False
+BLZ,Belize,Latin America & Caribbean,BLEND,False,,,no_results,99.6,2024,417072.0,2024,1668.2880000000237,,,False,False
+KNA,St. Kitts and Nevis,Latin America & Caribbean,IBRD,False,,,no_results,100.0,2024,46843.0,2024,0.0,,,False,False
+BOL,Bolivia,Latin America & Caribbean,IBRD,False,,,no_results,96.6,2024,12413315.0,2024,422052.71000000066,,,False,False
+CRI,Costa Rica,Latin America & Caribbean,IBRD,False,,,no_results,99.8,2024,5129910.0,2024,10259.820000000145,,,False,False
+JAM,Jamaica,Latin America & Caribbean,IBRD,False,,,no_results,97.7,2024,2839175.0,2024,65301.024999999914,,,False,False
+BWA,Botswana,Eastern & Southern Africa,IBRD,False,462845.0,462845.0,,80.2,2024,2521139.0,2024,499185.52199999994,0.0,1.0,False,False
+GNQ,Equatorial Guinea,Western & Central Africa,IBRD,False,,,no_results,65.1,2024,1892516.0,2024,660488.0840000001,,,False,False
+MDV,Maldives,South Asia,IDA,False,0.0,0.0,expected_missing,100.0,2024,527799.0,2024,0.0,,,False,False
+ERI,Eritrea,Eastern & Southern Africa,IDA,False,,,no_results,55.3,2024,3535603.0,2024,1580414.5410000002,,,False,False
+MHL,Marshall Islands,East Asia & Pacific,IDA,False,3883.0,3883.0,,97.2,2024,37548.0,2024,1051.343999999999,0.0,1.0,False,False
+TUV,Tuvalu,East Asia & Pacific,IDA,False,0.0,0.0,expected_missing,100.0,2024,9646.0,2024,0.0,,,False,False
+BRA,Brazil,Latin America & Caribbean,IBRD,False,2368399.0,1669989.0,achieved_above_expected,99.8,2024,211998573.0,2024,423997.14600000606,,,False,False
+POL,Poland,Europe & Central Asia,IBRD,False,0.0,0.0,expected_missing,100.0,2024,36559233.0,2024,0.0,,,False,False
+ECU,Ecuador,Latin America & Caribbean,IBRD,False,,,no_results,98.5,2024,18135478.0,2024,272032.17,,,False,False
+WSM,Samoa,East Asia & Pacific,IDA,False,,,no_results,100.0,2024,218019.0,2024,0.0,,,False,False
+TUR,Türkiye,Europe & Central Asia,IBRD,False,0.0,0.0,expected_missing,100.0,2024,85518661.0,2024,0.0,,,False,False
+BRB,Barbados,Latin America & Caribbean,IBRD,False,,,no_results,100.0,2024,282467.0,2024,0.0,,,False,False
+MYS,Malaysia,East Asia & Pacific,IBRD,False,0.0,0.0,expected_missing,100.0,2024,35557673.0,2024,0.0,,,False,False
+LBY,Libya,"MENA, Afghanistan & Pakistan",IBRD,True,,,no_results,77.4,2024,7381023.0,2024,1668111.1979999996,,,False,False
+LCA,St. Lucia,Latin America & Caribbean,BLEND,False,0.0,0.0,expected_missing,100.0,2024,179744.0,2024,0.0,,,False,False
+TTO,Trinidad and Tobago,Latin America & Caribbean,IBRD,False,,,no_results,100.0,2024,1368333.0,2024,0.0,,,False,False
+PRY,Paraguay,Latin America & Caribbean,IBRD,False,,,no_results,99.8,2024,6929153.0,2024,13858.306000000197,,,False,False
+DOM,Dominican Republic,Latin America & Caribbean,IBRD,False,103361.0,103361.0,,99.5,2024,11427557.0,2024,57137.785,0.0,1.0,False,False
+BGR,Bulgaria,Europe & Central Asia,IBRD,False,0.0,0.0,expected_missing,100.0,2024,6441421.0,2024,0.0,,,False,False
+NRU,Naoero,East Asia & Pacific,IBRD,False,,,no_results,100.0,2024,11947.0,2024,0.0,,,False,False
+GTM,Guatemala,Latin America & Caribbean,IBRD,False,,,not_disclosed,90.9,2024,18406359.0,2024,1674978.6689999988,,,False,False
+GEO,Georgia,Europe & Central Asia,IBRD,False,0.0,0.0,expected_missing,100.0,2024,3812518.0,2024,0.0,,,False,False
+NIC,Nicaragua,Latin America & Caribbean,IDA,False,,,no_results,88.7,2024,6916140.0,2024,781523.8199999998,,,False,False
+VCT,St. Vincent and the Grenadines,Latin America & Caribbean,BLEND,False,,,no_results,100.0,2024,100616.0,2024,0.0,,,False,False
+KGZ,Kyrgyz Republic,Europe & Central Asia,IDA,False,0.0,0.0,expected_missing,100.0,2024,7221868.0,2024,0.0,,,False,False
+THA,Thailand,East Asia & Pacific,IBRD,False,0.0,0.0,expected_missing,100.0,2024,71668011.0,2024,0.0,,,False,False
+SYC,Seychelles,Eastern & Southern Africa,IBRD,False,0.0,0.0,expected_missing,100.0,2024,121354.0,2024,0.0,,,False,False
+MDA,Moldova,Europe & Central Asia,IBRD,False,0.0,0.0,expected_missing,100.0,2024,2402306.0,2024,0.0,,,False,False
+BLR,Belarus,Europe & Central Asia,IBRD,False,,,no_results,100.0,2024,9132629.0,2024,0.0,,,False,False
+DMA,Dominica,Latin America & Caribbean,BLEND,False,0.0,0.0,expected_missing,100.0,2024,66205.0,2024,0.0,,,False,False
+VUT,Vanuatu,East Asia & Pacific,IDA,False,,,no_results,65.5,2024,327777.0,2024,113083.065,,,False,False
+RUS,Russian Federation,Europe & Central Asia,IBRD,False,,,no_results,100.0,2024,143669648.0,2024,0.0,,,False,False
+CHL,Chile,Latin America & Caribbean,IBRD,False,0.0,0.0,expected_missing,99.0,2024,19764771.0,2024,197647.71,,,False,False
+VEN,Venezuela,Latin America & Caribbean,IBRD,False,,,no_results,100.0,2024,28405543.0,2024,0.0,,,False,False
+IRN,Islamic Republic of Iran,"MENA, Afghanistan & Pakistan",IBRD,True,,,no_results,100.0,2024,91567738.0,2024,0.0,,,False,False
+XKX,Kosovo,Europe & Central Asia,IDA,False,,,no_results,,,1576876.0,2025,,,,False,False
+MEX,Mexico,Latin America & Caribbean,IBRD,False,0.0,0.0,expected_missing,99.8,2024,130861007.0,2024,261722.01400000372,,,False,False
+KAZ,Kazakhstan,Europe & Central Asia,IBRD,False,,,no_results,100.0,2024,20592571.0,2024,0.0,,,False,False
+ALB,Albania,Europe & Central Asia,IBRD,False,,,no_results,100.0,2024,2377128.0,2024,0.0,,,False,False
+FJI,Fiji,East Asia & Pacific,BLEND,False,,,no_results,95.9,2024,928784.0,2024,38080.14399999995,,,False,False
+SRB,Serbia,Europe & Central Asia,IBRD,False,0.0,0.0,expected_missing,,,6549143.0,2025,,,,False,False
+ROU,Romania,Europe & Central Asia,IBRD,False,0.0,0.0,expected_missing,100.0,2024,19051804.0,2024,0.0,,,False,False
+HRV,Croatia,Europe & Central Asia,IBRD,False,,,no_results,100.0,2024,3866200.0,2024,0.0,,,False,False
+AZE,Azerbaijan,Europe & Central Asia,IBRD,False,0.0,0.0,expected_missing,100.0,2024,10202830.0,2024,0.0,,,False,False
+CHN,China,East Asia & Pacific,IBRD,False,0.0,0.0,expected_missing,100.0,2024,1408975000.0,2024,0.0,,,False,False
+TON,Tonga,East Asia & Pacific,IDA,False,,,no_results,100.0,2024,104175.0,2024,0.0,,,False,False
+HND,Honduras,Latin America & Caribbean,IDA,False,,,no_results,95.5,2024,10825703.0,2024,487156.635,,,False,False
+PLW,Palau,East Asia & Pacific,IBRD,False,,,no_results,100.0,2024,17695.0,2024,0.0,,,False,False
+URY,Uruguay,Latin America & Caribbean,IBRD,False,,,no_results,100.0,2024,3386588.0,2024,0.0,,,False,False
+TKM,Turkmenistan,Europe & Central Asia,IBRD,False,,,no_results,100.0,2024,7494498.0,2024,0.0,,,False,False
+BIH,Bosnia and Herzegovina,Europe & Central Asia,IBRD,False,,,no_results,100.0,2024,3164253.0,2024,0.0,,,False,False
+MKD,North Macedonia,Europe & Central Asia,IBRD,False,,,no_results,100.0,2024,1824359.0,2024,0.0,,,False,False
+KIR,Kiribati,East Asia & Pacific,IDA,False,0.0,0.0,expected_missing,97.7,2024,134518.0,2024,3093.913999999996,,,False,False

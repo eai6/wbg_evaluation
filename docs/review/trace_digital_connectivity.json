@@ -1,0 +1,1562 @@
+{
+ "route": {
+  "intent": "research",
+  "by": "llm",
+  "entities": {
+   "topic": null,
+   "areas": []
+  },
+  "ms": 3186
+ },
+ "choose_area": [
+  {
+   "outcome": "Digital Connectivity",
+   "ind": "CSC_RES_BRO_INTE",
+   "gap": 331470829.0,
+   "n_results": 47,
+   "n_need": 144,
+   "ok": true
+  },
+  {
+   "outcome": "Green and Blue Planet and Resilient Populations",
+   "ind": "CSC_RES_RESI_CLIM_RISK",
+   "gap": 302936460.0,
+   "n_results": 110,
+   "n_need": 144,
+   "ok": true
+  },
+  {
+   "outcome": "Affordable, Reliable and Sustainable Energy for All",
+   "ind": "CSC_RES_ELC_ACCS",
+   "gap": 253342423.0,
+   "n_results": 84,
+   "n_need": 143,
+   "ok": true
+  },
+  {
+   "outcome": "Healthier Lives",
+   "ind": "CSC_RES_HEA_SERV",
+   "gap": 127179709.0,
+   "n_results": 86,
+   "n_need": 143,
+   "ok": true
+  },
+  {
+   "outcome": "No Learning Poverty",
+   "ind": "CSC_RES_EDU_SUPP",
+   "gap": 112634061.0,
+   "n_results": 107,
+   "n_need": 83,
+   "ok": true
+  }
+ ],
+ "committed": {
+  "indicator": "CSC_RES_BRO_INTE",
+  "indicator_name": "Number of people using broadband internet",
+  "need": {
+   "code": "IT_NET_USER_ZS",
+   "name": "Percentage of population using the internet",
+   "unit": "Percentage",
+   "higher_is_better": true
+  },
+  "need_is_negative": false,
+  "need_is_pop_share": true,
+  "sector_pattern": "ICT",
+  "sources": {
+   "countries_with_results": 47,
+   "countries_with_need": 144,
+   "countries_with_population": 145,
+   "countries_with_projects": 35,
+   "project_commitments": 7580485633.63,
+   "active_sector_projects": 155
+  },
+  "n_rows": 145,
+  "sample_rows": {
+   "NGA": {
+    "name": "Nigeria",
+    "region": "AFW",
+    "achieved": 7614916.0,
+    "expected": 83808587.0,
+    "gap": 76193671.0,
+    "ratio": 0.09086080880948393,
+    "need": 41.21139908,
+    "need_year": 2024,
+    "population": 237527782.0,
+    "people_in_need": 139639259.83410758,
+    "projects": 1,
+    "commitments": 500000000.0,
+    "active_projects": 3
+   },
+   "COD": {
+    "name": "Democratic Republic of Congo",
+    "region": "AFE",
+    "achieved": 14375293.0,
+    "expected": 59274266.0,
+    "gap": 44898973.0,
+    "ratio": 0.2425216534946211,
+    "need": 19.67350006,
+    "need_year": 2024,
+    "population": 112832473.0,
+    "people_in_need": 90634376.35664552,
+    "projects": 1,
+    "commitments": 400000000.0,
+    "active_projects": 0
+   },
+   "IND": {
+    "name": "India",
+    "region": "SAR",
+    "achieved": 250000.0,
+    "expected": 27869713.0,
+    "gap": 27619713.0,
+    "ratio": 0.008970311247912742,
+    "need": 70.0,
+    "need_year": 2025,
+    "population": 1463865525.0,
+    "people_in_need": 439159657.5,
+    "projects": 0,
+    "commitments": 0,
+    "active_projects": 10
+   },
+   "ETH": {
+    "name": "Ethiopia",
+    "region": "AFE",
+    "achieved": 6994702.0,
+    "expected": 32522039.0,
+    "gap": 25527337.0,
+    "ratio": 0.2150757521691675,
+    "need": 21.94129944,
+    "need_year": 2024,
+    "population": 135472051.0,
+    "people_in_need": 105747722.63258049,
+    "projects": 0,
+    "commitments": 0,
+    "active_projects": 3
+   },
+   "CHN": {
+    "name": "China",
+    "region": "EAP",
+    "achieved": null,
+    "expected": null,
+    "gap": null,
+    "ratio": null,
+    "need": 91.6,
+    "need_year": 2025,
+    "population": 1406585000.0,
+    "people_in_need": 118153140.00000007,
+    "projects": 0,
+    "commitments": 0,
+    "active_projects": 0
+   },
+   "PAK": {
+    "name": "Pakistan",
+    "region": "MENAAP",
+    "achieved": null,
+    "expected": null,
+    "gap": null,
+    "ratio": null,
+    "need": 57.253,
+    "need_year": 2024,
+    "population": 255219554.0,
+    "people_in_need": 109098702.74837999,
+    "projects": 0,
+    "commitments": 0,
+    "active_projects": 6
+   },
+   "BGD": {
+    "name": "Bangladesh",
+    "region": "SAR",
+    "achieved": null,
+    "expected": null,
+    "gap": null,
+    "ratio": null,
+    "need": 53.42171316,
+    "need_year": 2024,
+    "population": 175686899.0,
+    "people_in_need": 81831947.75652108,
+    "projects": 0,
+    "commitments": 0,
+    "active_projects": 4
+   },
+   "IDN": {
+    "name": "Indonesia",
+    "region": "EAP",
+    "achieved": null,
+    "expected": null,
+    "gap": null,
+    "ratio": null,
+    "need": 72.78075544,
+    "need_year": 2024,
+    "population": 285721236.0,
+    "people_in_need": 77771161.98669478,
+    "projects": 0,
+    "commitments": 0,
+    "active_projects": 6
+   },
+   "SSD": {
+    "name": "South Sudan",
+    "region": "AFE",
+    "achieved": 2850469.0,
+    "expected": 2826070.0,
+    "gap": -24399.0,
+    "ratio": 1.008633544108957,
+    "need": 6.671000004,
+    "need_year": 2019,
+    "population": 12188788.0,
+    "people_in_need": 11375673.952032447,
+    "projects": 1,
+    "commitments": 161999998.64,
+    "active_projects": 0
+   },
+   "GIN": {
+    "name": "Guinea",
+    "region": "AFW",
+    "achieved": 1900609.0,
+    "expected": 2436000.0,
+    "gap": 535391.0,
+    "ratio": 0.7802171592775041,
+    "need": 33.30469894,
+    "need_year": 2024,
+    "population": 15099727.0,
+    "people_in_need": 10070808.381888105,
+    "projects": 1,
+    "commitments": 296500000.0,
+    "active_projects": 1
+   },
+   "KEN": {
+    "name": "Kenya",
+    "region": "AFE",
+    "achieved": 27656844.0,
+    "expected": 49487029.0,
+    "gap": 21830185.0,
+    "ratio": 0.5588705678815352,
+    "need": 34.97622513,
+    "need_year": 2024,
+    "population": 57532493.0,
+    "people_in_need": 37409798.72541851,
+    "projects": 0,
+    "commitments": 0,
+    "active_projects": 3
+   }
+  },
+  "excluded_focus": [
+   "USA",
+   "DEU"
+  ],
+  "accelerate": [
+   "NGA",
+   "COD",
+   "IND",
+   "ETH"
+  ],
+  "expand": [
+   "CHN",
+   "PAK",
+   "BGD",
+   "IDN"
+  ],
+  "strong": [
+   [
+    "SSD",
+    1.009
+   ],
+   [
+    "GIN",
+    0.78
+   ]
+  ],
+  "overshoot": [
+   [
+    "NER",
+    3.59
+   ],
+   [
+    "ZMB",
+    1.79
+   ],
+   [
+    "BRA",
+    1.27
+   ]
+  ],
+  "regions": [
+   {
+    "code": "AFE",
+    "name": "Eastern & Southern Africa",
+    "people_in_need": 565907602.3095102,
+    "achieved": 134640036.0,
+    "expected": 300723373.0,
+    "gap": 166083337.0
+   },
+   {
+    "code": "AFW",
+    "name": "Western & Central Africa",
+    "people_in_need": 318542289.8839496,
+    "achieved": 23777874.0,
+    "expected": 133968659.0,
+    "gap": 110190785.0
+   },
+   {
+    "code": "EAP",
+    "name": "East Asia & Pacific",
+    "people_in_need": 307366052.6152384,
+    "achieved": 31063153.0,
+    "expected": 44319294.0,
+    "gap": 13256141.0
+   },
+   {
+    "code": "ECA",
+    "name": "Europe & Central Asia",
+    "people_in_need": 52493413.43667496,
+    "achieved": 464561.0,
+    "expected": 2852940.0,
+    "gap": 2388379.0
+   },
+   {
+    "code": "LCR",
+    "name": "Latin America & Caribbean",
+    "people_in_need": 120219227.18481703,
+    "achieved": 31932333.0,
+    "expected": 38173420.0,
+    "gap": 6241087.0
+   },
+   {
+    "code": "MENAAP",
+    "name": "MENA, Afghanistan & Pakistan",
+    "people_in_need": 269977993.30563694,
+    "achieved": 4984534.0,
+    "expected": 22342728.0,
+    "gap": 17358194.0
+   },
+   {
+    "code": "SAR",
+    "name": "South Asia",
+    "people_in_need": 546917119.6251189,
+    "achieved": 17073581.0,
+    "expected": 33026487.0,
+    "gap": 15952906.0
+   }
+  ],
+  "focus": "AFE",
+  "for_writer": {
+   "indicator": "Number of people using broadband internet",
+   "unit": "Beneficiaries",
+   "need_indicator": "Percentage of population using the internet",
+   "world": {
+    "achieved": {
+     "value": 243936072.0,
+     "display": "244M",
+     "claim": "c4bef2553"
+    },
+    "expected": {
+     "value": 575406901.0,
+     "display": "575M",
+     "claim": "c082b93ca"
+    },
+    "remaining_gap": {
+     "value": 331470829.0,
+     "display": "331M",
+     "claim": "c9fd20149"
+    },
+    "delivery_rate": {
+     "value": 42.39366465297225,
+     "display": "42%",
+     "claim": "cea261b27"
+    },
+    "change_since_previous_snapshot": {
+     "value": 27129469.0,
+     "display": "27.1M",
+     "claim": "cc73b7fa5"
+    }
+   },
+   "regional_focus": {
+    "region": "Eastern & Southern Africa",
+    "remaining_gap": {
+     "value": 166083337.0,
+     "display": "166M",
+     "claim": "c14c41084"
+    },
+    "share_of_people_in_need": {
+     "value": 25.94212223580021,
+     "display": "26%",
+     "claim": "c54cb34a9"
+    }
+   },
+   "accelerate_delivery": [
+    {
+     "country": "Nigeria",
+     "region": "Western & Central Africa",
+     "fcs": true,
+     "expected": {
+      "value": 83808587.0,
+      "display": "83.8M",
+      "claim": "c06d9edf4"
+     },
+     "achieved": {
+      "value": 7614916.0,
+      "display": "7.6M",
+      "claim": "c9f3925d6"
+     },
+     "delivery_rate": {
+      "value": 9.086080880948392,
+      "display": "9%",
+      "claim": "c68fa223a"
+     },
+     "remaining_gap": {
+      "value": 76193671.0,
+      "display": "76.2M",
+      "claim": "c798ef686"
+     },
+     "people_in_need": {
+      "value": 139639259.83410758,
+      "display": "140M",
+      "claim": "c808d584d"
+     },
+     "need_indicator": {
+      "value": 41.21139908,
+      "display": "41.2%",
+      "claim": "caa9aa2c8",
+      "year": 2024
+     },
+     "active_sector_projects": 3
+    },
+    {
+     "country": "Democratic Republic of Congo",
+     "region": "Eastern & Southern Africa",
+     "fcs": true,
+     "expected": {
+      "value": 59274266.0,
+      "display": "59.3M",
+      "claim": "c023bc96a"
+     },
+     "achieved": {
+      "value": 14375293.0,
+      "display": "14.4M",
+      "claim": "cb40e6f3f"
+     },
+     "delivery_rate": {
+      "value": 24.25216534946211,
+      "display": "24%",
+      "claim": "c95e5e071"
+     },
+     "remaining_gap": {
+      "value": 44898973.0,
+      "display": "44.9M",
+      "claim": "cd90815c4"
+     },
+     "people_in_need": {
+      "value": 90634376.35664552,
+      "display": "90.6M",
+      "claim": "ce3af983c"
+     },
+     "need_indicator": {
+      "value": 19.67350006,
+      "display": "19.7%",
+      "claim": "c5394185f",
+      "year": 2024
+     },
+     "active_sector_projects": 0
+    },
+    {
+     "country": "India",
+     "region": "South Asia",
+     "fcs": false,
+     "expected": {
+      "value": 27869713.0,
+      "display": "27.9M",
+      "claim": "c23e058a9"
+     },
+     "achieved": {
+      "value": 250000.0,
+      "display": "250K",
+      "claim": "c98be57ab"
+     },
+     "delivery_rate": {
+      "value": 0.8970311247912742,
+      "display": "1%",
+      "claim": "cdbe8c574"
+     },
+     "remaining_gap": {
+      "value": 27619713.0,
+      "display": "27.6M",
+      "claim": "c3216baad"
+     },
+     "people_in_need": {
+      "value": 439159657.5,
+      "display": "439M",
+      "claim": "c888cdc83"
+     },
+     "need_indicator": {
+      "value": 70.0,
+      "display": "70.0%",
+      "claim": "cfb379b2a",
+      "year": 2025
+     },
+     "active_sector_projects": 10
+    },
+    {
+     "country": "Ethiopia",
+     "region": "Eastern & Southern Africa",
+     "fcs": true,
+     "expected": {
+      "value": 32522039.0,
+      "display": "32.5M",
+      "claim": "c3cb30cfd"
+     },
+     "achieved": {
+      "value": 6994702.0,
+      "display": "7M",
+      "claim": "cf665feb9"
+     },
+     "delivery_rate": {
+      "value": 21.50757521691675,
+      "display": "22%",
+      "claim": "cd19c35e3"
+     },
+     "remaining_gap": {
+      "value": 25527337.0,
+      "display": "25.5M",
+      "claim": "cd4074a69"
+     },
+     "people_in_need": {
+      "value": 105747722.63258049,
+      "display": "106M",
+      "claim": "cffac19c8"
+     },
+     "need_indicator": {
+      "value": 21.94129944,
+      "display": "21.9%",
+      "claim": "cdaefd957",
+      "year": 2024
+     },
+     "active_sector_projects": 3
+    }
+   ],
+   "expand_footprint": [
+    {
+     "country": "China",
+     "region": "East Asia & Pacific",
+     "fcs": false,
+     "people_in_need": {
+      "value": 118153140.00000007,
+      "display": "118M",
+      "claim": "ca82eb36b"
+     },
+     "need_indicator": {
+      "value": 91.6,
+      "display": "91.6%",
+      "claim": "c0da809bb",
+      "year": 2025
+     },
+     "active_sector_projects": 0
+    },
+    {
+     "country": "Pakistan",
+     "region": "MENA, Afghanistan & Pakistan",
+     "fcs": false,
+     "people_in_need": {
+      "value": 109098702.74837999,
+      "display": "109M",
+      "claim": "cb4d69354"
+     },
+     "need_indicator": {
+      "value": 57.253,
+      "display": "57.3%",
+      "claim": "c21eab258",
+      "year": 2024
+     },
+     "active_sector_projects": 6
+    },
+    {
+     "country": "Bangladesh",
+     "region": "South Asia",
+     "fcs": false,
+     "people_in_need": {
+      "value": 81831947.75652108,
+      "display": "81.8M",
+      "claim": "cb8ccf82e"
+     },
+     "need_indicator": {
+      "value": 53.42171316,
+      "display": "53.4%",
+      "claim": "c93b39934",
+      "year": 2024
+     },
+     "active_sector_projects": 4
+    },
+    {
+     "country": "Indonesia",
+     "region": "East Asia & Pacific",
+     "fcs": false,
+     "people_in_need": {
+      "value": 77771161.98669478,
+      "display": "77.8M",
+      "claim": "ce13173f7"
+     },
+     "need_indicator": {
+      "value": 72.78075544,
+      "display": "72.8%",
+      "claim": "cf7382d07",
+      "year": 2024
+     },
+     "active_sector_projects": 6
+    }
+   ],
+   "strong_delivery": [
+    {
+     "country": "South Sudan",
+     "region": "Eastern & Southern Africa",
+     "fcs": true,
+     "expected": {
+      "value": 2826070.0,
+      "display": "2.8M",
+      "claim": "c424ece64"
+     },
+     "achieved": {
+      "value": 2850469.0,
+      "display": "2.9M",
+      "claim": "ce8fbb526"
+     },
+     "delivery_rate": {
+      "value": 100.8633544108957,
+      "display": "101%",
+      "claim": "cc6aef194"
+     },
+     "remaining_gap": {
+      "value": -24399.0,
+      "display": "-24.4K",
+      "claim": "c86efc436"
+     },
+     "people_in_need": {
+      "value": 11375673.952032447,
+      "display": "11.4M",
+      "claim": "c5a31acdc"
+     },
+     "need_indicator": {
+      "value": 6.671000004,
+      "display": "6.7%",
+      "claim": "cb0845db4",
+      "year": 2019
+     },
+     "active_sector_projects": 0
+    },
+    {
+     "country": "Guinea",
+     "region": "Western & Central Africa",
+     "fcs": false,
+     "expected": {
+      "value": 2436000.0,
+      "display": "2.4M",
+      "claim": "c54528753"
+     },
+     "achieved": {
+      "value": 1900609.0,
+      "display": "1.9M",
+      "claim": "c4c333c3b"
+     },
+     "delivery_rate": {
+      "value": 78.0217159277504,
+      "display": "78%",
+      "claim": "c09f2a119"
+     },
+     "remaining_gap": {
+      "value": 535391.0,
+      "display": "535.4K",
+      "claim": "c86ff370f"
+     },
+     "people_in_need": {
+      "value": 10070808.381888105,
+      "display": "10.1M",
+      "claim": "c3fc53971"
+     },
+     "need_indicator": {
+      "value": 33.30469894,
+      "display": "33.3%",
+      "claim": "cd94f230f",
+      "year": 2024
+     },
+     "active_sector_projects": 1
+    }
+   ],
+   "data_checks": [
+    "Niger reports 359% of expected",
+    "Zambia reports 179% of expected",
+    "Brazil reports 127% of expected"
+   ]
+  },
+  "writer": {
+   "system_prompt_head": "You are briefing senior World Bank leadership. Write the answer to the question below from the\nRESEARCH RESULTS only (Scorecard results by country, client-context need, Data360 population, operational footprint,\nand the prioritization computed in code).\n\nNUMBERS: wrap every number exactly as <claim id=\"CLAIM_ID\">DISPLAY</claim> using the given claim ids; never invent\nnumbers or ids; never compute.\nFACTS: use each country's \"region\" field exactly; never place a country in another region. Read \"definitions\":\n\"context_indicator\" is a context measure named by its \"name\" (e.g. % of people using the internet, where a HIGH value\nmeans LOW need) - never call it a \"need indicator\" without naming it. \"all_countries_total\" is the global total.\nSTRUCTURE (Markdown, numbered list, ~150-220 words):\n1. **Regional focus** - which region and why (need share, remaining gap).\n2. **Accelerate delivery** - the countries flagged, with delivery rate and portfolio size; what to do (implementation support).\n3. **Expand the footprint** - the countries flagged, with need and pipeline; what to do (new operations / scale-up).\n4. **Learn from strong delivery** - if any.\nThen one sentence: **Overall:** the all-countries remaining gap and delivery rate (from all_countries_total).\nKeep caveats out (they are shown separately).\n\nQuestion: {question}\nThematic area: {outcome}",
+   "raw": "1. **Regional focus** \u2013 Prioritize Eastern & Southern Africa, which holds the largest remaining gap of <claim id=\"c14c41084\">166M</claim> broadband beneficiaries and <claim id=\"c54cb34a9\">26%</claim> of people in need.\n\n2. **Accelerate delivery** \u2013 Strengthen implementation support where delivery lags against large targets:\n   - Nigeria (Western & Central Africa): <claim id=\"c68fa223a\">9%</claim> delivery against <claim id=\"c06d9edf4\">83.8M</claim> expected, with <claim id=\"c798ef686\">76.2M</claim> remaining and 3 active projects.\n   - Democratic Republic of Congo (Eastern & Southern Africa): <claim id=\"c95e5e071\">24%</claim> delivery against <claim id=\"c023bc96a\">59.3M</claim>, with no active sector projects.\n   - Ethiopia (Eastern & Southern Africa): <claim id=\"cd19c35e3\">22%</claim> against <claim id=\"c3cb30cfd\">32.5M</claim>, with 3 active projects.\n   - India (South Asia): <claim id=\"cdbe8c574\">1%</claim> against <claim id=\"c23e058a9\">27.9M</claim>, despite 10 active projects.\n\n3. **Expand the footprint** \u2013 Develop new operations or scale up where need is large and the pipeline is thin:\n   - China (East Asia & Pacific): <claim id=\"ca82eb36b\">118M</claim> people in need and no active projects.\n   - Pakistan (MENA, Afghanistan & Pakistan): <claim id=\"cb4d69354\">109M</claim> in need, 6 projects.\n   - Bangladesh (South Asia): <claim id=\"cb8ccf82e\">81.8M</claim> in need, 4 projects.\n   - Indonesia (East Asia & Pacific): <claim id=\"ce13173f7\">77.8M</claim> in need, 6 projects.\n\n4. **Learn from strong delivery** \u2013 South Sudan (Eastern & Southern Africa) reached <claim id=\"cc6aef194\">101%</claim> of its target, and Guinea (Western & Central Africa) reached <claim id=\"c09f2a119\">78%</claim>. Their approaches could inform fragile-context delivery elsewhere.\n\n**Overall:** Across all countries the remaining gap is <claim id=\"c9fd20149\">331M</claim>, with a delivery rate of <claim id=\"cea261b27\">42%</claim>.",
+   "stats": {
+    "tagged": 19,
+    "verified": 19,
+    "failed": [],
+    "untagged": [
+     "10"
+    ]
+   },
+   "checks": [
+    {
+     "id": "c14c41084",
+     "shown": "166M",
+     "verified": true,
+     "claim_label": "remaining gap (computed)",
+     "claim_source": "Eastern & Southern Africa \u00b7 FY26",
+     "source_value": 166083337.0,
+     "context": "1. **Regional focus** \u2013 Prioritize Eastern & Southern Africa, which holds the largest remaining gap of 166M broadband beneficiaries and 26% of people in need."
+    },
+    {
+     "id": "c54cb34a9",
+     "shown": "26%",
+     "verified": true,
+     "claim_label": "regional share of people in need (computed)",
+     "claim_source": "Eastern & Southern Africa \u00b7 computed",
+     "source_value": 25.94212223580021,
+     "context": "1. **Regional focus** \u2013 Prioritize Eastern & Southern Africa, which holds the largest remaining gap of 166M broadband beneficiaries and 26% of people in need."
+    },
+    {
+     "id": "c68fa223a",
+     "shown": "9%",
+     "verified": true,
+     "claim_label": "achieved \u00f7 expected",
+     "claim_source": "Nigeria \u00b7 computed",
+     "source_value": 9.086080880948392,
+     "context": "- Nigeria (Western & Central Africa): 9% delivery against 83.8M expected, with 76.2M remaining and 3 active projects."
+    },
+    {
+     "id": "c06d9edf4",
+     "shown": "83.8M",
+     "verified": true,
+     "claim_label": "CSC_RES_BRO_INTE expected",
+     "claim_source": "Nigeria \u00b7 FY26",
+     "source_value": 83808587.0,
+     "context": "- Nigeria (Western & Central Africa): 9% delivery against 83.8M expected, with 76.2M remaining and 3 active projects."
+    },
+    {
+     "id": "c798ef686",
+     "shown": "76.2M",
+     "verified": true,
+     "claim_label": "expected \u2212 achieved (computed)",
+     "claim_source": "Nigeria \u00b7 FY26",
+     "source_value": 76193671.0,
+     "context": "- Nigeria (Western & Central Africa): 9% delivery against 83.8M expected, with 76.2M remaining and 3 active projects."
+    },
+    {
+     "id": "c95e5e071",
+     "shown": "24%",
+     "verified": true,
+     "claim_label": "achieved \u00f7 expected",
+     "claim_source": "Democratic Republic of Congo \u00b7 computed",
+     "source_value": 24.25216534946211,
+     "context": "- Democratic Republic of Congo (Eastern & Southern Africa): 24% delivery against 59.3M, with no active sector projects."
+    },
+    {
+     "id": "c023bc96a",
+     "shown": "59.3M",
+     "verified": true,
+     "claim_label": "CSC_RES_BRO_INTE expected",
+     "claim_source": "Democratic Republic of Congo \u00b7 FY26",
+     "source_value": 59274266.0,
+     "context": "- Democratic Republic of Congo (Eastern & Southern Africa): 24% delivery against 59.3M, with no active sector projects."
+    },
+    {
+     "id": "cd19c35e3",
+     "shown": "22%",
+     "verified": true,
+     "claim_label": "achieved \u00f7 expected",
+     "claim_source": "Ethiopia \u00b7 computed",
+     "source_value": 21.50757521691675,
+     "context": "- Ethiopia (Eastern & Southern Africa): 22% against 32.5M, with 3 active projects."
+    },
+    {
+     "id": "c3cb30cfd",
+     "shown": "32.5M",
+     "verified": true,
+     "claim_label": "CSC_RES_BRO_INTE expected",
+     "claim_source": "Ethiopia \u00b7 FY26",
+     "source_value": 32522039.0,
+     "context": "- Ethiopia (Eastern & Southern Africa): 22% against 32.5M, with 3 active projects."
+    },
+    {
+     "id": "cdbe8c574",
+     "shown": "1%",
+     "verified": true,
+     "claim_label": "achieved \u00f7 expected",
+     "claim_source": "India \u00b7 computed",
+     "source_value": 0.8970311247912742,
+     "context": "- India (South Asia): 1% against 27.9M, despite 10 active projects."
+    },
+    {
+     "id": "c23e058a9",
+     "shown": "27.9M",
+     "verified": true,
+     "claim_label": "CSC_RES_BRO_INTE expected",
+     "claim_source": "India \u00b7 FY26",
+     "source_value": 27869713.0,
+     "context": "- India (South Asia): 1% against 27.9M, despite 10 active projects."
+    },
+    {
+     "id": "ca82eb36b",
+     "shown": "118M",
+     "verified": true,
+     "claim_label": "population \u00d7 need share (IT_NET_USER_ZS, Data360 population)",
+     "claim_source": "China \u00b7 FY26",
+     "source_value": 118153140.00000007,
+     "context": "- China (East Asia & Pacific): 118M people in need and no active projects."
+    },
+    {
+     "id": "cb4d69354",
+     "shown": "109M",
+     "verified": true,
+     "claim_label": "population \u00d7 need share (IT_NET_USER_ZS, Data360 population)",
+     "claim_source": "Pakistan \u00b7 FY26",
+     "source_value": 109098702.74837999,
+     "context": "- Pakistan (MENA, Afghanistan & Pakistan): 109M in need, 6 projects."
+    },
+    {
+     "id": "cb8ccf82e",
+     "shown": "81.8M",
+     "verified": true,
+     "claim_label": "population \u00d7 need share (IT_NET_USER_ZS, Data360 population)",
+     "claim_source": "Bangladesh \u00b7 FY26",
+     "source_value": 81831947.75652108,
+     "context": "- Bangladesh (South Asia): 81.8M in need, 4 projects."
+    },
+    {
+     "id": "ce13173f7",
+     "shown": "77.8M",
+     "verified": true,
+     "claim_label": "population \u00d7 need share (IT_NET_USER_ZS, Data360 population)",
+     "claim_source": "Indonesia \u00b7 FY26",
+     "source_value": 77771161.98669478,
+     "context": "- Indonesia (East Asia & Pacific): 77.8M in need, 6 projects."
+    },
+    {
+     "id": "cc6aef194",
+     "shown": "101%",
+     "verified": true,
+     "claim_label": "achieved \u00f7 expected",
+     "claim_source": "South Sudan \u00b7 computed",
+     "source_value": 100.8633544108957,
+     "context": "4. **Learn from strong delivery** \u2013 South Sudan (Eastern & Southern Africa) reached 101% of its target, and Guinea (Western & Central Africa) reached 78%. Their approaches could inform fragile-context delivery elsewhere."
+    },
+    {
+     "id": "c09f2a119",
+     "shown": "78%",
+     "verified": true,
+     "claim_label": "achieved \u00f7 expected",
+     "claim_source": "Guinea \u00b7 computed",
+     "source_value": 78.0217159277504,
+     "context": "4. **Learn from strong delivery** \u2013 South Sudan (Eastern & Southern Africa) reached 101% of its target, and Guinea (Western & Central Africa) reached 78%. Their approaches could inform fragile-context delivery elsewhere."
+    },
+    {
+     "id": "c9fd20149",
+     "shown": "331M",
+     "verified": true,
+     "claim_label": "remaining gap (computed)",
+     "claim_source": "All countries \u00b7 FY26",
+     "source_value": 331470829.0,
+     "context": "**Overall:** Across all countries the remaining gap is 331M, with a delivery rate of 42%."
+    },
+    {
+     "id": "cea261b27",
+     "shown": "42%",
+     "verified": true,
+     "claim_label": "achieved \u00f7 expected",
+     "claim_source": "All countries \u00b7 computed",
+     "source_value": 42.39366465297225,
+     "context": "**Overall:** Across all countries the remaining gap is 331M, with a delivery rate of 42%."
+    }
+   ],
+   "usage": [
+    {
+     "model": "anthropic/claude-sonnet-5-5",
+     "in": 3411,
+     "out": 838,
+     "ms": 4918
+    }
+   ]
+  }
+ },
+ "current": {
+  "indicator": "CSC_RES_BRO_INTE",
+  "indicator_name": "Number of people using broadband internet",
+  "need": {
+   "code": "IT_NET_USER_ZS",
+   "name": "Percentage of population using the internet",
+   "unit": "Percentage",
+   "higher_is_better": true
+  },
+  "need_is_negative": false,
+  "need_is_pop_share": true,
+  "sector_pattern": "ICT",
+  "sources": {
+   "countries_with_results": 47,
+   "countries_with_need": 144,
+   "countries_with_population": 145,
+   "countries_with_projects": 35,
+   "project_commitments": 7580485633.63,
+   "active_sector_projects": 155
+  },
+  "n_rows": 145,
+  "sample_rows": {
+   "NGA": {
+    "name": "Nigeria",
+    "region": "AFW",
+    "lending": "BLEND",
+    "achieved": 7614916.0,
+    "expected": 83808587.0,
+    "gap": 76193671.0,
+    "ratio": 0.09086080880948393,
+    "need": 41.21139908,
+    "need_year": 2024,
+    "population": 237527782.0,
+    "people_in_need": 139639259.83410758,
+    "projects": 1,
+    "commitments": 500000000.0,
+    "active_projects": 3
+   },
+   "COD": {
+    "name": "Democratic Republic of Congo",
+    "region": "AFE",
+    "lending": "IDA",
+    "achieved": 14375293.0,
+    "expected": 59274266.0,
+    "gap": 44898973.0,
+    "ratio": 0.2425216534946211,
+    "need": 19.67350006,
+    "need_year": 2024,
+    "population": 112832473.0,
+    "people_in_need": 90634376.35664552,
+    "projects": 1,
+    "commitments": 400000000.0,
+    "active_projects": 0
+   },
+   "IND": {
+    "name": "India",
+    "region": "SAR",
+    "lending": "IBRD",
+    "achieved": 250000.0,
+    "expected": 27869713.0,
+    "gap": 27619713.0,
+    "ratio": 0.008970311247912742,
+    "need": 70.0,
+    "need_year": 2025,
+    "population": 1463865525.0,
+    "people_in_need": 439159657.5,
+    "projects": 0,
+    "commitments": 0,
+    "active_projects": 10
+   },
+   "ETH": {
+    "name": "Ethiopia",
+    "region": "AFE",
+    "lending": "IDA",
+    "achieved": 6994702.0,
+    "expected": 32522039.0,
+    "gap": 25527337.0,
+    "ratio": 0.2150757521691675,
+    "need": 21.94129944,
+    "need_year": 2024,
+    "population": 135472051.0,
+    "people_in_need": 105747722.63258049,
+    "projects": 0,
+    "commitments": 0,
+    "active_projects": 3
+   },
+   "CHN": {
+    "name": "China",
+    "region": "EAP",
+    "lending": "IBRD",
+    "achieved": null,
+    "expected": null,
+    "gap": null,
+    "ratio": null,
+    "need": 91.6,
+    "need_year": 2025,
+    "population": 1406585000.0,
+    "people_in_need": 118153140.00000007,
+    "projects": 0,
+    "commitments": 0,
+    "active_projects": 0
+   },
+   "PAK": {
+    "name": "Pakistan",
+    "region": "MENAAP",
+    "lending": "BLEND",
+    "achieved": null,
+    "expected": null,
+    "gap": null,
+    "ratio": null,
+    "need": 57.253,
+    "need_year": 2024,
+    "population": 255219554.0,
+    "people_in_need": 109098702.74837999,
+    "projects": 0,
+    "commitments": 0,
+    "active_projects": 6
+   },
+   "BGD": {
+    "name": "Bangladesh",
+    "region": "SAR",
+    "lending": "IDA",
+    "achieved": null,
+    "expected": null,
+    "gap": null,
+    "ratio": null,
+    "need": 53.42171316,
+    "need_year": 2024,
+    "population": 175686899.0,
+    "people_in_need": 81831947.75652108,
+    "projects": 0,
+    "commitments": 0,
+    "active_projects": 4
+   },
+   "IDN": {
+    "name": "Indonesia",
+    "region": "EAP",
+    "lending": "IBRD",
+    "achieved": null,
+    "expected": null,
+    "gap": null,
+    "ratio": null,
+    "need": 72.78075544,
+    "need_year": 2024,
+    "population": 285721236.0,
+    "people_in_need": 77771161.98669478,
+    "projects": 0,
+    "commitments": 0,
+    "active_projects": 6
+   },
+   "SSD": {
+    "name": "South Sudan",
+    "region": "AFE",
+    "lending": "IDA",
+    "achieved": 2850469.0,
+    "expected": 2826070.0,
+    "gap": -24399.0,
+    "ratio": 1.008633544108957,
+    "need": 6.671000004,
+    "need_year": 2019,
+    "population": 12188788.0,
+    "people_in_need": 11375673.952032447,
+    "projects": 1,
+    "commitments": 161999998.64,
+    "active_projects": 0
+   },
+   "GIN": {
+    "name": "Guinea",
+    "region": "AFW",
+    "lending": "IDA",
+    "achieved": 1900609.0,
+    "expected": 2436000.0,
+    "gap": 535391.0,
+    "ratio": 0.7802171592775041,
+    "need": 33.30469894,
+    "need_year": 2024,
+    "population": 15099727.0,
+    "people_in_need": 10070808.381888105,
+    "projects": 1,
+    "commitments": 296500000.0,
+    "active_projects": 1
+   },
+   "KEN": {
+    "name": "Kenya",
+    "region": "AFE",
+    "lending": "BLEND",
+    "achieved": 27656844.0,
+    "expected": 49487029.0,
+    "gap": 21830185.0,
+    "ratio": 0.5588705678815352,
+    "need": 34.97622513,
+    "need_year": 2024,
+    "population": 57532493.0,
+    "people_in_need": 37409798.72541851,
+    "projects": 0,
+    "commitments": 0,
+    "active_projects": 3
+   }
+  },
+  "excluded_focus": [
+   "USA",
+   "DEU"
+  ],
+  "accelerate": [
+   "NGA",
+   "COD",
+   "IND",
+   "ETH"
+  ],
+  "expand": [
+   "PAK",
+   "BGD",
+   "TZA",
+   "UGA"
+  ],
+  "strong": [
+   [
+    "GIN",
+    0.78
+   ]
+  ],
+  "overshoot": [
+   [
+    "NER",
+    3.59
+   ],
+   [
+    "ZMB",
+    1.79
+   ],
+   [
+    "BRA",
+    1.27
+   ],
+   [
+    "SSD",
+    1.01
+   ]
+  ],
+  "regions": [
+   {
+    "code": "AFE",
+    "name": "Eastern & Southern Africa",
+    "people_in_need": 565907602.3095102,
+    "achieved": 134640036.0,
+    "expected": 300723373.0,
+    "gap": 166083337.0
+   },
+   {
+    "code": "AFW",
+    "name": "Western & Central Africa",
+    "people_in_need": 318542289.8839496,
+    "achieved": 23777874.0,
+    "expected": 133968659.0,
+    "gap": 110190785.0
+   },
+   {
+    "code": "EAP",
+    "name": "East Asia & Pacific",
+    "people_in_need": 307366052.6152384,
+    "achieved": 31063153.0,
+    "expected": 44319294.0,
+    "gap": 13256141.0
+   },
+   {
+    "code": "ECA",
+    "name": "Europe & Central Asia",
+    "people_in_need": 52493413.43667496,
+    "achieved": 464561.0,
+    "expected": 2852940.0,
+    "gap": 2388379.0
+   },
+   {
+    "code": "LCR",
+    "name": "Latin America & Caribbean",
+    "people_in_need": 120219227.18481703,
+    "achieved": 31932333.0,
+    "expected": 38173420.0,
+    "gap": 6241087.0
+   },
+   {
+    "code": "MENAAP",
+    "name": "MENA, Afghanistan & Pakistan",
+    "people_in_need": 269977993.30563694,
+    "achieved": 4984534.0,
+    "expected": 22342728.0,
+    "gap": 17358194.0
+   },
+   {
+    "code": "SAR",
+    "name": "South Asia",
+    "people_in_need": 546917119.6251189,
+    "achieved": 17073581.0,
+    "expected": 33026487.0,
+    "gap": 15952906.0
+   }
+  ],
+  "focus": "AFE",
+  "for_writer": {
+   "indicator": "Number of people using broadband internet",
+   "unit": "Beneficiaries",
+   "need_indicator": "Percentage of population using the internet",
+   "all_countries_total": {
+    "achieved": {
+     "value": 243936072.0,
+     "display": "244M",
+     "claim": "c4bef2553"
+    },
+    "expected": {
+     "value": 575406901.0,
+     "display": "575M",
+     "claim": "c082b93ca"
+    },
+    "remaining_gap": {
+     "value": 331470829.0,
+     "display": "331M",
+     "claim": "c9fd20149"
+    },
+    "delivery_rate": {
+     "value": 42.39366465297225,
+     "display": "42%",
+     "claim": "cea261b27"
+    },
+    "change_since_previous_snapshot": {
+     "value": 27129469.0,
+     "display": "27.1M",
+     "claim": "cc73b7fa5"
+    }
+   },
+   "regional_focus": {
+    "region": "Eastern & Southern Africa",
+    "remaining_gap": {
+     "value": 166083337.0,
+     "display": "166M",
+     "claim": "c14c41084"
+    },
+    "share_of_people_in_need": {
+     "value": 25.94212223580021,
+     "display": "26%",
+     "claim": "c54cb34a9"
+    }
+   },
+   "definitions": {
+    "people_without_access": "population \u00d7 (100 \u2212 share) of 'Percentage of population using the internet' (latest year)",
+    "context_indicator": "a high value is GOOD (low need)",
+    "accelerate_delivery": "expected \u2265 60th percentile of countries AND achieved < 40% of expected",
+    "expand_footprint": "IDA/Blend countries with the most people in need where expected results cover < 25% of need",
+    "strong_delivery": "75-100% of expected delivered with an above-median portfolio"
+   },
+   "accelerate_delivery": [
+    {
+     "country": "Nigeria",
+     "region": "Western & Central Africa",
+     "fcs": true,
+     "expected": {
+      "value": 83808587.0,
+      "display": "83.8M",
+      "claim": "c06d9edf4"
+     },
+     "achieved": {
+      "value": 7614916.0,
+      "display": "7.6M",
+      "claim": "c9f3925d6"
+     },
+     "delivery_rate": {
+      "value": 9.086080880948392,
+      "display": "9%",
+      "claim": "c68fa223a"
+     },
+     "remaining_gap": {
+      "value": 76193671.0,
+      "display": "76.2M",
+      "claim": "c798ef686"
+     },
+     "people_without_access": {
+      "value": 139639259.83410758,
+      "display": "140M",
+      "claim": "c1dd564d0"
+     },
+     "context_indicator": {
+      "name": "Percentage of population using the internet",
+      "higher_is_better": true,
+      "year": 2024,
+      "value": 41.21139908,
+      "display": "41.2%",
+      "claim": "caa9aa2c8"
+     },
+     "lending": "BLEND",
+     "scorecard_projects_contributing": 1
+    },
+    {
+     "country": "Democratic Republic of Congo",
+     "region": "Eastern & Southern Africa",
+     "fcs": true,
+     "expected": {
+      "value": 59274266.0,
+      "display": "59.3M",
+      "claim": "c023bc96a"
+     },
+     "achieved": {
+      "value": 14375293.0,
+      "display": "14.4M",
+      "claim": "cb40e6f3f"
+     },
+     "delivery_rate": {
+      "value": 24.25216534946211,
+      "display": "24%",
+      "claim": "c95e5e071"
+     },
+     "remaining_gap": {
+      "value": 44898973.0,
+      "display": "44.9M",
+      "claim": "cd90815c4"
+     },
+     "people_without_access": {
+      "value": 90634376.35664552,
+      "display": "90.6M",
+      "claim": "c37da5b12"
+     },
+     "context_indicator": {
+      "name": "Percentage of population using the internet",
+      "higher_is_better": true,
+      "year": 2024,
+      "value": 19.67350006,
+      "display": "19.7%",
+      "claim": "c5394185f"
+     },
+     "lending": "IDA",
+     "scorecard_projects_contributing": 1
+    },
+    {
+     "country": "India",
+     "region": "South Asia",
+     "fcs": false,
+     "expected": {
+      "value": 27869713.0,
+      "display": "27.9M",
+      "claim": "c23e058a9"
+     },
+     "achieved": {
+      "value": 250000.0,
+      "display": "250K",
+      "claim": "c98be57ab"
+     },
+     "delivery_rate": {
+      "value": 0.8970311247912742,
+      "display": "1%",
+      "claim": "cdbe8c574"
+     },
+     "remaining_gap": {
+      "value": 27619713.0,
+      "display": "27.6M",
+      "claim": "c3216baad"
+     },
+     "people_without_access": {
+      "value": 439159657.5,
+      "display": "439M",
+      "claim": "c39100609"
+     },
+     "context_indicator": {
+      "name": "Percentage of population using the internet",
+      "higher_is_better": true,
+      "year": 2025,
+      "value": 70.0,
+      "display": "70.0%",
+      "claim": "cfb379b2a"
+     },
+     "lending": "IBRD",
+     "scorecard_projects_contributing": 0
+    },
+    {
+     "country": "Ethiopia",
+     "region": "Eastern & Southern Africa",
+     "fcs": true,
+     "expected": {
+      "value": 32522039.0,
+      "display": "32.5M",
+      "claim": "c3cb30cfd"
+     },
+     "achieved": {
+      "value": 6994702.0,
+      "display": "7M",
+      "claim": "cf665feb9"
+     },
+     "delivery_rate": {
+      "value": 21.50757521691675,
+      "display": "22%",
+      "claim": "cd19c35e3"
+     },
+     "remaining_gap": {
+      "value": 25527337.0,
+      "display": "25.5M",
+      "claim": "cd4074a69"
+     },
+     "people_without_access": {
+      "value": 105747722.63258049,
+      "display": "106M",
+      "claim": "c718fae0d"
+     },
+     "context_indicator": {
+      "name": "Percentage of population using the internet",
+      "higher_is_better": true,
+      "year": 2024,
+      "value": 21.94129944,
+      "display": "21.9%",
+      "claim": "cdaefd957"
+     },
+     "lending": "IDA",
+     "scorecard_projects_contributing": 0
+    }
+   ],
+   "expand_footprint": [
+    {
+     "country": "Pakistan",
+     "region": "MENA, Afghanistan & Pakistan",
+     "fcs": false,
+     "people_without_access": {
+      "value": 109098702.74837999,
+      "display": "109M",
+      "claim": "c3af52491"
+     },
+     "context_indicator": {
+      "name": "Percentage of population using the internet",
+      "higher_is_better": true,
+      "year": 2024,
+      "value": 57.253,
+      "display": "57.3%",
+      "claim": "c21eab258"
+     },
+     "lending": "BLEND",
+     "scorecard_projects_contributing": 0
+    },
+    {
+     "country": "Bangladesh",
+     "region": "South Asia",
+     "fcs": false,
+     "people_without_access": {
+      "value": 81831947.75652108,
+      "display": "81.8M",
+      "claim": "c534ceda6"
+     },
+     "context_indicator": {
+      "name": "Percentage of population using the internet",
+      "higher_is_better": true,
+      "year": 2024,
+      "value": 53.42171316,
+      "display": "53.4%",
+      "claim": "c93b39934"
+     },
+     "lending": "IDA",
+     "scorecard_projects_contributing": 0
+    },
+    {
+     "country": "Tanzania",
+     "region": "Eastern & Southern Africa",
+     "fcs": false,
+     "expected": {
+      "value": 8655071.0,
+      "display": "8.7M",
+      "claim": "c5dde48a6"
+     },
+     "achieved": {
+      "value": 3716690.0,
+      "display": "3.7M",
+      "claim": "ce2e21f97"
+     },
+     "delivery_rate": {
+      "value": 42.94233981442787,
+      "display": "43%",
+      "claim": "c11d44d93"
+     },
+     "remaining_gap": {
+      "value": 4938381.0,
+      "display": "4.9M",
+      "claim": "ca1e58d18"
+     },
+     "people_without_access": {
+      "value": 48562292.11570839,
+      "display": "48.6M",
+      "claim": "c8cd85195"
+     },
+     "context_indicator": {
+      "name": "Percentage of population using the internet",
+      "higher_is_better": true,
+      "year": 2024,
+      "value": 31.16209984,
+      "display": "31.2%",
+      "claim": "c29e619f6"
+     },
+     "lending": "IDA",
+     "scorecard_projects_contributing": 0
+    },
+    {
+     "country": "Uganda",
+     "region": "Eastern & Southern Africa",
+     "fcs": false,
+     "expected": {
+      "value": 1859241.0,
+      "display": "1.9M",
+      "claim": "c06de96d3"
+     },
+     "achieved": {
+      "value": 26337.0,
+      "display": "26.3K",
+      "claim": "c2c4af80c"
+     },
+     "delivery_rate": {
+      "value": 1.4165457840054085,
+      "display": "1%",
+      "claim": "c11cfc943"
+     },
+     "remaining_gap": {
+      "value": 1832904.0,
+      "display": "1.8M",
+      "claim": "cb9de5d10"
+     },
+     "people_without_access": {
+      "value": 46786032.79612608,
+      "display": "46.8M",
+      "claim": "c087bc442"
+     },
+     "context_indicator": {
+      "name": "Percentage of population using the internet",
+      "higher_is_better": true,
+      "year": 2024,
+      "value": 8.949831061,
+      "display": "8.9%",
+      "claim": "c8b567ff9"
+     },
+     "lending": "IDA",
+     "scorecard_projects_contributing": 0
+    }
+   ],
+   "strong_delivery": [
+    {
+     "country": "Guinea",
+     "region": "Western & Central Africa",
+     "fcs": false,
+     "expected": {
+      "value": 2436000.0,
+      "display": "2.4M",
+      "claim": "c54528753"
+     },
+     "achieved": {
+      "value": 1900609.0,
+      "display": "1.9M",
+      "claim": "c4c333c3b"
+     },
+     "delivery_rate": {
+      "value": 78.0217159277504,
+      "display": "78%",
+      "claim": "c09f2a119"
+     },
+     "remaining_gap": {
+      "value": 535391.0,
+      "display": "535.4K",
+      "claim": "c86ff370f"
+     },
+     "people_without_access": {
+      "value": 10070808.381888105,
+      "display": "10.1M",
+      "claim": "cb58e0bf4"
+     },
+     "context_indicator": {
+      "name": "Percentage of population using the internet",
+      "higher_is_better": true,
+      "year": 2024,
+      "value": 33.30469894,
+      "display": "33.3%",
+      "claim": "cd94f230f"
+     },
+     "lending": "IDA",
+     "scorecard_projects_contributing": 1
+    }
+   ],
+   "data_checks": [
+    "Niger reports 359% of expected",
+    "Zambia reports 179% of expected",
+    "Brazil reports 127% of expected"
+   ]
+  }
+ }
+}

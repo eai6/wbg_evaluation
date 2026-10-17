@@ -1,16 +1,16 @@
 {% load static %}<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><title>{{ deck.title }}</title>
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{% static 'explorer/app.css' %}">
+<link rel="stylesheet" href="{% static 'explorer/app.css' %}?v={{ asset_v }}">
 <script src="https://cdn.jsdelivr.net/npm/plotly.js-dist-min@2.35.2/plotly.min.js"></script>
 <style>body{background:#e9edf1;padding:24px}.slidewrap{width:1280px;height:720px!important;margin:0 auto 24px;page-break-after:always}.slide{position:relative!important;transform:none!important}
 .claim{border:0}.claim .b{display:none}.toolbar{width:1280px;margin:0 auto 12px;display:flex;justify-content:flex-end;gap:8px}
-@media print{body{padding:0;background:#fff}.toolbar{display:none}.slidewrap{margin:0;box-shadow:none}}@page{size:1280px 720px;margin:0}</style>
+@media print{body{padding:0;background:#fff}.toolbar{display:none}.slidewrap{margin:0;box-shadow:none}}.slidewrap:last-child{page-break-after:auto;break-after:auto}.sgrid{grid-template-columns:690px 1fr!important}.kpis{grid-template-columns:repeat(4,1fr)!important}@page{size:1280px 720px;margin:0}</style>
 </head><body>
 <div class="toolbar"><button class="btn" onclick="window.print()">Print / Save as PDF</button></div>
 <div id="deck"></div>
 {{ deck|json_script:"deck-data" }}
-<script src="{% static 'explorer/common.js' %}"></script>
-<script src="{% static 'explorer/charts.js' %}"></script>
+<script src="{% static 'explorer/common.js' %}?v={{ asset_v }}"></script>
+<script src="{% static 'explorer/charts.js' %}?v={{ asset_v }}"></script>
 <script>const DECK=JSON.parse(document.getElementById('deck-data').textContent);renderDeck(document.getElementById('deck'),DECK,{exportMode:true});</script>
 </body></html>

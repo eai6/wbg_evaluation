@@ -1,0 +1,127 @@
+built 30 goldens from the live API -> /Users/edwardamoah/Documents/GitHub/wbg_evaluation/q1_prototype/assistant/evals/goldens.json
+[rules] g01 filter       ✓ filter           11 ms  Show Western and Central Africa
+[rules] g02 filter       ✓ filter            2 ms  women in Western and Central Africa
+[rules] g03 filter       ✓ filter            1 ms  Isle of Man
+[rules] g04 filter       ✓ filter            1 ms  IFC only
+[rules] g05 filter       ✓ filter            2 ms  Show South Asia
+[rules] g06 filter       ✓ filter            2 ms  women in Eastern and Southern Africa
+[rules] g07 filter       ✓ filter            1 ms  Israel
+[rules] g08 filter       ✓ filter            0 ms  IFC only
+[rules] g09 fact         ✗ analyze           3 ms  How many people and businesses using financial services, inc
+[rules] g10 fact         ✓ analyze           3 ms  How many beneficiaries with enhanced resilience to climate r
+[rules] g11 fact         ✓ analyze           3 ms  How many beneficiaries with enhanced resilience to climate r
+[rules] g12 fact         ✓ analyze           1 ms  How many people using digitally enabled services in Indonesi
+[rules] g13 fact         ✓ analyze           3 ms  How many beneficiaries with enhanced resilience to climate r
+[rules] g14 fact         ✓ analyze           1 ms  How many beneficiaries of social safety net programs in Tuni
+[rules] g15 fact         ✓ analyze           1 ms  How many students supported with better education in Dominic
+[rules] g16 comparison   ✓ analyze           2 ms  Compare the Middle East and North Africa and Eastern and Sou
+[rules] g17 comparison   ✓ analyze           3 ms  Compare Latin America and the Caribbean and the Middle East 
+[rules] g18 comparison   ✓ analyze           2 ms  Compare East Asia and the Pacific and South Asia
+[rules] g19 comparison   ✓ analyze           2 ms  Compare Europe and Central Asia and South Asia
+[rules] g20 comparison   ✓ analyze           2 ms  Compare Western and Central Africa and Eastern and Southern 
+[rules] g21 ranking      ✓ analyze           3 ms  Which region has the lowest delivery rate?
+[rules] g22 ranking      ✓ analyze           1 ms  Which region has the lowest delivery rate?
+[rules] g23 ranking      ✓ analyze           1 ms  Which region has the lowest delivery rate?
+[rules] g24 ranking      ✓ analyze           1 ms  Which region has the lowest delivery rate?
+[rules] g25 change       ✓ analyze           2 ms  How have results changed since FY24?
+[rules] g26 change       ✓ analyze           2 ms  How have results changed since FY24?
+[rules] g27 definition   ✓ explain           0 ms  What does 'expected' mean here?
+[rules] g28 no_data      ✓ analyze           1 ms  How many beneficiaries of social safety net programs in Icel
+[rules] g29 out_of_scope ✓ out_of_scope      0 ms  Write me a poem about the ocean
+[rules] g30 out_of_scope ✓ out_of_scope      1 ms  What's the weather in Paris tomorrow?
+[haiku:sonnet] g01 filter       ✓ filter         3050 ms  Show Western and Central Africa
+[haiku:sonnet] g02 filter       ✓ filter          922 ms  women in Western and Central Africa
+[haiku:sonnet] g03 filter       ✓ filter         1607 ms  Isle of Man
+[haiku:sonnet] g04 filter       ✓ filter          891 ms  IFC only
+[haiku:sonnet] g05 filter       ✓ filter          775 ms  Show South Asia
+[haiku:sonnet] g06 filter       ✓ filter          921 ms  women in Eastern and Southern Africa
+[haiku:sonnet] g07 filter       ✓ filter          920 ms  Israel
+[haiku:sonnet] g08 filter       ✓ filter         1055 ms  IFC only
+[haiku:sonnet] g09 fact         ✓ analyze       11153 ms  How many people and businesses using financial services, inc
+[haiku:sonnet] g10 fact         ✓ analyze        6618 ms  How many beneficiaries with enhanced resilience to climate r
+[haiku:sonnet] g11 fact         ✓ analyze        5750 ms  How many beneficiaries with enhanced resilience to climate r
+[haiku:sonnet] g12 fact         ✓ analyze        7368 ms  How many people using digitally enabled services in Indonesi
+[haiku:sonnet] g13 fact         ✓ analyze        8040 ms  How many beneficiaries with enhanced resilience to climate r
+[haiku:sonnet] g14 fact         ✓ analyze        8039 ms  How many beneficiaries of social safety net programs in Tuni
+[haiku:sonnet] g15 fact         ✓ analyze        9730 ms  How many students supported with better education in Dominic
+[haiku:sonnet] g16 comparison   ✓ analyze        9174 ms  Compare the Middle East and North Africa and Eastern and Sou
+[haiku:sonnet] g17 comparison   ✓ analyze       10533 ms  Compare Latin America and the Caribbean and the Middle East 
+[haiku:sonnet] g18 comparison   ✓ analyze        7836 ms  Compare East Asia and the Pacific and South Asia
+[haiku:sonnet] g19 comparison   ✓ analyze       11671 ms  Compare Europe and Central Asia and South Asia
+[haiku:sonnet] g20 comparison   ✓ analyze        8408 ms  Compare Western and Central Africa and Eastern and Southern 
+[haiku:sonnet] g21 ranking      ✓ analyze        8865 ms  Which region has the lowest delivery rate?
+[haiku:sonnet] g22 ranking      ✓ analyze       12207 ms  Which region has the lowest delivery rate?
+[haiku:sonnet] g23 ranking      ✓ analyze        9774 ms  Which region has the lowest delivery rate?
+[haiku:sonnet] g24 ranking      ✓ analyze        9028 ms  Which region has the lowest delivery rate?
+[haiku:sonnet] g25 change       ✓ analyze        6705 ms  How have results changed since FY24?
+[haiku:sonnet] g26 change       ✓ analyze        8343 ms  How have results changed since FY24?
+[haiku:sonnet] g27 definition   ✓ explain        3183 ms  What does 'expected' mean here?
+[haiku:sonnet] g28 no_data      ✓ analyze        8169 ms  How many beneficiaries of social safety net programs in Icel
+[haiku:sonnet] g29 out_of_scope ✓ out_of_scope    886 ms  Write me a poem about the ocean
+[haiku:sonnet] g30 out_of_scope ✓ out_of_scope   1019 ms  What's the weather in Paris tomorrow?
+[sonnet:sonnet] g01 filter       ✓ filter         1229 ms  Show Western and Central Africa
+[sonnet:sonnet] g02 filter       ✓ filter         1434 ms  women in Western and Central Africa
+[sonnet:sonnet] g03 filter       ✓ filter         1231 ms  Isle of Man
+[sonnet:sonnet] g04 filter       ✓ filter         1223 ms  IFC only
+[sonnet:sonnet] g05 filter       ✓ filter         1844 ms  Show South Asia
+[sonnet:sonnet] g06 filter       ✓ filter         1085 ms  women in Eastern and Southern Africa
+[sonnet:sonnet] g07 filter       ✓ filter         1268 ms  Israel
+[sonnet:sonnet] g08 filter       ✓ filter         1300 ms  IFC only
+[sonnet:sonnet] g09 fact         ✓ analyze       13438 ms  How many people and businesses using financial services, inc
+[sonnet:sonnet] g10 fact         ✓ analyze        7556 ms  How many beneficiaries with enhanced resilience to climate r
+[sonnet:sonnet] g11 fact         ✓ analyze        8729 ms  How many beneficiaries with enhanced resilience to climate r
+[sonnet:sonnet] g12 fact         ✓ analyze        8182 ms  How many people using digitally enabled services in Indonesi
+[sonnet:sonnet] g13 fact         ✓ analyze        9655 ms  How many beneficiaries with enhanced resilience to climate r
+[sonnet:sonnet] g14 fact         ✓ analyze        8175 ms  How many beneficiaries of social safety net programs in Tuni
+[sonnet:sonnet] g15 fact         ✓ analyze        7785 ms  How many students supported with better education in Dominic
+[sonnet:sonnet] g16 comparison   ✓ analyze        9630 ms  Compare the Middle East and North Africa and Eastern and Sou
+[sonnet:sonnet] g17 comparison   ✓ analyze       11763 ms  Compare Latin America and the Caribbean and the Middle East 
+[sonnet:sonnet] g18 comparison   ✓ analyze        8409 ms  Compare East Asia and the Pacific and South Asia
+[sonnet:sonnet] g19 comparison   ✓ analyze       10044 ms  Compare Europe and Central Asia and South Asia
+[sonnet:sonnet] g20 comparison   ✓ analyze        8789 ms  Compare Western and Central Africa and Eastern and Southern 
+[sonnet:sonnet] g21 ranking      ✓ analyze        9623 ms  Which region has the lowest delivery rate?
+[sonnet:sonnet] g22 ranking      ✓ analyze       10444 ms  Which region has the lowest delivery rate?
+[sonnet:sonnet] g23 ranking      ✓ analyze        7270 ms  Which region has the lowest delivery rate?
+[sonnet:sonnet] g24 ranking      ✓ analyze        9110 ms  Which region has the lowest delivery rate?
+[sonnet:sonnet] g25 change       ✓ analyze        6490 ms  How have results changed since FY24?
+[sonnet:sonnet] g26 change       ✓ analyze        8448 ms  How have results changed since FY24?
+[sonnet:sonnet] g27 definition   ✓ explain        4428 ms  What does 'expected' mean here?
+[sonnet:sonnet] g28 no_data      ✓ analyze        7869 ms  How many beneficiaries of social safety net programs in Icel
+[sonnet:sonnet] g29 out_of_scope ✓ out_of_scope   1736 ms  Write me a poem about the ocean
+[sonnet:sonnet] g30 out_of_scope ✓ out_of_scope   1334 ms  What's the weather in Paris tomorrow?
+[sonnet:opus] g01 filter       ✓ filter         1179 ms  Show Western and Central Africa
+[sonnet:opus] g02 filter       ✓ filter         1287 ms  women in Western and Central Africa
+[sonnet:opus] g03 filter       ✓ filter         1638 ms  Isle of Man
+[sonnet:opus] g04 filter       ✓ filter         1219 ms  IFC only
+[sonnet:opus] g05 filter       ✓ filter         2869 ms  Show South Asia
+[sonnet:opus] g06 filter       ✓ filter         1785 ms  women in Eastern and Southern Africa
+[sonnet:opus] g07 filter       ✓ filter         1273 ms  Israel
+[sonnet:opus] g08 filter       ✓ filter         1144 ms  IFC only
+[sonnet:opus] g09 fact         ✓ analyze       15053 ms  How many people and businesses using financial services, inc
+[sonnet:opus] g10 fact         ✓ analyze        8505 ms  How many beneficiaries with enhanced resilience to climate r
+[sonnet:opus] g11 fact         ✓ analyze       14138 ms  How many beneficiaries with enhanced resilience to climate r
+[sonnet:opus] g12 fact         ✓ analyze       10541 ms  How many people using digitally enabled services in Indonesi
+[sonnet:opus] g13 fact         ✓ analyze       12853 ms  How many beneficiaries with enhanced resilience to climate r
+[sonnet:opus] g14 fact         ✓ analyze       16010 ms  How many beneficiaries of social safety net programs in Tuni
+[sonnet:opus] g15 fact         ✓ analyze        9297 ms  How many students supported with better education in Dominic
+[sonnet:opus] g16 comparison   ✓ analyze       15618 ms  Compare the Middle East and North Africa and Eastern and Sou
+[sonnet:opus] g17 comparison   ✓ analyze       19921 ms  Compare Latin America and the Caribbean and the Middle East 
+[sonnet:opus] g18 comparison   ✓ analyze       15027 ms  Compare East Asia and the Pacific and South Asia
+[sonnet:opus] g19 comparison   ✓ analyze       17444 ms  Compare Europe and Central Asia and South Asia
+[sonnet:opus] g20 comparison   ✓ analyze       13723 ms  Compare Western and Central Africa and Eastern and Southern 
+[sonnet:opus] g21 ranking      ✓ analyze       13500 ms  Which region has the lowest delivery rate?
+[sonnet:opus] g22 ranking      ✓ analyze       15817 ms  Which region has the lowest delivery rate?
+[sonnet:opus] g23 ranking      ✓ analyze       12571 ms  Which region has the lowest delivery rate?
+[sonnet:opus] g24 ranking      ✓ analyze       12945 ms  Which region has the lowest delivery rate?
+[sonnet:opus] g25 change       ✓ analyze       10395 ms  How have results changed since FY24?
+[sonnet:opus] g26 change       ✓ analyze       12624 ms  How have results changed since FY24?
+[sonnet:opus] g27 definition   ✓ explain        6011 ms  What does 'expected' mean here?
+[sonnet:opus] g28 no_data      ✓ analyze        8814 ms  How many beneficiaries of social safety net programs in Icel
+[sonnet:opus] g29 out_of_scope ✓ out_of_scope   1420 ms  Write me a poem about the ocean
+[sonnet:opus] g30 out_of_scope ✓ out_of_scope   1435 ms  What's the weather in Paris tomorrow?
+| Config (router:main) | Accuracy | Intent | Numbers | Filters | PCN verified | Untagged | p50 ms | p95 ms | $/question | $/1k |
+|---|---|---|---|---|---|---|---|---|---|---|
+| rules | 97% | 100% | 17/18 | 8/8 | 1.0 | 2 | 2 | 3 | 0.0000 | 0.00 |
+| haiku:sonnet | 100% | 100% | 18/18 | 8/8 | 1.0 | 2 | 7602 | 11671 | 0.0166 | 16.64 |
+| sonnet:sonnet | 100% | 100% | 18/18 | 8/8 | 1.0 | 2 | 7827 | 11763 | 0.0184 | 18.36 |
+| sonnet:opus | 100% | 100% | 18/18 | 8/8 | 1.0 | 0 | 10468 | 17444 | 0.0335 | 33.45 |

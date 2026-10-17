@@ -10,3 +10,4 @@ python-dotenv>=1.0
 litellm>=1.50
 pydantic>=2.7
 sqlglot>=25.0
+plotly  # notebook exports (figures)

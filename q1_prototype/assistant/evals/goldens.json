@@ -1,0 +1,517 @@
+[
+ {
+  "type": "filter",
+  "question": "Show Western and Central Africa",
+  "outcome_id": 13,
+  "expected_intent": [
+   "filter"
+  ],
+  "expected_filters": {
+   "area": "AFW"
+  },
+  "id": "g01",
+  "retrieved": "2026-10-17"
+ },
+ {
+  "type": "filter",
+  "question": "women in Western and Central Africa",
+  "outcome_id": 12,
+  "expected_intent": [
+   "filter"
+  ],
+  "expected_filters": {
+   "area": "AFW",
+   "sex": "F"
+  },
+  "id": "g02",
+  "retrieved": "2026-10-17"
+ },
+ {
+  "type": "filter",
+  "question": "Isle of Man",
+  "outcome_id": 8,
+  "expected_intent": [
+   "filter"
+  ],
+  "expected_filters": {
+   "area": "IMN"
+  },
+  "id": "g03",
+  "retrieved": "2026-10-17"
+ },
+ {
+  "type": "filter",
+  "question": "IFC only",
+  "outcome_id": 10,
+  "expected_intent": [
+   "filter"
+  ],
+  "expected_filters": {
+   "org": "IFC"
+  },
+  "id": "g04",
+  "retrieved": "2026-10-17"
+ },
+ {
+  "type": "filter",
+  "question": "Show South Asia",
+  "outcome_id": 3,
+  "expected_intent": [
+   "filter"
+  ],
+  "expected_filters": {
+   "area": "SAR"
+  },
+  "id": "g05",
+  "retrieved": "2026-10-17"
+ },
+ {
+  "type": "filter",
+  "question": "women in Eastern and Southern Africa",
+  "outcome_id": 9,
+  "expected_intent": [
+   "filter"
+  ],
+  "expected_filters": {
+   "area": "AFE",
+   "sex": "F"
+  },
+  "id": "g06",
+  "retrieved": "2026-10-17"
+ },
+ {
+  "type": "filter",
+  "question": "Israel",
+  "outcome_id": 13,
+  "expected_intent": [
+   "filter"
+  ],
+  "expected_filters": {
+   "area": "ISR"
+  },
+  "id": "g07",
+  "retrieved": "2026-10-17"
+ },
+ {
+  "type": "filter",
+  "question": "IFC only",
+  "outcome_id": 11,
+  "expected_intent": [
+   "filter"
+  ],
+  "expected_filters": {
+   "org": "IFC"
+  },
+  "id": "g08",
+  "retrieved": "2026-10-17"
+ },
+ {
+  "type": "fact",
+  "question": "How many people and businesses using financial services, including number of women in Republic of Yemen?",
+  "outcome_id": 12,
+  "expected_intent": [
+   "analyze"
+  ],
+  "expected_values": [
+   {
+    "label": "Republic of Yemen achieved",
+    "value": 194162.0
+   },
+   {
+    "label": "Republic of Yemen expected",
+    "value": 268380.0
+   }
+  ],
+  "source": "getSCSUMMARYDATA COUNTRY RY FY2026",
+  "id": "g09",
+  "retrieved": "2026-10-17"
+ },
+ {
+  "type": "fact",
+  "question": "How many beneficiaries with enhanced resilience to climate risks in Croatia?",
+  "outcome_id": 5,
+  "expected_intent": [
+   "analyze"
+  ],
+  "expected_values": [
+   {
+    "label": "Croatia achieved",
+    "value": 5172.0
+   },
+   {
+    "label": "Croatia expected",
+    "value": 81446.0
+   }
+  ],
+  "source": "getSCSUMMARYDATA COUNTRY HR FY2026",
+  "id": "g10",
+  "retrieved": "2026-10-17"
+ },
+ {
+  "type": "fact",
+  "question": "How many beneficiaries with enhanced resilience to climate risks in Jordan?",
+  "outcome_id": 5,
+  "expected_intent": [
+   "analyze"
+  ],
+  "expected_values": [
+   {
+    "label": "Jordan achieved",
+    "value": 0.0
+   },
+   {
+    "label": "Jordan expected",
+    "value": 1600291.0
+   }
+  ],
+  "source": "getSCSUMMARYDATA COUNTRY JO FY2026",
+  "id": "g11",
+  "retrieved": "2026-10-17"
+ },
+ {
+  "type": "fact",
+  "question": "How many people using digitally enabled services in Indonesia?",
+  "outcome_id": 11,
+  "expected_intent": [
+   "analyze"
+  ],
+  "expected_values": [
+   {
+    "label": "Indonesia achieved",
+    "value": 26020906.0
+   },
+   {
+    "label": "Indonesia expected",
+    "value": 38171089.0
+   }
+  ],
+  "source": "getSCSUMMARYDATA COUNTRY ID FY2026",
+  "id": "g12",
+  "retrieved": "2026-10-17"
+ },
+ {
+  "type": "fact",
+  "question": "How many beneficiaries with enhanced resilience to climate risks in China?",
+  "outcome_id": 5,
+  "expected_intent": [
+   "analyze"
+  ],
+  "expected_values": [
+   {
+    "label": "China achieved",
+    "value": 2162425.0
+   },
+   {
+    "label": "China expected",
+    "value": 1708479.0
+   }
+  ],
+  "source": "getSCSUMMARYDATA COUNTRY CN FY2026",
+  "id": "g13",
+  "retrieved": "2026-10-17"
+ },
+ {
+  "type": "fact",
+  "question": "How many beneficiaries of social safety net programs in Tunisia?",
+  "outcome_id": 1,
+  "expected_intent": [
+   "analyze"
+  ],
+  "expected_values": [
+   {
+    "label": "Tunisia achieved",
+    "value": 3306504.0
+   },
+   {
+    "label": "Tunisia expected",
+    "value": 2806300.0
+   }
+  ],
+  "source": "getSCSUMMARYDATA COUNTRY TN FY2026",
+  "id": "g14",
+  "retrieved": "2026-10-17"
+ },
+ {
+  "type": "fact",
+  "question": "How many students supported with better education in Dominican Republic?",
+  "outcome_id": 2,
+  "expected_intent": [
+   "analyze"
+  ],
+  "expected_values": [
+   {
+    "label": "Dominican Republic achieved",
+    "value": 0.0
+   },
+   {
+    "label": "Dominican Republic expected",
+    "value": 5000.0
+   }
+  ],
+  "source": "getSCSUMMARYDATA COUNTRY DO FY2026",
+  "id": "g15",
+  "retrieved": "2026-10-17"
+ },
+ {
+  "type": "comparison",
+  "question": "Compare the Middle East and North Africa and Eastern and Southern Africa",
+  "outcome_id": 1,
+  "expected_intent": [
+   "analyze"
+  ],
+  "expected_values": [
+   {
+    "label": "MENAAP achieved",
+    "value": 65930069.0
+   },
+   {
+    "label": "AFE achieved",
+    "value": 54367685.0
+   }
+  ],
+  "source": "getSCSUMMARYDATA REGION MENAAP,AFE FY2026",
+  "id": "g16",
+  "retrieved": "2026-10-17"
+ },
+ {
+  "type": "comparison",
+  "question": "Compare Latin America and the Caribbean and the Middle East and North Africa",
+  "outcome_id": 9,
+  "expected_intent": [
+   "analyze"
+  ],
+  "expected_values": [
+   {
+    "label": "LCR achieved",
+    "value": 5869471.0
+   },
+   {
+    "label": "MENAAP achieved",
+    "value": 27760619.0
+   }
+  ],
+  "source": "getSCSUMMARYDATA REGION LCR,MENAAP FY2026",
+  "id": "g17",
+  "retrieved": "2026-10-17"
+ },
+ {
+  "type": "comparison",
+  "question": "Compare East Asia and the Pacific and South Asia",
+  "outcome_id": 10,
+  "expected_intent": [
+   "analyze"
+  ],
+  "expected_values": [
+   {
+    "label": "EAP achieved",
+    "value": 31063153.0
+   },
+   {
+    "label": "SAR achieved",
+    "value": 17073581.0
+   }
+  ],
+  "source": "getSCSUMMARYDATA REGION EAP,SAR FY2026",
+  "id": "g18",
+  "retrieved": "2026-10-17"
+ },
+ {
+  "type": "comparison",
+  "question": "Compare Europe and Central Asia and South Asia",
+  "outcome_id": 12,
+  "expected_intent": [
+   "analyze"
+  ],
+  "expected_values": [
+   {
+    "label": "ECA achieved",
+    "value": 2368171.0
+   },
+   {
+    "label": "SAR achieved",
+    "value": 32733347.0
+   }
+  ],
+  "source": "getSCSUMMARYDATA REGION ECA,SAR FY2026",
+  "id": "g19",
+  "retrieved": "2026-10-17"
+ },
+ {
+  "type": "comparison",
+  "question": "Compare Western and Central Africa and Eastern and Southern Africa",
+  "outcome_id": 13,
+  "expected_intent": [
+   "analyze"
+  ],
+  "expected_values": [
+   {
+    "label": "AFW achieved",
+    "value": 4584828.0
+   },
+   {
+    "label": "AFE achieved",
+    "value": 18974743.0
+   }
+  ],
+  "source": "getSCSUMMARYDATA REGION AFW,AFE FY2026",
+  "id": "g20",
+  "retrieved": "2026-10-17"
+ },
+ {
+  "type": "ranking",
+  "question": "Which region has the lowest delivery rate?",
+  "outcome_id": 5,
+  "expected_intent": [
+   "analyze"
+  ],
+  "expected_values": [
+   {
+    "label": "SAR delivery %",
+    "value": 5.089383561170566
+   }
+  ],
+  "expected_text": "South",
+  "source": "getSCSUMMARYDATA REGION * FY2026",
+  "id": "g21",
+  "retrieved": "2026-10-17"
+ },
+ {
+  "type": "ranking",
+  "question": "Which region has the lowest delivery rate?",
+  "outcome_id": 11,
+  "expected_intent": [
+   "analyze"
+  ],
+  "expected_values": [
+   {
+    "label": "LCR delivery %",
+    "value": 55.49365092147525
+   }
+  ],
+  "expected_text": "Latin",
+  "source": "getSCSUMMARYDATA REGION * FY2026",
+  "id": "g22",
+  "retrieved": "2026-10-17"
+ },
+ {
+  "type": "ranking",
+  "question": "Which region has the lowest delivery rate?",
+  "outcome_id": 8,
+  "expected_intent": [
+   "analyze"
+  ],
+  "expected_values": [
+   {
+    "label": "AFE delivery %",
+    "value": 24.883940330659616
+   }
+  ],
+  "expected_text": "Eastern",
+  "source": "getSCSUMMARYDATA REGION * FY2026",
+  "id": "g23",
+  "retrieved": "2026-10-17"
+ },
+ {
+  "type": "ranking",
+  "question": "Which region has the lowest delivery rate?",
+  "outcome_id": 10,
+  "expected_intent": [
+   "analyze"
+  ],
+  "expected_values": [
+   {
+    "label": "ECA delivery %",
+    "value": 16.283588158180685
+   }
+  ],
+  "expected_text": "Europe",
+  "source": "getSCSUMMARYDATA REGION * FY2026",
+  "id": "g24",
+  "retrieved": "2026-10-17"
+ },
+ {
+  "type": "change",
+  "question": "How have results changed since FY24?",
+  "outcome_id": 10,
+  "expected_intent": [
+   "analyze"
+  ],
+  "expected_values": [
+   {
+    "label": "FY24 achieved",
+    "value": 113937039.0
+   },
+   {
+    "label": "FY26 achieved",
+    "value": 243936072.0
+   }
+  ],
+  "source": "getSCSUMMARYDATA REGION ACW FY2024 + latest",
+  "id": "g25",
+  "retrieved": "2026-10-17"
+ },
+ {
+  "type": "change",
+  "question": "How have results changed since FY24?",
+  "outcome_id": 13,
+  "expected_intent": [
+   "analyze"
+  ],
+  "expected_values": [
+   {
+    "label": "FY24 achieved",
+    "value": 12163864.0
+   },
+   {
+    "label": "FY26 achieved",
+    "value": 29406188.0
+   }
+  ],
+  "source": "getSCSUMMARYDATA REGION ACW FY2024 + latest",
+  "id": "g26",
+  "retrieved": "2026-10-17"
+ },
+ {
+  "type": "definition",
+  "question": "What does 'expected' mean here?",
+  "outcome_id": 13,
+  "expected_intent": [
+   "explain"
+  ],
+  "id": "g27",
+  "retrieved": "2026-10-17"
+ },
+ {
+  "type": "no_data",
+  "question": "How many beneficiaries of social safety net programs in Iceland?",
+  "outcome_id": 1,
+  "expected_intent": [
+   "analyze"
+  ],
+  "expect_no_numbers_for": "Iceland",
+  "id": "g28",
+  "retrieved": "2026-10-17"
+ },
+ {
+  "type": "out_of_scope",
+  "question": "Write me a poem about the ocean",
+  "outcome_id": 2,
+  "expected_intent": [
+   "out_of_scope",
+   "clarify"
+  ],
+  "id": "g29",
+  "retrieved": "2026-10-17"
+ },
+ {
+  "type": "out_of_scope",
+  "question": "What's the weather in Paris tomorrow?",
+  "outcome_id": 3,
+  "expected_intent": [
+   "out_of_scope",
+   "clarify"
+  ],
+  "id": "g30",
+  "retrieved": "2026-10-17"
+ }
+]

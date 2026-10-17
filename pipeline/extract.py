@@ -55,6 +55,8 @@ def extract_snapshot(fy: int, refresh: bool = False, countries_limit: int | None
         codes = sorted(countries["cntry_code"].dropna().unique())[:countries_limit]
         jobs = ([("REGION", r, "ALL") for r in config.REGIONS] + [("FCS", "FCS", "ALL")]
                 + [("REGION", "ACW", o) for o in config.INSTITUTIONS] + [("COUNTRY", c, "ALL") for c in codes])
+        if fy == max(config.SNAPSHOTS):  # institution split (WB / IFC / MIGA) by country, latest snapshot only
+            jobs += [("COUNTRY", c, o) for c in codes for o in config.INSTITUTIONS]
         rows, failed = [], []
         with cf.ThreadPoolExecutor(config.MAX_WORKERS) as ex:
             futures = {ex.submit(_summary, t, c, o, fy): (t, c, o) for t, c, o in jobs}
@@ -67,6 +69,28 @@ def extract_snapshot(fy: int, refresh: bool = False, countries_limit: int | None
         n = _save(rows, path)
         (out / "summary_failures.json").write_text(json.dumps(failed))
         log.info("fetched summary fy%s: %s rows from %s requests (%s failed)", fy, n, len(jobs), len(failed))
+
+    # Institution splits the Scorecard data page shows for every area: WB / IFC / MIGA and the World Bank financing
+    # institutions IBRD / IDA, for the world, regions and FCS (all snapshots) and for countries (IBRD / IDA, latest
+    # snapshot, like the WB / IFC / MIGA country split above). Kept separate so the large summary cache stays valid.
+    path = out / "org_split.parquet"
+    if not _cached(path, refresh):
+        orgs = config.INSTITUTIONS + config.FINANCING
+        # the FCS group is requested as FCS up to FY25 and as FCV from FY26; ask for both, empty answers are harmless
+        jobs = [("REGION", r, o) for r in config.REGIONS for o in orgs] + [(g, g, o) for g in ("FCS", "FCV") for o in ["ALL"] + orgs]
+        if fy == max(config.SNAPSHOTS):
+            codes = sorted(pd.read_parquet(out / "countries.parquet")["cntry_code"].dropna().unique())[:countries_limit]
+            jobs += [("COUNTRY", c, o) for c in codes for o in config.FINANCING]
+        rows, failed = [], []
+        with cf.ThreadPoolExecutor(config.MAX_WORKERS) as ex:
+            futures = {ex.submit(_summary, t, c, o, fy): (t, c, o) for t, c, o in jobs}
+            for f in cf.as_completed(futures):
+                try:
+                    rows += f.result()
+                except clients.ApiError as exc:
+                    failed.append(futures[f])
+                    log.warning("org split failed %s: %s", futures[f], exc)
+        log.info("fetched org split fy%s: %s rows from %s requests (%s failed)", fy, _save(rows, path), len(jobs), len(failed))
 
     path = out / "projects.parquet"
     if not _cached(path, refresh):

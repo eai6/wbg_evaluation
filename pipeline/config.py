@@ -20,6 +20,7 @@ SNAPSHOTS = [int(s) for s in os.getenv("SCORECARD_SNAPSHOTS", "2024,2025,2026").
 # Aggregate areas queried in addition to every country.
 REGIONS = ["ACW", "AFE", "AFW", "EAP", "ECA", "LCR", "MENAAP", "SAR"]
 INSTITUTIONS = ["WB", "IFC", "MIGA"]
+FINANCING = ["IBRD", "IDA"]  # World Bank financing institutions (Scorecard "WB Financing Institutions" tab)
 
 # Data360 (WDI) context series pulled for every country.
 DATA360_INDICATORS = {

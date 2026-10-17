@@ -25,13 +25,8 @@ def home(request):
             ratio = (a / e) if (a is not None and e) else 0
             tile["bar_px"] = max(4, min(1, ratio) * 52) if a is not None and e and e > 0 else 0
         tiles.append(tile)
-    by_id = {o["outcome_id"]: o for o in q.outcomes()}
-    stories = []
-    for s in q.stories():
-        o = by_id.get((s["outcome_ids"] or [None])[0])
-        stories.append({**s, "outcome_name": o["name"] if o else "", "color_var": VERTICALS.get(o["vertical"] if o else "", "--muted")})
     return render(request, "explorer/home.html", {
-        "page": "home", "tiles": tiles, "stories": stories, "verticals": list(VERTICALS.items()), **_common()})
+        "page": "home", "tiles": tiles, "verticals": list(VERTICALS.items()), **_common()})
 
 
 @require_GET
@@ -40,10 +35,25 @@ def outcome(request, slug):
     if not o:
         raise Http404("Unknown outcome area")
     boot = {"outcome_id": o["outcome_id"], "data_url": f"/api/outcomes/{o['outcome_id']}/data",
-            "ask": request.GET.get("q", "")[:500], "research": request.GET.get("research") == "1"}
+            "ask": request.GET.get("q", "")[:500], "research": request.GET.get("research") == "1",
+            # shareable view: ?ind=&fy=&org=&area=&sex= (validated again client-side against the payload)
+            "view": {k: request.GET[k][:40] for k in ("ind", "fy", "org", "area", "sex") if request.GET.get(k)}}
     return render(request, "explorer/workspace.html", {
         "page": "outcome", "outcome": o, "icon": ICONS.get(o["outcome_id"], "circle"),
         "color_var": VERTICALS.get(o["vertical"], "--muted"), "boot": boot, **_common()})
+
+
+@require_GET
+def indicator_data(request, ind_code: str):
+    """The Scorecard data page for one results indicator (all areas, institutions, breakdowns and projects)."""
+    try:
+        fy = int(request.GET["fy"]) if request.GET.get("fy") else None
+    except ValueError:
+        raise Http404
+    d = q.indicator_detail(ind_code, fy)
+    if not d:
+        raise Http404("Unknown results indicator")
+    return JsonResponse(d, json_dumps_params={"default": str})
 
 
 @require_GET

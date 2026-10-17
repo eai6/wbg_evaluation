@@ -5,3 +5,6 @@ __pycache__/
 data/*.tmp.duckdb
 .DS_Store
 q1_prototype/app.sqlite3
+
+# raw main session transcripts exceed GitHub's 100 MB limit; the lossless .jsonl.gz copies are committed
+chat_logs/*.jsonl

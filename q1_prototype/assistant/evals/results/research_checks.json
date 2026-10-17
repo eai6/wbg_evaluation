@@ -1,0 +1,90 @@
+[
+ {
+  "outcome": "No Learning Poverty",
+  "need_measure": null,
+  "most_to_deliver": [
+   "NGA",
+   "PHL",
+   "UGA",
+   "PAK",
+   "MDG"
+  ],
+  "most_people": [],
+  "regions_correct": true,
+  "borrowers_only": true,
+  "flagged_rows_not_in_delivery_list": true,
+  "delivery_rates_within_0_100": true,
+  "people_measure_only_if_catalogued": true,
+  "people_and_need_same_year_or_earlier": true,
+  "all_pass": true
+ },
+ {
+  "outcome": "Healthier Lives",
+  "need_measure": null,
+  "most_to_deliver": [
+   "NGA",
+   "CHN",
+   "PHL",
+   "IDN",
+   "TZA"
+  ],
+  "most_people": [],
+  "regions_correct": true,
+  "borrowers_only": true,
+  "flagged_rows_not_in_delivery_list": true,
+  "delivery_rates_within_0_100": true,
+  "people_measure_only_if_catalogued": true,
+  "people_and_need_same_year_or_earlier": true,
+  "all_pass": true
+ },
+ {
+  "outcome": "Affordable, Reliable and Sustainable Energy for All",
+  "need_measure": "people without access to electricity",
+  "most_to_deliver": [
+   "ETH",
+   "NGA",
+   "KEN",
+   "UZB",
+   "IND"
+  ],
+  "most_people": [
+   "NGA",
+   "COD",
+   "ETH",
+   "TZA",
+   "UGA"
+  ],
+  "regions_correct": true,
+  "borrowers_only": true,
+  "flagged_rows_not_in_delivery_list": true,
+  "delivery_rates_within_0_100": true,
+  "people_measure_only_if_catalogued": true,
+  "people_and_need_same_year_or_earlier": true,
+  "all_pass": true
+ },
+ {
+  "outcome": "Digital Connectivity",
+  "need_measure": "people not using the internet",
+  "most_to_deliver": [
+   "NGA",
+   "COD",
+   "IND",
+   "ETH",
+   "KEN"
+  ],
+  "most_people": [
+   "IND",
+   "NGA",
+   "CHN",
+   "PAK",
+   "ETH"
+  ],
+  "regions_correct": true,
+  "borrowers_only": true,
+  "flagged_rows_not_in_delivery_list": true,
+  "delivery_rates_within_0_100": true,
+  "people_measure_only_if_catalogued": true,
+  "people_and_need_same_year_or_earlier": true,
+  "all_pass": true
+ }
+]

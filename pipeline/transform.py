@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import json
 import logging
-import re
+import unicodedata
 
 import pandas as pd
 
@@ -39,7 +39,16 @@ def _global(name: str) -> pd.DataFrame:
 
 
 def slugify(text: str) -> str:
-    return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")
+    text = unicodedata.normalize("NFKD", text).encode("ascii", "ignore").decode().lower()
+    return "-".join("".join(ch if ch.isalnum() else " " for ch in text).split())
+
+
+def end_year(period) -> int | None:
+    """'2023-12-31' -> 2023; range '2011-2021' -> 2021 (the end of the range). Plain parsing of a known format."""
+    if not isinstance(period, str):
+        return None
+    years = [p for p in period.replace("/", "-").split("-") if len(p) == 4 and p.isdigit()]
+    return int(years[-1]) if years else None
 
 
 # --------------------------------------------------------------------------------------------- reference tables
@@ -65,7 +74,7 @@ def build_areas(snapshots) -> pd.DataFrame:
 
 def iso2_to_area(areas: pd.DataFrame) -> dict:
     m = areas.dropna(subset=["iso2"]).set_index("iso2")["area_code"].to_dict()
-    m.update({r: r for r in config.REGIONS}, FCS="FCS")
+    m.update({r: r for r in config.REGIONS}, FCS="FCS", FCV="FCS")  # FY26 returns the FCS group as "FCV"
     return m
 
 
@@ -89,16 +98,32 @@ def build_indicators(snapshots) -> tuple[pd.DataFrame, pd.DataFrame]:
     ind = pd.DataFrame({
         "ind_code": m["ind_code"], "name": m["ind_name"], "display_name": m["ind_display_name"].fillna(m["ind_name"]),
         "type": m["ind_type_name"].map(kind), "unit": m["ind_unit_of_measure"],
-        "outcome_id": _num(m["ind_outcome_area_code"].str.extract(r"(\d+)")[0]).astype("Int64"),
+        "outcome_id": _num(m["ind_outcome_area_code"].str.split().str[-1]).astype("Int64"),
         "vertical": m["ind_vertical_name"], "definition": m["ind_definition"],
         "long_definition": m["ind_long_definition"], "wdi_code": m["dec_ind_code"],
         "wb": m["ind_wb_flag"].eq("Y"), "ifc": m["ind_ifc_flag"].eq("Y"), "miga": m["ind_miga_flag"].eq("Y"),
         "has_sub_indicators": m["sub_ind_flag"].eq("Y"), "sex_disaggregated": m["ind_sex_disaggregate_flag"].eq("Y"),
         "country_disaggregated": m["ind_cntry_disaggregate_flag"].eq("Y"),
         "scale_type": m["scale_type_code"], "note": m["ind_note"]})
-    # "higher is better" is needed to read need indicators correctly (poverty, stunting... are higher = worse)
-    worse = r"cannot|poverty|stunt|insecur|risk|hazard|displaced|not in education|distress|inequality|emission|shortfall"
-    ind["higher_is_better"] = ~ind["name"].str.contains(worse, case=False, regex=True)
+    # The short description the Scorecard site shows under an indicator's title comes from the CMS
+    # (get_outcomes_indicators.ind_display_desc); ind_definition above is the full methodological definition.
+    cms = _global("outcome_indicators")
+    cms = cms[cms["sub_ind_code"].fillna("") == ""].drop_duplicates("ind_code").set_index("ind_code")["ind_display_desc"]
+    ind["description"] = ind["ind_code"].map(cms)
+    # Direction: the Scorecard's own scale type ("*_rev" = higher is worse) wins; otherwise the reviewed catalogue
+    # (pipeline/measures.csv); otherwise unknown. Never inferred from indicator names.
+    st = ind["scale_type"].fillna("")
+    ind["direction"] = None
+    ind.loc[st.str.endswith("_rev"), "direction"] = "lower_is_better"
+    ind.loc[(st != "") & ~st.str.endswith("_rev"), "direction"] = "higher_is_better"
+    ind["direction_source"] = ind["direction"].map(lambda d: "scorecard_scale_type" if d else None)
+    cat = pd.read_csv(config.ROOT / "pipeline" / "measures.csv").set_index("ind_code")
+    missing = ind["direction"].isna() & ind["ind_code"].isin(cat.index)
+    ind.loc[missing, "direction"] = ind.loc[missing, "ind_code"].map(cat["direction"])
+    ind.loc[missing, "direction_source"] = "reviewed"
+    ind["population_basis"] = ind["ind_code"].map(cat["population_basis"])
+    ind["people_measure"] = ind["ind_code"].map(cat["people_measure"])
+    ind["higher_is_better"] = ind["direction"].map({"higher_is_better": True, "lower_is_better": False})
     s = _raw(latest, "sub_indicators")
     sub = pd.DataFrame({"ind_code": s["ind_code"], "sub_ind_code": s["sub_ind_code"], "name": s["sub_ind_name"],
                         "display_name": s["sub_ind_display_name"], "female": s["female_sub_ind"].eq("Y"),
@@ -119,7 +144,7 @@ def _dims(df: pd.DataFrame, area_map: dict) -> pd.DataFrame:
 def build_results(snapshots, area_map) -> pd.DataFrame:
     frames = []
     for fy in snapshots:
-        raw = _raw(fy, "summary")
+        raw = pd.concat([_raw(fy, "summary"), _raw(fy, "org_split")], ignore_index=True)
         r = raw[raw["ind_type_name"] == "WBG Results"]
         df = _dims(r, area_map)
         df["org"] = r["org_code"]
@@ -154,7 +179,7 @@ def build_context(snapshots, area_map) -> pd.DataFrame:
         df["type"] = r["ind_type_name"].map({"Client Context": "context", "Vision": "vision"})
         # periods are usually dates ("2023-12-31") but some are ranges ("2011-2021"): keep the text, use the end year
         df["period"] = r["ind_time_per"]
-        df["year"] = _num(r["ind_time_per"].str.findall(r"(?:19|20)\d{2}").str[-1]).astype("Int64")
+        df["year"] = r["ind_time_per"].map(end_year).astype("Int64")
         df["value"] = _num(r["ind_base_achieved_val"]).fillna(_num(r["ind_achieved_val"]))
         df["unit"] = r["unit_of_measure_code"]
         frames.append(df)
@@ -172,7 +197,7 @@ def build_projects(snapshots, area_map) -> pd.DataFrame:
         frames.append(pd.DataFrame({
             "snapshot_fy": fy, "ind_code": p["ind_code"].fillna(p["query_ind_code"]), "sub_ind_code": p["sub_ind_code"].fillna(""),
             "proj_id": p["proj_id"], "project_name": p["project_name"], "org": p["org_code"],
-            "area_code": p["cntry_code"].map(area_map), "region_code": p["region_code"],
+            "area_code": p["cntry_code"].map(area_map), "cntry_code": p["cntry_code"], "region_code": p["region_code"],
             "approval_fy": _num(p["approval_fy"]).astype("Int64"), "closing_fy": _num(p["closing_fy"]).astype("Int64"),
             "status": p["project_status_code"], "global_practice": p["global_practice_code"],
             "product_line": p["product_line_code"], "commitment_usd": _num(p["sum_tot_net_cmt_amt"]),
@@ -180,8 +205,20 @@ def build_projects(snapshots, area_map) -> pd.DataFrame:
             "sex": p["sex_disaggregate_code"].fillna("_T"), "age": p["age_disaggregate_code"].fillna("_T"),
             "disability": p["disability_disaggregate_code"].fillna("_T"),
             "achieved": _num(p["sum_ind_base_achieved_val"]), "expected": _num(p["sum_ind_base_expected_val"]),
-            "url": p["project_external_url"]}))
-    return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
+            # financing-institution split of the same project result (WB Financing Institutions tab on the Scorecard)
+            "ibrd_achieved": _num(p["sum_ind_ibrd_base_achieved_val"]), "ibrd_expected": _num(p["sum_ind_ibrd_base_expected_val"]),
+            "ida_achieved": _num(p["sum_ind_ida_base_achieved_val"]), "ida_expected": _num(p["sum_ind_ida_base_expected_val"]),
+            # "Results Overlap Flag" column of the Scorecard's World Bank Operations table
+            "overlap_flag": p["max_double_counting_flag"], "url": p["project_external_url"]}))
+    if not frames:
+        return pd.DataFrame()
+    out = pd.concat(frames, ignore_index=True)
+    # the API repeats a project row once per IDA21 attribution (only ida21_* columns differ); those columns are not
+    # kept, so the repeats are exact duplicates here and would double count the project's result
+    n = len(out)
+    out = out.drop_duplicates().reset_index(drop=True)
+    log.info("projects: dropped %d IDA21-attribution repeat rows", n - len(out))
+    return out
 
 
 def build_wdi(area_codes: set) -> pd.DataFrame:
@@ -210,7 +247,13 @@ def build_active_projects(area_map) -> pd.DataFrame:
 
 def build_stories() -> pd.DataFrame:
     s = _global("stories")
-    url = s["embed_code"].str.extract(r'src="(https://[^"]+?)/embed\.js')[0]
+    def story_url(embed):  # embed code: <script src="https://…/embed.js"></script>
+        if not isinstance(embed, str) or 'src="' not in embed:
+            return None
+        src = embed.split('src="', 1)[1].split('"', 1)[0]
+        return src[: -len("/embed.js")] if src.endswith("/embed.js") else src
+
+    url = s["embed_code"].map(story_url)
     return pd.DataFrame({"story_id": s["narrative_id"], "title": s["narrative_title"].str.split().str.join(" "),
                          "image_url": s["banner_url"], "alt": s["alt_tags"], "url": url,
                          "outcome_ids": s["related_outcomes"].map(lambda j: [int(o["outcome_id"]) for o in json.loads(j or "[]")]),

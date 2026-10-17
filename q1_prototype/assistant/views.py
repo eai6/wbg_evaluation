@@ -1,3 +1,4 @@
+import html
 import json
 import time
 
@@ -10,7 +11,7 @@ from django.views.decorators.http import require_GET, require_POST
 from explorer import queries as q
 from explorer.formatting import fmt
 
-from . import analysis, artifacts, llm, pcn, pipelines, resolver
+from . import artifacts, llm, pcn, pipelines
 
 
 def _conv(request, outcome_id) -> dict:
@@ -59,46 +60,6 @@ def chat(request):
     return resp
 
 
-@require_POST
-def route_home(request):
-    """Landing-page Ask: navigate to an outcome, answer cross-area questions, or start research."""
-    body = json.loads(request.body or "{}")
-    message = str(body.get("message", ""))[:500].strip()
-    if not message or pipelines.INJECTION.search(message) or _rate_limited(request):
-        return JsonResponse({"action": "answer", "html": "Ask a question about World Bank Group Scorecard results."})
-    r = pipelines.route(message, {"outcome_id": None, "filters": {}}, [], [])
-    ents = r["entities"]
-    if r["intent"] in ("research", "deck"):
-        if ents.get("topic"):
-            o = q.outcome(ents["topic"])
-            return JsonResponse({"action": "navigate", "url": f"/outcomes/{o['slug']}/?research=1&q={message}"})
-        ranked = analysis.choose_area()
-        pick = ranked[0]["outcome"]
-        note = (f"No thematic area was named, so I compared all outcome areas and picked <b>{pick['name']}</b>: the largest "
-                f"remaining gap among areas with country-level results and need data. Starting the analysis…")
-        return JsonResponse({"action": "navigate", "url": f"/outcomes/{pick['slug']}/?research=1&q={message}", "html": note})
-    if ents.get("topic") and r["intent"] in ("filter", "navigate", "analyze", "explain", "summary"):
-        o = q.outcome(ents["topic"])
-        return JsonResponse({"action": "navigate", "url": f"/outcomes/{o['slug']}/?q={message}"})
-    if r["intent"] == "analyze":  # cross-area question: rank outcome areas by delivery rate
-        claims = pcn.Claims()
-        rows = []
-        for o in q.outcomes():
-            p = q.primary_result(o["outcome_id"])
-            if p and p["achieved"] is not None and p["expected"] and p["unit"] == "Beneficiaries" and p["achieved"] <= 1.05 * p["expected"]:
-                rows.append((p["achieved"] / p["expected"], o, p))
-        rows.sort(key=lambda x: x[0])
-        items = []
-        for ratio, o, p in rows[:3]:
-            cid = claims.add(100 * ratio, unit="Percentage", source=f"{p['ind_code']} · all countries · computed", label="achieved ÷ expected")
-            items.append(f"<li>{o['name']}: <claim id=\"{cid}\">{100 * ratio:.0f}%</claim> of expected</li>")
-        html_, _ = pcn.render("".join(items), claims)
-        html_ = html_.replace("&lt;li&gt;", "<li>").replace("&lt;/li&gt;", "</li>")
-        return JsonResponse({"action": "answer", "highlight": [o["outcome_id"] for _, o, _ in rows[:3]],
-                             "html": f"<p style='margin:0 0 6px'><b>Furthest from expected results</b> (people-reached indicators, all countries, FY{str(q.latest_fy())[2:]}):</p><ol style='margin:0;padding-left:20px'>{html_}</ol>"})
-    return JsonResponse({"action": "answer", "html": "Which outcome area do you mean? Try “energy access in Nigeria”, “students supported in Ghana”, or ask for three-year priorities."})
-
-
 def _artifact(request, artifact_id) -> dict:
     for conv in (request.session.get("convs") or {}).values():
         a = (conv.get("artifacts") or {}).get(artifact_id)
@@ -110,9 +71,9 @@ def _artifact(request, artifact_id) -> dict:
 @require_GET
 def notebook(request, artifact_id):
     a = _artifact(request, artifact_id)
-    nb = artifacts.notebook(a) if a["type"] != "notebook" else {
-        "nbformat": 4, "nbformat_minor": 5, "cells": a["cells"],
-        "metadata": {"kernelspec": {"name": "python3", "display_name": "Python 3", "language": "python"}, "language_info": {"name": "python"}}}
+    if a["type"] != "deck":  # notebooks are scoped to a 3-slide briefing
+        raise Http404("Notebooks are exported with a 3-slide briefing")
+    nb = artifacts.notebook(a)
     resp = HttpResponse(json.dumps(nb, indent=1), content_type="application/x-ipynb+json")
     resp["Content-Disposition"] = f'attachment; filename="scorecard_{artifact_id}.ipynb"'
     return resp

@@ -2,15 +2,15 @@
  "row_counts": [
   {
    "t": "results",
-   "n": 25347
+   "n": 50956
   },
   {
    "t": "context",
-   "n": 227113
+   "n": 227136
   },
   {
    "t": "projects",
-   "n": 43414
+   "n": 43405
   },
   {
    "t": "areas",
@@ -275,18 +275,18 @@
   },
   {
    "snapshot_fy": 2026,
-   "ind_code": "CSC_RES_EDU_SUPP",
-   "area_code": "SLE",
-   "achieved": 3407759.0,
-   "expected": 1253202.0,
-   "ratio": 2.72
-  },
-  {
-   "snapshot_fy": 2026,
    "ind_code": "CSC_RES_ACCS_TRANS_INFRA_SERV",
    "area_code": "LKA",
    "achieved": 878980.0,
    "expected": 323614.0,
+   "ratio": 2.72
+  },
+  {
+   "snapshot_fy": 2026,
+   "ind_code": "CSC_RES_EDU_SUPP",
+   "area_code": "SLE",
+   "achieved": 3407759.0,
+   "expected": 1253202.0,
    "ratio": 2.72
   },
   {
@@ -442,6 +442,336 @@
    "ratio": 2.05
   }
  ],
+ "quality_flags": [
+  {
+   "snapshot_fy": 2026,
+   "org": "IBRD",
+   "quality_flag": "achieved_above_expected",
+   "n": 76
+  },
+  {
+   "snapshot_fy": 2026,
+   "org": "IBRD",
+   "quality_flag": "achieved_missing",
+   "n": 189
+  },
+  {
+   "snapshot_fy": 2026,
+   "org": "IBRD",
+   "quality_flag": "expected_missing",
+   "n": 6
+  },
+  {
+   "snapshot_fy": 2026,
+   "org": "IDA",
+   "quality_flag": "achieved_above_expected",
+   "n": 145
+  },
+  {
+   "snapshot_fy": 2026,
+   "org": "IDA",
+   "quality_flag": "achieved_missing",
+   "n": 283
+  },
+  {
+   "snapshot_fy": 2026,
+   "org": "IDA",
+   "quality_flag": "expected_missing",
+   "n": 2
+  },
+  {
+   "snapshot_fy": 2026,
+   "org": "IFC",
+   "quality_flag": "achieved_above_expected",
+   "n": 37
+  },
+  {
+   "snapshot_fy": 2026,
+   "org": "IFC",
+   "quality_flag": "achieved_missing",
+   "n": 102
+  },
+  {
+   "snapshot_fy": 2026,
+   "org": "IFC",
+   "quality_flag": "not_disclosed",
+   "n": 680
+  },
+  {
+   "snapshot_fy": 2026,
+   "org": "MIGA",
+   "quality_flag": "achieved_above_expected",
+   "n": 25
+  },
+  {
+   "snapshot_fy": 2026,
+   "org": "MIGA",
+   "quality_flag": "achieved_missing",
+   "n": 143
+  },
+  {
+   "snapshot_fy": 2026,
+   "org": "MIGA",
+   "quality_flag": "expected_missing",
+   "n": 28
+  },
+  {
+   "snapshot_fy": 2026,
+   "org": "WB",
+   "quality_flag": "achieved_above_expected",
+   "n": 196
+  },
+  {
+   "snapshot_fy": 2026,
+   "org": "WB",
+   "quality_flag": "achieved_missing",
+   "n": 360
+  },
+  {
+   "snapshot_fy": 2026,
+   "org": "WB",
+   "quality_flag": "expected_missing",
+   "n": 79
+  },
+  {
+   "snapshot_fy": 2026,
+   "org": "WBG",
+   "quality_flag": "achieved_above_expected",
+   "n": 221
+  },
+  {
+   "snapshot_fy": 2026,
+   "org": "WBG",
+   "quality_flag": "achieved_missing",
+   "n": 441
+  },
+  {
+   "snapshot_fy": 2026,
+   "org": "WBG",
+   "quality_flag": "expected_missing",
+   "n": 48
+  },
+  {
+   "snapshot_fy": 2026,
+   "org": "WBG",
+   "quality_flag": "not_disclosed",
+   "n": 166
+  },
+  {
+   "snapshot_fy": 2025,
+   "org": "IBRD",
+   "quality_flag": "achieved_above_expected",
+   "n": 17
+  },
+  {
+   "snapshot_fy": 2025,
+   "org": "IBRD",
+   "quality_flag": "achieved_missing",
+   "n": 26
+  },
+  {
+   "snapshot_fy": 2025,
+   "org": "IBRD",
+   "quality_flag": "expected_missing",
+   "n": 1
+  },
+  {
+   "snapshot_fy": 2025,
+   "org": "IDA",
+   "quality_flag": "achieved_above_expected",
+   "n": 10
+  },
+  {
+   "snapshot_fy": 2025,
+   "org": "IDA",
+   "quality_flag": "achieved_missing",
+   "n": 27
+  },
+  {
+   "snapshot_fy": 2025,
+   "org": "IFC",
+   "quality_flag": "achieved_above_expected",
+   "n": 11
+  },
+  {
+   "snapshot_fy": 2025,
+   "org": "IFC",
+   "quality_flag": "achieved_missing",
+   "n": 19
+  },
+  {
+   "snapshot_fy": 2025,
+   "org": "IFC",
+   "quality_flag": "not_disclosed",
+   "n": 31
+  },
+  {
+   "snapshot_fy": 2025,
+   "org": "MIGA",
+   "quality_flag": "achieved_above_expected",
+   "n": 1
+  },
+  {
+   "snapshot_fy": 2025,
+   "org": "MIGA",
+   "quality_flag": "achieved_missing",
+   "n": 18
+  },
+  {
+   "snapshot_fy": 2025,
+   "org": "MIGA",
+   "quality_flag": "expected_missing",
+   "n": 19
+  },
+  {
+   "snapshot_fy": 2025,
+   "org": "WB",
+   "quality_flag": "achieved_above_expected",
+   "n": 13
+  },
+  {
+   "snapshot_fy": 2025,
+   "org": "WB",
+   "quality_flag": "achieved_missing",
+   "n": 27
+  },
+  {
+   "snapshot_fy": 2025,
+   "org": "WBG",
+   "quality_flag": "achieved_above_expected",
+   "n": 176
+  },
+  {
+   "snapshot_fy": 2025,
+   "org": "WBG",
+   "quality_flag": "achieved_missing",
+   "n": 428
+  },
+  {
+   "snapshot_fy": 2025,
+   "org": "WBG",
+   "quality_flag": "expected_missing",
+   "n": 55
+  },
+  {
+   "snapshot_fy": 2025,
+   "org": "WBG",
+   "quality_flag": "not_disclosed",
+   "n": 124
+  },
+  {
+   "snapshot_fy": 2024,
+   "org": "IBRD",
+   "quality_flag": "achieved_above_expected",
+   "n": 14
+  },
+  {
+   "snapshot_fy": 2024,
+   "org": "IBRD",
+   "quality_flag": "achieved_missing",
+   "n": 16
+  },
+  {
+   "snapshot_fy": 2024,
+   "org": "IDA",
+   "quality_flag": "achieved_above_expected",
+   "n": 11
+  },
+  {
+   "snapshot_fy": 2024,
+   "org": "IDA",
+   "quality_flag": "achieved_missing",
+   "n": 16
+  },
+  {
+   "snapshot_fy": 2024,
+   "org": "IFC",
+   "quality_flag": "achieved_above_expected",
+   "n": 7
+  },
+  {
+   "snapshot_fy": 2024,
+   "org": "IFC",
+   "quality_flag": "achieved_missing",
+   "n": 15
+  },
+  {
+   "snapshot_fy": 2024,
+   "org": "MIGA",
+   "quality_flag": "achieved_above_expected",
+   "n": 1
+  },
+  {
+   "snapshot_fy": 2024,
+   "org": "MIGA",
+   "quality_flag": "achieved_missing",
+   "n": 16
+  },
+  {
+   "snapshot_fy": 2024,
+   "org": "MIGA",
+   "quality_flag": "expected_missing",
+   "n": 32
+  },
+  {
+   "snapshot_fy": 2024,
+   "org": "WB",
+   "quality_flag": "achieved_above_expected",
+   "n": 9
+  },
+  {
+   "snapshot_fy": 2024,
+   "org": "WB",
+   "quality_flag": "achieved_missing",
+   "n": 16
+  },
+  {
+   "snapshot_fy": 2024,
+   "org": "WBG",
+   "quality_flag": "achieved_above_expected",
+   "n": 176
+  },
+  {
+   "snapshot_fy": 2024,
+   "org": "WBG",
+   "quality_flag": "achieved_missing",
+   "n": 299
+  },
+  {
+   "snapshot_fy": 2024,
+   "org": "WBG",
+   "quality_flag": "expected_missing",
+   "n": 59
+  },
+  {
+   "snapshot_fy": 2024,
+   "org": "WBG",
+   "quality_flag": "not_disclosed",
+   "n": 65
+  }
+ ],
+ "indicator_direction": [
+  {
+   "direction_source": "reviewed",
+   "direction": "higher_is_better",
+   "n": 11
+  },
+  {
+   "direction_source": "reviewed",
+   "direction": "lower_is_better",
+   "n": 1
+  },
+  {
+   "direction_source": "scorecard_scale_type",
+   "direction": "higher_is_better",
+   "n": 4
+  },
+  {
+   "direction_source": "scorecard_scale_type",
+   "direction": "lower_is_better",
+   "n": 14
+  }
+ ],
  "results_without_total": [
   {
    "snapshot_fy": 2024,
@@ -581,6 +911,141 @@
    "world": 58.6206896552,
    "regions_sum": 406.2026862027,
    "ratio": 6.929
+  }
+ ],
+ "project_reconciliation": [
+  {
+   "ind_code": "CSC_RES_DEBT_SUST_RISK",
+   "projects": null,
+   "projects_expected": null,
+   "wb_expected": 60.0,
+   "reconciles": false
+  },
+  {
+   "ind_code": "CSC_RES_ELC_ACCS",
+   "projects": 100,
+   "projects_expected": 204062191.0,
+   "wb_expected": 321262968.0,
+   "reconciles": false
+  },
+  {
+   "ind_code": "CSC_RES_HEA_EMER_BENE",
+   "projects": 62,
+   "projects_expected": 0.0,
+   "wb_expected": 71.0,
+   "reconciles": false
+  },
+  {
+   "ind_code": "CSC_RES_ACCS_TRANS_INFRA_SERV",
+   "projects": 222,
+   "projects_expected": 536132864.0,
+   "wb_expected": 536132858.0,
+   "reconciles": true
+  },
+  {
+   "ind_code": "CSC_RES_BRO_INTE",
+   "projects": 51,
+   "projects_expected": 271133439.0,
+   "wb_expected": 271133440.0,
+   "reconciles": true
+  },
+  {
+   "ind_code": "CSC_RES_DIG_ENA_SERV",
+   "projects": 136,
+   "projects_expected": 263471801.0,
+   "wb_expected": 263471798.0,
+   "reconciles": true
+  },
+  {
+   "ind_code": "CSC_RES_DISP_COMM_SERVICES",
+   "projects": 144,
+   "projects_expected": 82568421.0,
+   "wb_expected": 82568418.0,
+   "reconciles": true
+  },
+  {
+   "ind_code": "CSC_RES_EDU_SUPP",
+   "projects": 323,
+   "projects_expected": 436466534.0,
+   "wb_expected": 436466530.0,
+   "reconciles": true
+  },
+  {
+   "ind_code": "CSC_RES_FIN_SERV_WOM",
+   "projects": 191,
+   "projects_expected": 95796474.0,
+   "wb_expected": 95796474.0,
+   "reconciles": true
+  },
+  {
+   "ind_code": "CSC_RES_FOOD_NUTR_SECU",
+   "projects": 320,
+   "projects_expected": 204984512.0,
+   "wb_expected": 204984514.0,
+   "reconciles": true
+  },
+  {
+   "ind_code": "CSC_RES_GHG_EMS_YEAR",
+   "projects": 671,
+   "projects_expected": -179471139.0,
+   "wb_expected": -179471139.0,
+   "reconciles": true
+  },
+  {
+   "ind_code": "CSC_RES_HEA_SERV",
+   "projects": 169,
+   "projects_expected": 597400249.0,
+   "wb_expected": 597400245.0,
+   "reconciles": true
+  },
+  {
+   "ind_code": "CSC_RES_PRIV_CAP_ENAB",
+   "projects": 295,
+   "projects_expected": 172793975013.0,
+   "wb_expected": 172793975013.0,
+   "reconciles": true
+  },
+  {
+   "ind_code": "CSC_RES_PRIV_CAP_MOBL",
+   "projects": 322,
+   "projects_expected": 77291960401.0,
+   "wb_expected": 77291960401.0,
+   "reconciles": true
+  },
+  {
+   "ind_code": "CSC_RES_REN_ENER_ENAB",
+   "projects": 197,
+   "projects_expected": 101.0,
+   "wb_expected": 101.0,
+   "reconciles": true
+  },
+  {
+   "ind_code": "CSC_RES_RESI_CLIM_RISK",
+   "projects": 429,
+   "projects_expected": 369257634.0,
+   "wb_expected": 369257630.0,
+   "reconciles": true
+  },
+  {
+   "ind_code": "CSC_RES_SOC_SAF_PROG",
+   "projects": 218,
+   "projects_expected": 338522731.0,
+   "wb_expected": 338522726.0,
+   "reconciles": true
+  },
+  {
+   "ind_code": "CSC_RES_TAX_REV_GDP",
+   "projects": 29,
+   "projects_expected": 31.0,
+   "wb_expected": 31.0,
+   "reconciles": true
+  },
+  {
+   "ind_code": "CSC_RES_TER_AQU_HECT",
+   "projects": 216,
+   "projects_expected": 148313103.0,
+   "wb_expected": 148313103.0,
+   "reconciles": true
   }
  ],
  "unmapped_project_countries": [

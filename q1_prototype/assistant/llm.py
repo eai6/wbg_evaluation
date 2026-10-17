@@ -23,16 +23,25 @@ def available() -> bool:
 
 
 def complete(messages: list[dict], *, fast: bool = False, tools: list | None = None, json_mode: bool = False,
-             temperature: float = 0.0, max_tokens: int = 1500, usage: list | None = None):
+             temperature: float = 0.0, max_tokens: int = 1500, usage: list | None = None, effort: str | None = None,
+             model: str | None = None):
     """Return the LiteLLM message object. Appends {model, in, out, ms} to ``usage`` for cost/latency tracking."""
     if not available():
         raise LLMUnavailable("No LLM configured (set LLM_MODEL and LLM_API_KEY in .env)")
     import litellm  # imported lazily: keeps startup fast and the app usable without an LLM
 
     cfg = settings.LLM
-    model = cfg["fast_model"] if fast else cfg["model"]
-    kwargs = dict(model=model, messages=messages, temperature=temperature, max_tokens=max_tokens,
+    model = model or (cfg["fast_model"] if fast else cfg["model"])
+    litellm.drop_params = True  # drop params a provider doesn't support instead of failing
+    kwargs = dict(model=model, messages=messages, max_tokens=max_tokens,
                   timeout=cfg["timeout"], api_key=cfg["api_key"] or None, api_base=cfg["api_base"])
+    if not model.startswith("anthropic/"):
+        # Current Claude models (Sonnet/Haiku/Opus 5.5) reject non-default sampling params; thinking depth is set
+        # by effort instead. Other providers get a low temperature for reproducible routing/analysis.
+        kwargs["temperature"] = temperature
+    else:
+        # Claude: adaptive thinking is always on; effort (low|medium|high) sets how much it thinks -> latency and cost
+        kwargs["output_config"] = {"effort": effort or (cfg["router_effort"] if fast else cfg["effort"])}
     if tools:
         kwargs["tools"] = tools
         kwargs["tool_choice"] = "auto"

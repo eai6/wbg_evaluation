@@ -6,7 +6,6 @@ Arguments are validated with pydantic against allowlists (indicator codes, area 
 """
 from __future__ import annotations
 
-import re
 from typing import Literal
 
 import sqlglot
@@ -32,6 +31,17 @@ def _ind(code: str) -> str:
     return code
 
 
+def _fy(v: int | None) -> int | None:
+    """Snapshot fiscal year: accepts 2026 or the FY shorthand 26; anything else is rejected with the valid list."""
+    if v is None:
+        return None
+    v = v + 2000 if 0 <= v < 100 else v
+    valid = [s["fy"] for s in q.snapshots()]
+    if v not in valid:
+        raise ValueError(f"unknown snapshot {v}; valid snapshots are {valid}")
+    return v
+
+
 def _area(code: str) -> str:
     if code not in q.areas():
         raise ValueError(f"unknown area {code}")
@@ -45,9 +55,12 @@ class Ctx:
         self.claims, self.fy = claims, fy or q.latest_fy()
 
     def num(self, value, unit, ind, area, field, fy=None):
-        src = f"WBG Scorecard API · {ind} · {q.area_name(area)} · {field} · FY{str(fy or self.fy)[2:]} snapshot"
-        cid = self.claims.add(value, unit=unit, source=src, label=field)
+        """Register a value as a claim that records entity, measure and period, not just the number."""
+        period = f"FY{str(fy or self.fy)[2:]} snapshot"
         disp = fmt(value, "Percentage" if unit == "Percentage" else unit) if value is not None else None
+        name = q.indicators().get(ind, {}).get("display_name", ind)
+        cid = self.claims.add(value, unit=unit, source=f"WBG Scorecard API · {ind}", label=field, entity=q.area_name(area),
+                              measure=f"{name}: {field}", period=period, display=disp)
         return {"value": value, "display": disp, "claim": cid}
 
 
@@ -55,9 +68,10 @@ class Ctx:
 class ResultsArgs(BaseModel):
     ind_code: str
     areas: list[str] = Field(default_factory=lambda: ["ACW"], max_length=40)
-    org: Literal["WBG", "WB", "IFC", "MIGA"] = "WBG"
+    org: Literal["WBG", "WB", "IFC", "MIGA", "IBRD", "IDA"] = "WBG"
     sex: Literal["_T", "F"] = "_T"
     snapshot: int | None = None
+    _v_fy = field_validator("snapshot")(lambda cls, v: _fy(v))
     _v_ind = field_validator("ind_code")(lambda cls, v: _ind(v))
     _v_areas = field_validator("areas")(lambda cls, v: [_area(a) for a in v])
 
@@ -71,6 +85,7 @@ class RankArgs(BaseModel):
     top_n: int = Field(5, ge=1, le=15)
     sex: Literal["_T", "F"] = "_T"
     snapshot: int | None = None
+    _v_fy = field_validator("snapshot")(lambda cls, v: _fy(v))
     _v_ind = field_validator("ind_code")(lambda cls, v: _ind(v))
 
 
@@ -98,6 +113,17 @@ class SearchArgs(BaseModel):
     query: str = Field(min_length=2, max_length=80)
 
 
+class ProjectsArgs(BaseModel):
+    ind_code: str
+    area: str = "ACW"
+    org: Literal["WB", "IBRD", "IDA"] = "WB"
+    limit: int = Field(default=10, ge=1, le=25)
+    snapshot: int | None = None
+    _v_fy = field_validator("snapshot")(lambda cls, v: _fy(v))
+    _v_ind = field_validator("ind_code")(lambda cls, v: _ind(v))
+    _v_area = field_validator("area")(lambda cls, v: _area(v))
+
+
 class DefArgs(BaseModel):
     ind_code: str
     _v_ind = field_validator("ind_code")(lambda cls, v: _ind(v))
@@ -111,9 +137,13 @@ class SqlArgs(BaseModel):
 def _row(ctx: Ctx, ind: str, unit: str, area: str, a, e, fy) -> dict:
     out = {"area": area, "area_name": q.area_name(area),
            "achieved": ctx.num(a, unit, ind, area, "achieved", fy), "expected": ctx.num(e, unit, ind, area, "expected", fy)}
-    if a is not None and e:
+    # a delivery rate / remaining gap is meaningful only when 0 <= achieved <= expected (same rule as the pipeline's
+    # quality_flag); achieved above expected is reported as a data check instead of a rate above 100%
+    if a is not None and e and e > 0 and 0 <= a <= e:
         out["delivery_pct"] = ctx.num(100 * a / e, "Percentage", ind, area, "achieved ÷ expected (computed)", fy)
         out["remaining_gap"] = ctx.num(e - a, unit, ind, area, "expected − achieved (computed)", fy)
+    elif a is not None and e and e > 0 and a > e:
+        out["data_check"] = "achieved above expected"
     return out
 
 
@@ -129,6 +159,48 @@ def get_results(ctx: Ctx, args: ResultsArgs) -> dict:
         rows.append(_row(ctx, args.ind_code, ind["unit"], area, r["achieved"], r["expected"], fy))
     return {"indicator": ind["display_name"], "ind_code": args.ind_code, "unit": ind["unit"], "org": args.org,
             "sex": "female" if args.sex == "F" else "total", "snapshot": f"FY{str(fy)[2:]}", "rows": rows}
+
+
+def get_projects(ctx: Ctx, args: ProjectsArgs) -> dict:
+    """World Bank operations behind a result (the Scorecard's "World Bank Operations" table), largest first, with a
+    check that the project rows add up to the published World Bank (or IBRD / IDA) total for the same area."""
+    ind = q.indicators()[args.ind_code]
+    if ind["type"] != "results":
+        raise ToolError("not_results", "Projects exist only for WBG Results indicators.")
+    fy, unit, col = args.snapshot or ctx.fy, ind["unit"], {"WB": "", "IBRD": "ibrd_", "IDA": "ida_"}[args.org]
+    where, params = "", []
+    if args.area in q.REGIONS:
+        where, params = " AND region_code = ?", [args.area]
+    elif args.area == "FCS":
+        where = " AND area_code IN (SELECT area_code FROM areas WHERE fcs)"
+    elif args.area != "ACW":
+        where, params = " AND area_code = ?", [args.area]
+    rows = q.rows(f"""SELECT proj_id, project_name, coalesce(area_code, cntry_code) area, {col}achieved a, {col}expected e, overlap_flag, url
+                      FROM projects WHERE ind_code=? AND snapshot_fy=? AND sub_ind_code='' AND sex='_T' AND age='_T'{where}
+                        AND ({col}expected <> 0 OR {col}achieved <> 0)
+                      ORDER BY {col}achieved DESC NULLS LAST""", [args.ind_code, fy, *params])
+    total = q.result(args.ind_code, args.area, args.org, fy)
+    sa, se = sum(r["a"] or 0 for r in rows), sum(r["e"] or 0 for r in rows)
+    summable = unit not in ("Percentage", "Countries/Economies")  # these totals are not sums of project values
+    adds_up = None if not summable else bool(total and total["expected"] is not None and abs(se - total["expected"]) <= 0.005 * abs(total["expected"]) + 1
+                   and abs(sa - (total["achieved"] or 0)) <= 0.005 * abs(total["achieved"] or 0) + 1)
+    src = "WBG Scorecard API · getSCResultIndicatorSummary"
+    out = []
+    for r in rows[: args.limit]:
+        ent = f"{r['project_name']} ({r['proj_id']})"
+        def c(v, field, r=r, ent=ent):
+            disp = fmt(v, unit) if v is not None else None
+            return {"value": v, "display": disp, "claim": ctx.claims.add(v, unit=unit, source=f"{src} · {r['proj_id']}", label=field, entity=ent,
+                                                                          measure=f"{ind['display_name']}: {field}", period=f"FY{str(fy)[2:]} snapshot", display=disp)}
+        out.append({"project": ent, "country": q.area_name(r["area"]), "url": r["url"], "overlap_flag": r["overlap_flag"],
+                    "achieved": c(r["a"], "achieved"), "expected": c(r["e"], "expected")})
+    return {"indicator": ind["display_name"], "ind_code": args.ind_code, "area": q.area_name(args.area), "org": args.org,
+            "snapshot": f"FY{str(fy)[2:]}", "projects": len({r["proj_id"] for r in rows}), "countries": len({r["area"] for r in rows}),
+            "rows": out, "sum_of_projects": {"achieved": ctx.num(sa, unit, args.ind_code, args.area, f"sum of {args.org} project rows (achieved)", fy),
+                                             "expected": ctx.num(se, unit, args.ind_code, args.area, f"sum of {args.org} project rows (expected)", fy)},
+            "published_total": {"achieved": ctx.num(total["achieved"], unit, args.ind_code, args.area, f"{args.org} achieved", fy),
+                                "expected": ctx.num(total["expected"], unit, args.ind_code, args.area, f"{args.org} expected", fy)} if total else None,
+            "projects_add_up_to_total": adds_up}
 
 
 def rank_areas(ctx: Ctx, args: RankArgs) -> dict:
@@ -195,15 +267,17 @@ def get_context(ctx: Ctx, args: ContextArgs) -> dict:
             continue
         years = sorted(s)
         first, last = years[0], years[-1]
-        src = f"WBG Scorecard client context · {args.ind_code} · {q.area_name(area)}"
-        rows.append({"area": area, "area_name": q.area_name(area), "latest_year": last,
-                     "latest": {"value": s[last], "display": f"{s[last]:.1f}",
-                                "claim": ctx.claims.add(s[last], unit=ind["unit"], source=f"{src} · {last}", label=ind["display_name"])},
-                     "first_year": first,
-                     "first": {"value": s[first], "display": f"{s[first]:.1f}",
-                               "claim": ctx.claims.add(s[first], unit=ind["unit"], source=f"{src} · {first}", label=ind["display_name"])}})
+        src = f"WBG Scorecard client context · {args.ind_code}"
+
+        def val(y):
+            d = f"{s[y]:.1f}%" if ind["unit"] == "Percentage" else f"{s[y]:,.1f}"
+            return {"value": s[y], "display": d,
+                    "claim": ctx.claims.add(s[y], unit=ind["unit"], source=src, label=ind["display_name"], entity=q.area_name(area),
+                                            measure=ind["display_name"], period=str(y), display=d)}
+        rows.append({"area": area, "area_name": q.area_name(area), "latest_year": last, "latest": val(last),
+                     "first_year": first, "first": val(first)})
     return {"indicator": ind["display_name"], "ind_code": args.ind_code, "unit": ind["unit"],
-            "higher_is_better": ind["higher_is_better"], "rows": rows}
+            "direction": ind["direction"] or "unknown", "rows": rows}
 
 
 def outcome_overview(ctx: Ctx, args: OverviewArgs) -> dict:
@@ -224,7 +298,7 @@ def outcome_overview(ctx: Ctx, args: OverviewArgs) -> dict:
 
 
 def search_indicators(ctx: Ctx, args: SearchArgs) -> dict:
-    terms = [t for t in re.split(r"\W+", args.query.lower()) if len(t) > 2]
+    terms = [t for t in "".join(ch if ch.isalnum() else " " for ch in args.query.lower()).split() if len(t) > 2]
     hits = []
     for i in q.indicators().values():
         text = f"{i['name']} {i['display_name']} {i['definition'] or ''}".lower()
@@ -245,7 +319,7 @@ def get_definition(ctx: Ctx, args: DefArgs) -> dict:
 
 
 # ------------------------------------------------------------------------------------------------ guarded SQL
-SQL_VIEWS = {"v_results", "v_results_female", "v_context", "v_context_latest", "v_population", "areas", "indicators", "outcomes"}
+SQL_VIEWS = {"v_results", "v_results_female", "v_context", "v_context_latest", "v_population", "v_projects", "areas", "indicators", "outcomes"}
 
 
 def run_sql(ctx: Ctx, args: SqlArgs) -> dict:
@@ -273,9 +347,12 @@ def run_sql(ctx: Ctx, args: SqlArgs) -> dict:
     out = []
     for r in cur.fetchmany(200):
         row = {}
+        rec = dict(zip(cols, r))
+        entity = rec.get("area_name") or rec.get("area_code") or rec.get("indicator") or rec.get("ind_code")
         for c, v in zip(cols, r):
             if isinstance(v, float):
-                cid = ctx.claims.add(v, unit=None, source=f"run_sql · column {c}", label=c)
+                cid = ctx.claims.add(v, unit=None, source="run_sql (read-only query shown in 'How I got this')", label=c,
+                                     entity=str(entity) if entity else None, measure=c, display=f"{v:,.4g}")
                 row[c] = {"value": v, "display": f"{v:,.4g}", "claim": cid}
             else:
                 row[c] = v if isinstance(v, (int, str, bool, type(None))) else str(v)
@@ -284,14 +361,15 @@ def run_sql(ctx: Ctx, args: SqlArgs) -> dict:
 
 
 TOOLS = {
-    "get_results": (ResultsArgs, get_results, "Achieved, expected, delivery % and remaining gap for one WBG Results indicator in given areas (region codes ACW AFE AFW EAP ECA LCR MENAAP SAR, FCS, or ISO3 country codes)."),
+    "get_results": (ResultsArgs, get_results, "Achieved, expected, delivery % and remaining gap for one WBG Results indicator in given areas (region codes ACW AFE AFW EAP ECA LCR MENAAP SAR, FCS, or ISO3 country codes). org IBRD/IDA (World Bank financing institutions) is reported for ACW and regions only."),
     "rank_areas": (RankArgs, rank_areas, "Rank regions or countries (optionally within a region or FCS) for one results indicator by delivery_ratio, remaining_gap, achieved or expected. Excludes tiny portfolios and achieved>expected data anomalies."),
     "compare_snapshots": (SnapArgs, compare_snapshots, "Achieved/expected for one indicator and area across the FY24-FY26 snapshots, with change."),
     "get_context": (ContextArgs, get_context, "Client-context or vision indicator: first and latest values for given areas."),
     "outcome_overview": (OverviewArgs, outcome_overview, "All results indicators (optionally for one outcome area) with achieved/expected/delivery % for an area."),
     "search_indicators": (SearchArgs, search_indicators, "Find indicator codes by keywords."),
     "get_definition": (DefArgs, get_definition, "Definition and notes for an indicator."),
-    "run_sql": (SqlArgs, run_sql, "Last resort: one read-only DuckDB SELECT over views v_results(snapshot_fy, ind_code, indicator, unit, outcome_id, org, area_code, area_type, area_name, region_code, achieved, expected, remaining_gap, delivery_ratio), v_results_female, v_context(snapshot_fy, ind_code, indicator, unit, type, outcome_id, higher_is_better, area_code, area_name, year, value), v_context_latest, v_population(area_code, year, population), areas, indicators, outcomes. Prefer the typed tools."),
+    "get_projects": (ProjectsArgs, get_projects, "The World Bank operations (projects) behind a results number for an area (ACW, a region, FCS or an ISO3 country): largest first with links, the Results Overlap Flag, and whether the project rows add up to the published WB / IBRD / IDA total. Use when asked which projects deliver a result or to verify a number."),
+    "run_sql": (SqlArgs, run_sql, "Last resort: one read-only DuckDB SELECT over views v_results(snapshot_fy, ind_code, indicator, unit, outcome_id, org, area_code, area_type, area_name, region_code, achieved, expected, remaining_gap, delivery_ratio; org is WBG, WB, IFC, MIGA, or IBRD/IDA for ACW and regions), v_results_female, v_projects(snapshot_fy, ind_code, proj_id, project_name, area_code, region_code, approval_fy, closing_fy, achieved, expected, ibrd_achieved, ibrd_expected, ida_achieved, ida_expected, overlap, disability_inclusive, url: World Bank operations, one row per project and country), v_context(snapshot_fy, ind_code, indicator, unit, type, outcome_id, higher_is_better, area_code, area_name, year, value), v_context_latest, v_population(area_code, year, population), areas, indicators, outcomes. Prefer the typed tools."),
 }
 
 

@@ -33,7 +33,7 @@ TEMPLATES = [{
     "BACKEND": "django.template.backends.django.DjangoTemplates",
     "DIRS": [],
     "APP_DIRS": True,
-    "OPTIONS": {"context_processors": ["django.template.context_processors.request"]},
+    "OPTIONS": {"context_processors": ["django.template.context_processors.request", "explorer.context.assets"]},
 }]
 WSGI_APPLICATION = "scorecard_explorer.wsgi.application"
 
@@ -59,6 +59,8 @@ LLM = {
     "api_key": os.getenv("LLM_API_KEY", ""),
     "api_base": os.getenv("LLM_API_BASE", "") or None,
     "timeout": int(os.getenv("LLM_TIMEOUT", "60")),
+    "effort": os.getenv("LLM_EFFORT", "medium"),               # Claude effort for research / writing
+    "router_effort": os.getenv("LLM_ROUTER_EFFORT", "low"),    # Claude effort for routing
 }
 ASSISTANT = {
     "max_tool_calls": int(os.getenv("ASSISTANT_MAX_TOOL_CALLS", "6")),

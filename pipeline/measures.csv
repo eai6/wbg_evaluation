@@ -1,0 +1,17 @@
+ind_code,direction,direction_source,population_basis,people_measure,note
+EG_ELC_ACCS_ZS,higher_is_better,reviewed,total_population,people without access to electricity,% of total population with access (WDI EG.ELC.ACCS.ZS)
+IT_NET_USER_ZS,higher_is_better,reviewed,total_population,people not using the internet,% of total population using the internet (WDI IT.NET.USER.ZS)
+PER_ALLSP_COV_POP_TO,higher_is_better,reviewed,total_population,people not covered by social protection and labor programs,total value = % of total population (poorest-quintile value is a sub-indicator)
+SN_ITK_MSFI_ZS_CC,lower_is_better,scorecard_scale_type,total_population,people facing food and nutrition insecurity,% of people
+EN_ATM_HAZA,lower_is_better,scorecard_scale_type,total_population,people exposed to hazardous air quality,% of people
+SP_ROD_R2KM,higher_is_better,scorecard_scale_type,total_population,people without reliable year-round transport,definition: percentage of the population
+CSC_CLI_EXT_POOR_FCS,lower_is_better,scorecard_scale_type,total_population,people in extreme poverty,% of population ($3.00/day)
+SH_UHC_SRVS_CV_XD,higher_is_better,reviewed,other,,index 0-100 (not a population share)
+SH_H2O_STA_HYGN_ZS_TO,higher_is_better,reviewed,other,,composite of water OR sanitation OR hygiene; no single population share
+SH_H2O_STA_HYGN_TO,higher_is_better,reviewed,other,,global composite
+SI_POV_DDAY_TO,lower_is_better,reviewed,other,,two poverty lines in one indicator
+FX_OWN_TO,higher_is_better,reviewed,other,,% of population ages 15+ (not total population)
+IT_GOV_EGOV_XQ,higher_is_better,reviewed,other,,index 0-1
+NE_GDI_FPRV_ZS,higher_is_better,reviewed,other,,% of GDP
+ER_NCA_RNEW,higher_is_better,reviewed,other,,count of economies
+ER_LND_HEAL,higher_is_better,reviewed,other,,hectares
